@@ -1,4 +1,5 @@
 import collection from "../collection.config.js";
+import EntryCard from "../components/EntryCard";
 
 const styles = {
   wrap: {
@@ -72,7 +73,23 @@ export default function Home() {
         <p style={styles.cardValue}>{collection.source}</p>
       </div>
 
-      <p style={styles.count}>entries in the archive: 0 (for now)</p>
+      <EntryCard
+        title="My First Ever Flight"
+        description="At 13, I left Cambodia for the first time, beginning a journey I would never forget."
+        contributor="Lyching Kong"
+        date="January 2018"
+        image="/first_flight.jpg"
+      />
+
+      <EntryCard
+        title="The Place I Could Never Fly From Again"
+        description="Some airports are more than places you pass through, they become part of your memories."
+        contributor="Sokputhea Chamnan"
+        date="2018"
+        image=""
+      />
+
+      <p style={styles.count}>entries in the archive: 2 (for now)</p>
 
       <footer style={styles.footer}>
         Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
