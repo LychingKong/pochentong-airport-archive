@@ -1,5 +1,5 @@
 import collection from "../collection.config.js";
-import EntryCard from "../components/EntryCard";
+import ArchiveGrid from "../components/ArchiveGrid";
 import entries from "../data/entries.js";
 
 const styles = {
@@ -56,29 +56,6 @@ const styles = {
     color: "#3A362F",
     maxWidth: 420,
   },
-  sectionHead: {
-    display: "flex",
-    alignItems: "baseline",
-    justifyContent: "space-between",
-    marginBottom: "clamp(28px, 4vw, 40px)",
-  },
-  sectionTitle: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: 22,
-    fontWeight: 600,
-    margin: 0,
-    color: "#211F1B",
-  },
-  count: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 13,
-    color: "#9C6B3F",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-    gap: "clamp(32px, 5vw, 56px)",
-  },
   footer: {
     marginTop: "clamp(64px, 9vw, 96px)",
     paddingTop: 24,
@@ -108,25 +85,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={styles.sectionHead}>
-        <h2 style={styles.sectionTitle}>The Collection</h2>
-        <span style={styles.count}>
-          {entries.length} {entries.length === 1 ? "entry" : "entries"}
-        </span>
-      </div>
-
-      <div style={styles.grid}>
-        {entries.map((entry) => (
-          <EntryCard
-            key={entry.id}
-            title={entry.title}
-            description={entry.description}
-            contributor={entry.contributor}
-            date={entry.date}
-            image={entry.images && entry.images[0] ? entry.images[0] : ""}
-          />
-        ))}
-      </div>
+      <ArchiveGrid entries={entries} />
 
       <footer style={styles.footer}>
         Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
