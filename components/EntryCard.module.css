@@ -1,0 +1,67 @@
+/* Hover-only motion for the 3-image collage. Kept separate from
+   EntryCard.js's inline styles because :hover and prefers-reduced-motion
+   can't be expressed with inline style objects. Resting values below
+   match what used to be inline, so the design is unchanged at rest. */
+
+.echoBack,
+.echoMid,
+.mainImg {
+  transition: transform 360ms ease, opacity 360ms ease, filter 360ms ease,
+    box-shadow 360ms ease;
+}
+
+.echoBack {
+  transform: rotate(-6deg) translate(-10px, 6px);
+  opacity: 0.35;
+  filter: grayscale(30%);
+}
+
+.echoMid {
+  transform: rotate(4deg) translate(8px, -4px);
+  opacity: 0.55;
+  filter: grayscale(15%);
+}
+
+.mainImg {
+  transform: scale(1);
+  box-shadow: 0 12px 28px rgba(33, 31, 27, 0.1);
+}
+
+.collage:hover .echoBack {
+  transform: rotate(-9deg) translate(-30px, 18px);
+  opacity: 0.55;
+  filter: grayscale(10%);
+}
+
+.collage:hover .echoMid {
+  transform: rotate(7deg) translate(26px, -16px);
+  opacity: 0.75;
+  filter: grayscale(0%);
+}
+
+.collage:hover .mainImg {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(33, 31, 27, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .echoBack,
+  .echoMid,
+  .mainImg {
+    transition: opacity 200ms ease, filter 200ms ease, box-shadow 200ms ease;
+  }
+
+  /* No translate/rotate/scale spread — only the non-motion cues
+     (opacity, filter, shadow) still respond to hover. */
+  .collage:hover .echoBack {
+    transform: rotate(-6deg) translate(-10px, 6px);
+  }
+
+  .collage:hover .echoMid {
+    transform: rotate(4deg) translate(8px, -4px);
+  }
+
+  .collage:hover .mainImg {
+    transform: scale(1);
+  }
+}

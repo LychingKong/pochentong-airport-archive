@@ -1,3 +1,5 @@
+import motion from "./EntryCard.module.css";
+
 export default function EntryCard({
   title,
   description,
@@ -8,59 +10,91 @@ export default function EntryCard({
   const imgSrc = image && image.length > 0 ? image : "/placeholder-image.png";
 
   const styles = {
-    card: {
-      marginTop: 48,
-      padding: 24,
-      backgroundColor: "#1C222C",
-      border: "1px solid #2E3644",
+    card: { display: "flex", flexDirection: "column" },
+    collage: {
+      position: "relative",
+      aspectRatio: "4 / 3",
+      marginBottom: "clamp(20px, 3vw, 28px)",
+    },
+    echoBack: {
+      position: "absolute",
+      inset: 0,
+      backgroundImage: `url(${imgSrc})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
       borderRadius: 10,
+      border: "1px solid #E7E3DB",
+    },
+    echoMid: {
+      position: "absolute",
+      inset: 0,
+      backgroundImage: `url(${imgSrc})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      borderRadius: 10,
+      border: "1px solid #E7E3DB",
+    },
+    mainImg: {
+      position: "absolute",
+      inset: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: 10,
+      border: "1px solid #E7E3DB",
+    },
+    title: {
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      fontSize: "clamp(19px, 2vw, 22px)",
+      fontWeight: 600,
+      margin: "0 0 8px",
+      color: "#211F1B",
+    },
+    body: {
+      fontSize: 14.5,
+      color: "#7C7568",
+      lineHeight: 1.6,
+      margin: "0 0 14px",
+      display: "-webkit-box",
+      WebkitLineClamp: 2,
+      WebkitBoxOrient: "vertical",
       overflow: "hidden",
     },
-    img: {
-      width: "calc(100% + 48px)",
-      height: "auto",
-      display: "block",
-      margin: "-24px -24px 20px",
-    },
-    title: { fontSize: 24, fontWeight: 700, margin: "0 0 8px" },
-    body: {
-      fontSize: 16,
-      color: "#97A1B3",
-      lineHeight: 1.6,
-      margin: "0 0 16px",
-    },
     meta: {
-      display: "flex",
-      gap: 24,
-      fontSize: 13,
-      color: "#5A6373",
-    },
-    label: {
       fontFamily: "'Courier New', monospace",
-      fontSize: 11,
-      letterSpacing: 1,
+      fontSize: 12,
+      letterSpacing: 0.5,
+      color: "#A39C8C",
     },
   };
 
   return (
     <article style={styles.card}>
-      <img src={imgSrc} alt="" style={styles.img} />
-      <h2 style={styles.title}>{title || "Untitled entry"}</h2>
-      <p style={styles.body}>{description}</p>
-      <div style={styles.meta}>
-        {contributor ? (
-          <span>
-            <span style={styles.label}>Contributed by &nbsp;</span>
-            {contributor}
-          </span>
-        ) : null}
-        {date ? (
-          <span>
-            <span style={styles.label}>Happens in &nbsp;</span>
-            {date}
-          </span>
-        ) : null}
+      <div style={styles.collage} className={motion.collage}>
+        <div
+          style={styles.echoBack}
+          className={motion.echoBack}
+          aria-hidden="true"
+        />
+        <div
+          style={styles.echoMid}
+          className={motion.echoMid}
+          aria-hidden="true"
+        />
+        <img
+          src={imgSrc}
+          alt=""
+          style={styles.mainImg}
+          className={motion.mainImg}
+        />
       </div>
+      <h2 style={styles.title}>{title || "Untitled entry"}</h2>
+      {description ? <p style={styles.body}>{description}</p> : null}
+      <p style={styles.meta}>
+        {contributor}
+        {contributor && date ? "  ·  " : ""}
+        {date}
+      </p>
     </article>
   );
 }
