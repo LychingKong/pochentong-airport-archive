@@ -9,7 +9,7 @@ const entries = [
     tags: ["First Flight", "Singapore", "Youth", "School Trip"],
     story:
       "At 13, I left Cambodia for the first time, beginning a journey I would never forget.",
-    images: ["/first_flight.jpg"],
+    images: ["/entries/entry001/001-lyching-kong-1.jpg"],
   },
   {
     id: 2,
