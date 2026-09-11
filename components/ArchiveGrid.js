@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import EntryCard from "./EntryCard";
 import SearchInput from "./SearchInput";
 
-// Check if an entry matches the search query by searching title, description, contributor, date, and tags.
+// Check if an entry matches the search query by searching title, description, contributor, date, tags, and story.
 function matches(entry, query) {
   const haystack = [
     entry.title,
@@ -13,6 +13,7 @@ function matches(entry, query) {
     entry.contributor,
     entry.date,
     ...(entry.tags || []),
+    entry.story,
   ]
     .join(" ")
     .toLowerCase();
@@ -25,7 +26,7 @@ export default function ArchiveGrid({ entries }) {
 
   // Memoized filter: only re-runs when query or entries array changes. Returns all entries if query is empty.
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = query.trim().replace(/["']/g, "").toLowerCase();
     return q ? entries.filter((entry) => matches(entry, q)) : entries;
   }, [entries, query]);
 
