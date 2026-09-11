@@ -92,7 +92,9 @@ export default function ArchiveGrid({ entries }) {
           ))}
         </div>
       ) : (
-        <p style={styles.empty}>No entries match &ldquo;{query}&rdquo;.</p>
+        <p style={styles.empty}>
+          No memories/stories found. Try a different keyword.
+        </p>
       )}
     </section>
   );
