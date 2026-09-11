@@ -8,7 +8,7 @@ const entries = [
     contributor: "Lyching Kong",
     tags: ["First Flight", "Singapore", "Youth", "School Trip"],
     story:
-      "At 13, I left Cambodia for the first time, beginning a journey I would never forget.",
+      "In January 2018, when I was 13 years old, I took my very first flight from Pochentong International Airport. I was traveling to Singapore with my debate teammates and our teacher to attend the Youth Environmental Summit 2018.\n\nIt was my first time flying, so everything felt exciting and unfamiliar. I remember arriving at the airport with my teammates, all of us feeling a little nervous but mostly excited about the trip ahead. The airport was crowded, and there were people everywhere preparing for their flights. At that age, simply being inside an international airport already felt like a big adventure.\n\nI remember going through the check-in and security process with my teammates and trying to follow our teacher carefully so we wouldn't get lost. Eventually, we made our way to the departure area and waited for our flight to Singapore. Looking back, I don't remember every detail of the airport itself, but I remember how it felt to be there—the excitement of knowing that I was about to leave Cambodia for the first time.\n\nThat trip became more than just my first flight. It was the beginning of many new experiences and a memory I still associate with Pochentong. Today, when I think about the old airport, I remember being 13, sitting there with my teammates, waiting for my very first journey to begin.",
     images: ["/entries/entry001-lyching-kong/image1.jpg"],
   },
   {
@@ -20,7 +20,7 @@ const entries = [
     contributor: "Sokputhea Chamnan",
     tags: ["Memory", "Farewell", "Departure"],
     story:
-      "Some airports are more than places you pass through, they become part of your memories.",
+      "I would love to provide a more detailed description of my experience, but my memory has become hazy now after years (old age I guess lol). But if I had to choose only one memory of me and that airport, it'd be back in 2018, to catch my flight to Taiwan along with my family and my mom's colleagues. A few years ago, my mom's company always had an annual trip; hence, I was lucky enough to tag along.\n\nI remembered that was already my 4th time there, but I still got excited every time I set foot in. There's this feeling about the old airport that the new one couldn't quite replicate; it's homey, cozy, and full of nostalgia. I remember taking pictures with the statue near the check-in counters and always getting DQ, always the same vanilla milkshake, before I boarded every flight. Worst of all was that time I almost puked at the airport upon landing. But above all, remembering the times when those nice airport workers were asking me cheerfully, Where are you headed? and wishing me a happy vacation.\n\nAs much as I missed the old airport and the memories it held for me. Young me would be in awe when she saw the new airport.",
     images: [
       "/entries/entry002-puthea-chamnan/image1.JPG",
       "/entries/entry002-puthea-chamnan/image2.JPG",
