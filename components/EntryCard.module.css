@@ -44,6 +44,25 @@
   box-shadow: 0 20px 40px rgba(33, 31, 27, 0.18);
 }
 
+@media (hover: none) {
+  .collage:hover .echoBack {
+    transform: rotate(-6deg) translate(-10px, 6px);
+    opacity: 0.35;
+    filter: grayscale(30%);
+  }
+
+  .collage:hover .echoMid {
+    transform: rotate(4deg) translate(8px, -4px);
+    opacity: 0.55;
+    filter: grayscale(15%);
+  }
+
+  .collage:hover .mainImg {
+    transform: scale(1);
+    box-shadow: 0 12px 28px rgba(33, 31, 27, 0.1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .echoBack,
   .echoMid,
