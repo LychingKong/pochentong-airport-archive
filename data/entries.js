@@ -21,7 +21,14 @@ const entries = [
     tags: ["Memory", "Farewell", "Departure"],
     story:
       "Some airports are more than places you pass through, they become part of your memories.",
-    images: ["/entries/entry002-puthea-chamnan/image1.JPG"],
+    images: [
+      "/entries/entry002-puthea-chamnan/image1.JPG",
+      "/entries/entry002-puthea-chamnan/image2.JPG",
+      "/entries/entry002-puthea-chamnan/image3.JPG",
+      "/entries/entry002-puthea-chamnan/image4.JPG",
+      "/entries/entry002-puthea-chamnan/image5.JPG",
+      "/entries/entry002-puthea-chamnan/image6.jpg",
+    ],
   },
   {
     id: 3,
@@ -39,7 +46,11 @@ const entries = [
     ],
     story:
       "One of my most memorable experiences with Pochentong Airport was during my internship with Cambodia Air Traffic Services (CATS), where I had the opportunity to spend time in the ATC Tower at Phnom Penh International Airport.\n\nAt that time, I wasn't there as a passenger, but as an intern learning how air traffic was managed. I remember watching aircraft arrive and depart while the controllers coordinated everything from the tower. Seeing the airport from that perspective made me realize how much communication, coordination, and responsibility are behind every flight that passengers see as just a normal takeoff or landing.\n\nWhat stayed with me the most was standing in the tower and looking at the airport from above, knowing that this was an airport that had served Phnom Penh for so many years. It felt special to be there during the final chapter of Pochentong before operations moved to Techo International Airport.\n\nFor me, Pochentong is not just an old airport. It became part of my own aviation journey, because it was one of the places where I experienced air traffic control and aviation in a real working environment for the first time.",
-    images: ["/entries/entry003-seilakeo-kan/image1.jpg"],
+    images: [
+      "/entries/entry003-seilakeo-kan/image1.jpg",
+      "/entries/entry003-seilakeo-kan/image2.jpg",
+      "/entries/entry003-seilakeo-kan/image3.jpg",
+    ],
   },
   {
     id: 4,

@@ -83,6 +83,7 @@ export default function ArchiveGrid({ entries }) {
           {filtered.map((entry) => (
             <EntryCard
               key={entry.id}
+              id={entry.id}
               title={entry.title}
               description={entry.description}
               contributor={entry.contributor}

@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 import motion from "./EntryCard.module.css";
 
 export default function EntryCard({
+  id,
   title,
   description,
   contributor,
@@ -10,7 +13,12 @@ export default function EntryCard({
   const imgSrc = image && image.length > 0 ? image : "/placeholder-image.png";
 
   const styles = {
-    card: { display: "flex", flexDirection: "column" },
+    card: {
+      display: "flex",
+      flexDirection: "column",
+      textDecoration: "none",
+      color: "inherit",
+    },
     collage: {
       position: "relative",
       aspectRatio: "4 / 3",
@@ -69,7 +77,7 @@ export default function EntryCard({
   };
 
   return (
-    <article style={styles.card}>
+    <Link href={`/entries/${id}`} style={styles.card}>
       <div style={styles.collage} className={motion.collage}>
         <div
           style={styles.echoBack}
@@ -95,6 +103,6 @@ export default function EntryCard({
         {contributor && date ? "  ·  " : ""}
         {date}
       </p>
-    </article>
+    </Link>
   );
 }
