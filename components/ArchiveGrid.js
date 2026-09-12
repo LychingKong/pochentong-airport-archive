@@ -2,10 +2,14 @@
 
 import { useMemo, useState } from "react";
 
+import { getLocalizedEntryField } from "../lib/translations";
 import EntryCard from "./EntryCard";
+import { useLanguage } from "./LanguageProvider";
 import SearchInput from "./SearchInput";
 
-// Check if an entry matches the search query by searching title, description, contributor, date, tags, and story.
+// Search always runs against the canonical (English) fields, regardless of
+// the active display language, so results stay consistent while Khmer
+// content is still placeholder text.
 function matches(entry, query) {
   const haystack = [
     entry.title,
@@ -21,6 +25,8 @@ function matches(entry, query) {
 }
 
 export default function ArchiveGrid({ entries }) {
+  const { language, t } = useLanguage();
+
   // Search query state, updated as user types in SearchInput
   const [query, setQuery] = useState("");
 
@@ -67,14 +73,15 @@ export default function ArchiveGrid({ entries }) {
       <SearchInput
         value={query}
         onChange={setQuery}
-        placeholder="Search entries, contributors, tags..."
+        placeholder={t.searchPlaceholder}
       />
 
       <div style={styles.sectionHead}>
-        <h2 style={styles.sectionTitle}>The Collection</h2>
+        <h2 style={styles.sectionTitle}>{t.collectionSectionTitle}</h2>
         {/* Live count updates as search results change */}
         <span style={styles.count}>
-          {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
+          {filtered.length}{" "}
+          {filtered.length === 1 ? t.entryCountSingular : t.entryCountPlural}
         </span>
       </div>
 
@@ -85,18 +92,25 @@ export default function ArchiveGrid({ entries }) {
             <EntryCard
               key={entry.id}
               id={entry.id}
-              title={entry.title}
-              description={entry.description}
-              contributor={entry.contributor}
-              date={entry.date}
+              title={getLocalizedEntryField(entry, "title", language)}
+              description={getLocalizedEntryField(
+                entry,
+                "description",
+                language,
+              )}
+              contributor={getLocalizedEntryField(
+                entry,
+                "contributor",
+                language,
+              )}
+              date={getLocalizedEntryField(entry, "date", language)}
               image={entry.images && entry.images[0] ? entry.images[0] : ""}
+              untitledLabel={t.untitledEntry}
             />
           ))}
         </div>
       ) : (
-        <p style={styles.empty}>
-          No memories/stories found. Try a different keyword.
-        </p>
+        <p style={styles.empty}>{t.noResults}</p>
       )}
     </section>
   );

@@ -9,6 +9,7 @@ export default function EntryCard({
   contributor,
   date,
   image,
+  untitledLabel = "Untitled entry",
 }) {
   const imgSrc = image && image.length > 0 ? image : "/placeholder-image.png";
 
@@ -96,7 +97,7 @@ export default function EntryCard({
           className={motion.mainImg}
         />
       </div>
-      <h2 style={styles.title}>{title || "Untitled entry"}</h2>
+      <h2 style={styles.title}>{title || untitledLabel}</h2>
       {description ? <p style={styles.body}>{description}</p> : null}
       <p style={styles.meta}>
         {contributor}

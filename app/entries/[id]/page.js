@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import collection from "../../../collection.config.js";
+import BackLink from "../../../components/BackLink";
 import EntryDetail from "../../../components/EntryDetail";
 import EntryGallery from "../../../components/EntryGallery";
 import entries from "../../../data/entries.js";
@@ -28,15 +28,6 @@ const styles = {
     margin: "0 auto",
     padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
   },
-  back: {
-    display: "inline-block",
-    fontFamily: "'Courier New', monospace",
-    fontSize: 13,
-    letterSpacing: 1,
-    color: "#9C6B3F",
-    textDecoration: "none",
-    marginBottom: "clamp(28px, 4vw, 40px)",
-  },
   layout: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
@@ -55,9 +46,7 @@ export default async function EntryPage({ params }) {
 
   return (
     <main style={styles.wrap}>
-      <Link href="/" style={styles.back}>
-        ← BACK TO ARCHIVE
-      </Link>
+      <BackLink />
 
       <div style={styles.layout}>
         <EntryGallery images={entry.images} title={entry.title} />

@@ -1,5 +1,19 @@
+"use client";
+
+import { getLocalizedEntryField } from "../lib/translations";
+import { useLanguage } from "./LanguageProvider";
+
 export default function EntryDetail({ entry }) {
-  const paragraphs = (entry.story || entry.description || "")
+  const { language, t } = useLanguage();
+
+  const title = getLocalizedEntryField(entry, "title", language);
+  const contributor = getLocalizedEntryField(entry, "contributor", language);
+  const date = getLocalizedEntryField(entry, "date", language);
+  const tags = getLocalizedEntryField(entry, "tags", language);
+  const story = getLocalizedEntryField(entry, "story", language);
+  const description = getLocalizedEntryField(entry, "description", language);
+
+  const paragraphs = (story || description || "")
     .split(/\n\n+/)
     .filter(Boolean);
 
@@ -46,16 +60,16 @@ export default function EntryDetail({ entry }) {
 
   return (
     <div>
-      <h1 style={styles.title}>{entry.title || "Untitled entry"}</h1>
+      <h1 style={styles.title}>{title || t.untitledEntry}</h1>
       <p style={styles.meta}>
-        {entry.contributor}
-        {entry.contributor && entry.date ? "  ·  " : ""}
-        {entry.date}
+        {contributor}
+        {contributor && date ? "  ·  " : ""}
+        {date}
       </p>
-      {entry.tags && entry.tags.length > 0 ? (
+      {tags && tags.length > 0 ? (
         <div style={styles.tags}>
-          {entry.tags.map((tag) => (
-            <span style={styles.tag} key={tag}>
+          {tags.map((tag, index) => (
+            <span style={styles.tag} key={index}>
               {tag}
             </span>
           ))}

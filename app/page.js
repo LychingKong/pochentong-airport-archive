@@ -1,6 +1,10 @@
+"use client";
+
 import collection from "../collection.config.js";
 import ArchiveGrid from "../components/ArchiveGrid";
+import { useLanguage } from "../components/LanguageProvider";
 import entries from "../data/entries.js";
+import { collectionText } from "../lib/translations";
 
 const styles = {
   wrap: {
@@ -66,32 +70,32 @@ const styles = {
 };
 
 export default function Home() {
+  const { language, t } = useLanguage();
+  const localizedCollection =
+    language === "km" ? { ...collection, ...collectionText.km } : collection;
+
   return (
     <main style={styles.wrap}>
       <div style={styles.hero}>
-        <p style={styles.kicker}>KHMER LIVING ARCHIVE</p>
-        <h1 style={styles.title}>{collection.name}</h1>
-        <p style={styles.description}>{collection.description}</p>
+        <p style={styles.kicker}>{t.kicker}</p>
+        <h1 style={styles.title}>{localizedCollection.name}</h1>
+        <p style={styles.description}>{localizedCollection.description}</p>
       </div>
 
       <div style={styles.metaRow}>
         <div>
-          <p style={styles.metaLabel}>CURATED BY</p>
-          <p style={styles.metaValue}>{collection.curator}</p>
+          <p style={styles.metaLabel}>{t.curatedByLabel}</p>
+          <p style={styles.metaValue}>{localizedCollection.curator}</p>
         </div>
         <div>
-          <p style={styles.metaLabel}>SOURCE</p>
-          <p style={styles.metaValue}>{collection.source}</p>
+          <p style={styles.metaLabel}>{t.sourceLabel}</p>
+          <p style={styles.metaValue}>{localizedCollection.source}</p>
         </div>
       </div>
 
       <ArchiveGrid entries={entries} />
 
-      <footer style={styles.footer}>
-        Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
-        2026. This archive is under construction all semester. Come back in
-        December.
-      </footer>
+      <footer style={styles.footer}>{t.footer}</footer>
     </main>
   );
 }

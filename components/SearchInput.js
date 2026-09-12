@@ -1,6 +1,10 @@
 "use client";
 
+import { useLanguage } from "./LanguageProvider";
+
 export default function SearchInput({ value, onChange, placeholder }) {
+  const { t } = useLanguage();
+
   const styles = {
     wrap: {
       position: "relative",
@@ -49,7 +53,7 @@ export default function SearchInput({ value, onChange, placeholder }) {
           type="button"
           onClick={() => onChange("")}
           style={styles.clear}
-          aria-label="Clear search"
+          aria-label={t.clearSearchLabel}
         >
           ×
         </button>
