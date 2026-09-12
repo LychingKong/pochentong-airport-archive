@@ -7,20 +7,36 @@ import EntryCard from "./EntryCard";
 import { useLanguage } from "./LanguageProvider";
 import SearchInput from "./SearchInput";
 
-// Search always runs against the canonical (English) fields, regardless of
-// the active display language, so results stay consistent while Khmer
-// content is still placeholder text.
-function matches(entry, query) {
-  const haystack = [
-    entry.title,
-    entry.description,
-    entry.contributor,
-    entry.date,
-    ...(entry.tags || []),
-    entry.story,
-  ]
-    .join(" ")
-    .toLowerCase();
+// Search against the fields in the currently selected language
+function matches(entry, query, language) {
+  let searchFields = [];
+
+  if (language === "km" && entry.translations?.km) {
+    // Search Khmer translations
+    searchFields = [
+      entry.translations.km.title,
+      entry.translations.km.description,
+      entry.translations.km.contributor,
+      entry.translations.km.date,
+      ...(entry.translations.km.tags || []),
+      entry.translations.km.story,
+    ];
+  } else {
+    // Search English fields (default)
+    searchFields = [
+      entry.title,
+      entry.description,
+      entry.contributor,
+      entry.date,
+      ...(entry.tags || []),
+      entry.story,
+    ];
+  }
+
+  let haystack = searchFields.join(" ");
+  if (language === "en") {
+    haystack = haystack.toLowerCase();
+  }
   return haystack.includes(query);
 }
 
@@ -30,11 +46,14 @@ export default function ArchiveGrid({ entries }) {
   // Search query state, updated as user types in SearchInput
   const [query, setQuery] = useState("");
 
-  // Memoized filter: only re-runs when query or entries array changes. Returns all entries if query is empty.
+  // Memoized filter: re-runs when query, language, or entries array changes. Returns all entries if query is empty.
   const filtered = useMemo(() => {
-    const q = query.trim().replace(/["']/g, "").toLowerCase();
-    return q ? entries.filter((entry) => matches(entry, q)) : entries;
-  }, [entries, query]);
+    let q = query.trim().replace(/["']/g, "");
+    if (language === "en") {
+      q = q.toLowerCase();
+    }
+    return q ? entries.filter((entry) => matches(entry, q, language)) : entries;
+  }, [entries, query, language]);
 
   const styles = {
     sectionHead: {
