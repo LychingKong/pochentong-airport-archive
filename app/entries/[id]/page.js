@@ -4,6 +4,7 @@ import collection from "../../../collection.config.js";
 import BackLink from "../../../components/BackLink";
 import EntryDetail from "../../../components/EntryDetail";
 import EntryGallery from "../../../components/EntryGallery";
+import Header from "../../../components/Header";
 import entries from "../../../data/entries.js";
 
 export function generateStaticParams() {
@@ -46,6 +47,7 @@ export default async function EntryPage({ params }) {
 
   return (
     <main style={styles.wrap}>
+      <Header />
       <BackLink />
 
       <div style={styles.layout}>

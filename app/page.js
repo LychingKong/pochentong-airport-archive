@@ -2,6 +2,7 @@
 
 import collection from "../collection.config.js";
 import ArchiveGrid from "../components/ArchiveGrid";
+import Header from "../components/Header";
 import { useLanguage } from "../components/LanguageProvider";
 import entries from "../data/entries.js";
 import { collectionText } from "../lib/translations";
@@ -76,6 +77,7 @@ export default function Home() {
 
   return (
     <main style={styles.wrap}>
+      <Header />
       <div style={styles.hero}>
         <p style={styles.kicker}>{t.kicker}</p>
         <h1 style={styles.title}>{localizedCollection.name}</h1>
