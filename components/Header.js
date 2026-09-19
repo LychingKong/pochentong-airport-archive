@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "./LanguageProvider";
+
 import { createClient } from "../lib/supabase/client";
+import { useLanguage } from "./LanguageProvider";
 
 const styles = {
   header: {

@@ -9,6 +9,29 @@ import { uiText } from "@/lib/translations";
 import { useLanguage } from "@/components/LanguageProvider";
 
 const styles = {
+  langSwitcher: {
+    display: "flex",
+    gap: 8,
+    marginBottom: "clamp(40px, 6vw, 64px)",
+  },
+  langButton: {
+    fontFamily: "'Courier New', monospace",
+    fontSize: 12,
+    letterSpacing: 1,
+    padding: "6px 10px",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#E7E3DB",
+    backgroundColor: "transparent",
+    color: "#9C6B3F",
+    cursor: "pointer",
+    textTransform: "uppercase",
+  },
+  langButtonActive: {
+    backgroundColor: "#9C6B3F",
+    color: "#FFF",
+    borderColor: "#9C6B3F",
+  },
   wrap: {
     maxWidth: 1160,
     margin: "0 auto",
@@ -96,7 +119,7 @@ const styles = {
 };
 
 export default function SignupPage() {
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const t = uiText[language];
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -140,6 +163,27 @@ export default function SignupPage() {
 
   return (
     <main style={styles.wrap}>
+      <div style={styles.langSwitcher}>
+        <button
+          onClick={() => setLanguage("en")}
+          style={{
+            ...styles.langButton,
+            ...(language === "en" ? styles.langButtonActive : {}),
+          }}
+        >
+          EN
+        </button>
+        <button
+          onClick={() => setLanguage("km")}
+          style={{
+            ...styles.langButton,
+            ...(language === "km" ? styles.langButtonActive : {}),
+          }}
+        >
+          KH
+        </button>
+      </div>
+
       <div style={styles.formContainer}>
         <p style={styles.kicker}>{t.kicker}</p>
         <h1 style={styles.title}>{t.signup}</h1>
