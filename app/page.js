@@ -78,28 +78,37 @@ const styles = {
   },
 };
 
+function formatDate(isoDate) {
+  if (!isoDate) return "";
+  const date = new Date(isoDate);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
 function transformEntry(dbEntry) {
   return {
     id: dbEntry.id,
     title: dbEntry.title || "",
     description: dbEntry.description || "",
-    date: dbEntry.date || "",
+    date: formatDate(dbEntry.created_at),
     story: dbEntry.story || "",
     tags: dbEntry.tags ? dbEntry.tags.split(",").map((t) => t.trim()) : [],
     images: dbEntry.images
       ? dbEntry.images.split(",").map((img) => img.trim())
       : [],
-    contributor: "",
+    contributor: dbEntry.contributor || "",
     translations: {
       km: {
         title: dbEntry.title_km || "",
         description: dbEntry.description_km || "",
-        date: dbEntry.date || "",
+        date: formatDate(dbEntry.created_at),
         story: dbEntry.story_km || "",
         tags: dbEntry.tags_km
           ? dbEntry.tags_km.split(",").map((t) => t.trim())
           : [],
-        contributor: "",
+        contributor: dbEntry.contributor_km || "",
       },
     },
   };
