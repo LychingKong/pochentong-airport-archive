@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import collection from "../collection.config.js";
 import ArchiveGrid from "../components/ArchiveGrid";
 import Header from "../components/Header";
 import { useLanguage } from "../components/LanguageProvider";
-import entries from "../data/entries.js";
+import { createClient } from "../lib/supabase/client";
 import { collectionText } from "../lib/translations";
 
 const styles = {
@@ -68,10 +70,70 @@ const styles = {
     fontSize: 13,
     color: "#A39C8C",
   },
+  loadingPlaceholder: {
+    fontSize: 15,
+    color: "#7C7568",
+    lineHeight: 1.6,
+    padding: "32px 0",
+  },
 };
+
+function transformEntry(dbEntry) {
+  return {
+    id: dbEntry.id,
+    title: dbEntry.title || "",
+    description: dbEntry.description || "",
+    date: dbEntry.date || "",
+    story: dbEntry.story || "",
+    tags: dbEntry.tags ? dbEntry.tags.split(",").map((t) => t.trim()) : [],
+    images: dbEntry.images
+      ? dbEntry.images.split(",").map((img) => img.trim())
+      : [],
+    contributor: "",
+    translations: {
+      km: {
+        title: dbEntry.title_km || "",
+        description: dbEntry.description_km || "",
+        date: dbEntry.date || "",
+        story: dbEntry.story_km || "",
+        tags: dbEntry.tags_km
+          ? dbEntry.tags_km.split(",").map((t) => t.trim())
+          : [],
+        contributor: "",
+      },
+    },
+  };
+}
 
 export default function Home() {
   const { language, t } = useLanguage();
+  const [entries, setEntries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEntries() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("entries")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        const transformed = data.map(transformEntry);
+        setEntries(transformed);
+      } catch (err) {
+        console.error("Failed to fetch entries:", err);
+        setEntries([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchEntries();
+  }, []);
+
   const localizedCollection =
     language === "km" ? { ...collection, ...collectionText.km } : collection;
 
@@ -95,7 +157,11 @@ export default function Home() {
         </div>
       </div>
 
-      <ArchiveGrid entries={entries} />
+      {isLoading ? (
+        <div style={styles.loadingPlaceholder}>Loading entries...</div>
+      ) : (
+        <ArchiveGrid entries={entries} />
+      )}
 
       <footer style={styles.footer}>{t.footer}</footer>
     </main>
