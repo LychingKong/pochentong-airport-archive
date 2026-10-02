@@ -24,7 +24,7 @@
 
 .mainImg {
   transform: scale(1);
-  box-shadow: 0 12px 28px rgba(33, 31, 27, 0.1);
+  box-shadow: 0 12px 28px rgba(18, 21, 28, 0.1);
 }
 
 .collage:hover .echoBack {
@@ -41,7 +41,7 @@
 
 .collage:hover .mainImg {
   transform: scale(1.02);
-  box-shadow: 0 20px 40px rgba(33, 31, 27, 0.18);
+  box-shadow: 0 20px 40px rgba(18, 21, 28, 0.18);
 }
 
 @media (hover: none) {
@@ -59,7 +59,7 @@
 
   .collage:hover .mainImg {
     transform: scale(1);
-    box-shadow: 0 12px 28px rgba(33, 31, 27, 0.1);
+    box-shadow: 0 12px 28px rgba(18, 21, 28, 0.1);
   }
 }
 

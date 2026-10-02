@@ -32,7 +32,7 @@ export default function EntryCard({
       backgroundSize: "cover",
       backgroundPosition: "center",
       borderRadius: 10,
-      border: "1px solid #E7E3DB",
+      border: "1px solid var(--color-line)",
     },
     echoMid: {
       position: "absolute",
@@ -41,7 +41,7 @@ export default function EntryCard({
       backgroundSize: "cover",
       backgroundPosition: "center",
       borderRadius: 10,
-      border: "1px solid #E7E3DB",
+      border: "1px solid var(--color-line)",
     },
     mainImg: {
       position: "absolute",
@@ -50,18 +50,18 @@ export default function EntryCard({
       height: "100%",
       objectFit: "cover",
       borderRadius: 10,
-      border: "1px solid #E7E3DB",
+      border: "1px solid var(--color-line)",
     },
     title: {
       fontFamily: "Georgia, 'Times New Roman', serif",
       fontSize: "clamp(19px, 2vw, 22px)",
       fontWeight: 600,
       margin: "0 0 8px",
-      color: "#211F1B",
+      color: "var(--color-text)",
     },
     body: {
       fontSize: 14.5,
-      color: "#7C7568",
+      color: "var(--color-muted)",
       lineHeight: 1.6,
       margin: "0 0 14px",
       display: "-webkit-box",
@@ -73,7 +73,7 @@ export default function EntryCard({
       fontFamily: "'Courier New', monospace",
       fontSize: 12,
       letterSpacing: 0.5,
-      color: "#A39C8C",
+      color: "var(--color-faint)",
     },
   };
 

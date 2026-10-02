@@ -1,0 +1,38 @@
+/* The archive's color palette ("Navy & Runway Orange").
+   Every component reads these names, e.g. color: "var(--color-accent)",
+   so changing a value here recolors the whole site. */
+
+:root {
+  /* page and surfaces */
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-surface-tint: #fdf9f6;
+  --color-subtle: #f1eeea;
+
+  /* text */
+  --color-text: #0e1420;
+  --color-text-soft: #263042;
+  --color-muted: #5a6475;
+  --color-faint: #98a0ad;
+
+  /* lines */
+  --color-line: #e6e2dc;
+  --color-line-strong: #d2ccc4;
+
+  /* deep navy: buttons, links, focus */
+  --color-accent: #0b2545;
+  --color-accent-hover: #061a33;
+  --color-on-accent: #ffffff;
+  --color-focus-ring: rgba(11, 37, 69, 0.18);
+
+  /* runway orange: kickers, tags, small details */
+  --color-detail: #e8641e;
+  --color-detail-soft: #fdebdf;
+
+  /* errors (a deeper red so they don't blend with the orange) */
+  --color-error: #b3261e;
+  --color-error-strong: #8c1d17;
+  --color-error-soft: #fbeceb;
+  --color-error-line: #f2cfcc;
+  --color-error-ring: rgba(179, 38, 30, 0.15);
+}

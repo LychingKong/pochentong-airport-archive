@@ -67,12 +67,12 @@ export default function ArchiveGrid({ entries }) {
       fontSize: 22,
       fontWeight: 600,
       margin: 0,
-      color: "#211F1B",
+      color: "var(--color-text)",
     },
     count: {
       fontFamily: "'Courier New', monospace",
       fontSize: 13,
-      color: "#9C6B3F",
+      color: "var(--color-detail)",
     },
     grid: {
       display: "grid",
@@ -81,7 +81,7 @@ export default function ArchiveGrid({ entries }) {
     },
     empty: {
       fontSize: 15,
-      color: "#7C7568",
+      color: "var(--color-muted)",
       lineHeight: 1.6,
       padding: "8px 0 24px",
     },

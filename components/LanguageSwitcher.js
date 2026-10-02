@@ -12,7 +12,7 @@ const styles = {
   },
   group: {
     display: "inline-flex",
-    border: "1px solid #E7E3DB",
+    border: "1px solid var(--color-line)",
     borderRadius: 999,
     overflow: "hidden",
   },
@@ -26,8 +26,8 @@ function buttonStyle(active) {
     padding: "6px 14px",
     border: "none",
     cursor: "pointer",
-    backgroundColor: active ? "#211F1B" : "transparent",
-    color: active ? "#FAF9F6" : "#7C7568",
+    backgroundColor: active ? "var(--color-text)" : "transparent",
+    color: active ? "var(--color-bg)" : "var(--color-muted)",
   };
 }
 

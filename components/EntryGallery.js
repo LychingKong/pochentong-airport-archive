@@ -10,9 +10,9 @@ export default function EntryGallery({ images, title }) {
       aspectRatio: "16 / 9",
       marginBottom: rest.length > 0 ? "clamp(16px, 2.5vw, 24px)" : 0,
       borderRadius: 12,
-      border: "1px solid #E7E3DB",
+      border: "1px solid var(--color-line)",
       overflow: "hidden",
-      backgroundColor: "#F1EEE6",
+      backgroundColor: "var(--color-subtle)",
     },
     heroImg: {
       width: "100%",
@@ -29,9 +29,9 @@ export default function EntryGallery({ images, title }) {
       position: "relative",
       aspectRatio: "4 / 3",
       borderRadius: 8,
-      border: "1px solid #E7E3DB",
+      border: "1px solid var(--color-line)",
       overflow: "hidden",
-      backgroundColor: "#F1EEE6",
+      backgroundColor: "var(--color-subtle)",
     },
     thumbImg: {
       width: "100%",

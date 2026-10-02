@@ -9,7 +9,7 @@ const style = {
   fontFamily: "'Courier New', monospace",
   fontSize: 13,
   letterSpacing: 1,
-  color: "#9C6B3F",
+  color: "var(--color-accent)",
   textDecoration: "none",
   marginBottom: "clamp(28px, 4vw, 40px)",
 };

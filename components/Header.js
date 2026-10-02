@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "../lib/supabase/client";
+import ContributeButton from "./ContributeButton";
 import { useLanguage } from "./LanguageProvider";
 
 const styles = {
@@ -13,11 +14,13 @@ const styles = {
     alignItems: "center",
     marginBottom: "clamp(40px, 6vw, 64px)",
     paddingBottom: 16,
-    borderBottom: "1px solid #E7E3DB",
+    borderBottom: "1px solid var(--color-line)",
   },
   headerContent: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "flex-end",
+    flexWrap: "wrap",
     gap: 20,
   },
   languageButton: {
@@ -27,25 +30,25 @@ const styles = {
     padding: "6px 10px",
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: "#E7E3DB",
+    borderColor: "var(--color-line)",
     backgroundColor: "transparent",
-    color: "#9C6B3F",
+    color: "var(--color-accent)",
     cursor: "pointer",
     textTransform: "uppercase",
   },
   languageButtonActive: {
-    backgroundColor: "#9C6B3F",
-    color: "#FFF",
-    borderColor: "#9C6B3F",
+    backgroundColor: "var(--color-accent)",
+    color: "var(--color-on-accent)",
+    borderColor: "var(--color-accent)",
   },
   userEmail: {
     fontSize: 14,
-    color: "#7C7568",
+    color: "var(--color-muted)",
     margin: 0,
   },
   authLink: {
     fontSize: 14,
-    color: "#9C6B3F",
+    color: "var(--color-accent)",
     textDecoration: "none",
     marginLeft: 16,
   },
@@ -59,14 +62,14 @@ const styles = {
     padding: "8px 16px",
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: "#9C6B3F",
+    borderColor: "var(--color-accent)",
     backgroundColor: "transparent",
-    color: "#9C6B3F",
+    color: "var(--color-accent)",
     cursor: "pointer",
   },
   logoutButtonHover: {
-    backgroundColor: "#9C6B3F",
-    color: "#FFF",
+    backgroundColor: "var(--color-accent)",
+    color: "var(--color-on-accent)",
   },
 };
 
@@ -118,6 +121,8 @@ export default function Header() {
         >
           KH
         </button>
+
+        <ContributeButton />
 
         {user ? (
           <>
