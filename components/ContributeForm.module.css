@@ -391,8 +391,9 @@ textarea.input {
 .spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: var(--color-on-accent);
+  /* currentColor = the button's text color, so it shows in both themes. */
+  border: 2px solid currentColor;
+  border-top-color: transparent;
   border-radius: 50%;
   animation: spin 800ms linear infinite;
 }

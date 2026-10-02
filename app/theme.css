@@ -1,8 +1,15 @@
-/* The archive's color palette ("Navy & Runway Orange").
+/* The archive's color palette ("Navy & Runway Orange"), light and dark.
    Every component reads these names, e.g. color: "var(--color-accent)",
-   so changing a value here recolors the whole site. */
+   so changing a value here recolors the whole site.
+
+   Which palette shows:
+   - no choice saved   -> follows the device setting (prefers-color-scheme)
+   - data-theme="dark" -> dark, set by ThemeToggle and the script in layout.js
+   - data-theme="light"-> light, even on a device set to dark */
 
 :root {
+  color-scheme: light;
+
   /* page and surfaces */
   --color-bg: #faf8f5;
   --color-surface: #ffffff;
@@ -35,4 +42,82 @@
   --color-error-soft: #fbeceb;
   --color-error-line: #f2cfcc;
   --color-error-ring: rgba(179, 38, 30, 0.15);
+}
+
+/* The dark palette is written twice because CSS can't share one block
+   between a media query and an attribute selector. Keep the two in sync. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #0a101c;
+    --color-surface: #111a2a;
+    --color-surface-tint: #152036;
+    --color-subtle: #182337;
+    --color-text: #e9edf4;
+    --color-text-soft: #c8d0dd;
+    --color-muted: #96a2b6;
+    --color-faint: #6c788d;
+    --color-line: #1f2a3f;
+    --color-line-strong: #2d3a54;
+    --color-accent: #dbe5f5;
+    --color-accent-hover: #ffffff;
+    --color-on-accent: #0a1730;
+    --color-focus-ring: rgba(219, 229, 245, 0.22);
+    --color-detail: #ff8a4c;
+    --color-detail-soft: rgba(255, 138, 76, 0.14);
+    --color-error: #ff6f61;
+    --color-error-strong: #ffaaa1;
+    --color-error-soft: rgba(255, 111, 97, 0.12);
+    --color-error-line: rgba(255, 111, 97, 0.35);
+    --color-error-ring: rgba(255, 111, 97, 0.25);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #0a101c;
+  --color-surface: #111a2a;
+  --color-surface-tint: #152036;
+  --color-subtle: #182337;
+  --color-text: #e9edf4;
+  --color-text-soft: #c8d0dd;
+  --color-muted: #96a2b6;
+  --color-faint: #6c788d;
+  --color-line: #1f2a3f;
+  --color-line-strong: #2d3a54;
+  --color-accent: #dbe5f5;
+  --color-accent-hover: #ffffff;
+  --color-on-accent: #0a1730;
+  --color-focus-ring: rgba(219, 229, 245, 0.22);
+  --color-detail: #ff8a4c;
+  --color-detail-soft: rgba(255, 138, 76, 0.14);
+  --color-error: #ff6f61;
+  --color-error-strong: #ffaaa1;
+  --color-error-soft: rgba(255, 111, 97, 0.12);
+  --color-error-line: rgba(255, 111, 97, 0.35);
+  --color-error-ring: rgba(255, 111, 97, 0.25);
+}
+
+/* Theme switch animation (see lib/themeTransition.js).
+   Turn off the browser's default cross-fade so the new theme is revealed
+   only by the growing circle, drawn on top of the old one. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* Fallback for browsers without View Transitions: every color fades
+   for a moment while the class is on <html>. */
+.theme-fade,
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition: background-color 350ms ease, color 350ms ease,
+    border-color 350ms ease, box-shadow 350ms ease !important;
 }

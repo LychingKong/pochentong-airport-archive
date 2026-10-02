@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
 import ContributeButton from "./ContributeButton";
 import { useLanguage } from "./LanguageProvider";
+import ThemeToggle from "./ThemeToggle";
 
 const styles = {
   header: {
@@ -121,6 +122,8 @@ export default function Header() {
         >
           KH
         </button>
+
+        <ThemeToggle />
 
         <ContributeButton />
 
