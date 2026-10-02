@@ -16,20 +16,29 @@ const SECTIONS = [
   { id: "contributor" },
 ];
 
-export default function ContributeForm() {
+// Pass `entry` to edit an existing entry; leave it out on /contribute.
+export default function ContributeForm({ entry }) {
   const { t } = useLanguage();
-  const form = useContributeForm();
+  const form = useContributeForm(entry);
+  const editing = Boolean(entry);
 
   return (
     <form onSubmit={form.handleSubmit} noValidate className={styles.form}>
       <header className={styles.pageHead}>
-        <p className={styles.kicker}>{t.contributeKicker}</p>
-        <h1 className={styles.title}>{t.contributeTitle}</h1>
-        <p className={styles.intro}>{t.contributeIntro}</p>
+        <p className={styles.kicker}>
+          {editing ? t.editKicker : t.contributeKicker}
+        </p>
+        <h1 className={styles.title}>
+          {editing ? t.editTitle : t.contributeTitle}
+        </h1>
+        <p className={styles.intro}>
+          {editing ? t.editIntro : t.contributeIntro}
+        </p>
       </header>
 
-      <FormSection id="images" number="01" required>
+      <FormSection id="images" number="01" required={!editing}>
         <ImageField
+          currentUrl={entry?.cover}
           file={form.image}
           onChange={form.changeImage}
           error={form.errors.images}
@@ -59,7 +68,11 @@ export default function ContributeForm() {
         </FormSection>
       ))}
 
-      <FormFooter formError={form.formError} saving={form.saving} />
+      <FormFooter
+        formError={form.formError}
+        saving={form.saving}
+        editing={editing}
+      />
     </form>
   );
 }

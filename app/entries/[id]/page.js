@@ -4,6 +4,7 @@ import collection from "../../../collection.config.js";
 import BackLink from "../../../components/BackLink";
 import EntryDetail from "../../../components/EntryDetail";
 import EntryGallery from "../../../components/EntryGallery";
+import EntryOwnerActions from "../../../components/EntryOwnerActions";
 import Header from "../../../components/Header";
 import { createClient } from "../../../lib/supabase/server";
 
@@ -100,11 +101,16 @@ export default async function EntryPage({ params }) {
     }
 
     const entry = transformEntry(dbEntries[0]);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const isOwner = Boolean(user) && user.id === dbEntries[0].owner;
 
     return (
       <main style={styles.wrap}>
         <Header />
         <BackLink />
+        {isOwner ? <EntryOwnerActions id={entry.id} /> : null}
 
         <div style={styles.layout}>
           <EntryGallery images={entry.images} title={entry.title} />

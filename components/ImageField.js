@@ -5,21 +5,31 @@ import { useEffect, useRef, useState } from "react";
 import { formatFieldError } from "../lib/translations";
 import styles from "./ContributeForm.module.css";
 import { useLanguage } from "./LanguageProvider";
+import PhotoFileMeta from "./PhotoFileMeta";
 import UploadIcon from "./UploadIcon";
 
-export default function ImageField({ file, onChange, error, disabled }) {
+// `currentUrl` is the entry's existing photo when editing; it shows until
+// a new file is picked.
+export default function ImageField({
+  currentUrl,
+  file,
+  onChange,
+  error,
+  disabled,
+}) {
   const { t } = useLanguage();
   const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
+  const previewUrl = filePreview || currentUrl;
 
   // Show the chosen photo, and free its memory when it changes or the form closes.
   useEffect(() => {
     if (!file) {
-      setPreviewUrl(null);
+      setFilePreview(null);
       return;
     }
     const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
+    setFilePreview(url);
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
@@ -64,20 +74,10 @@ export default function ImageField({ file, onChange, error, disabled }) {
         />
       </div>
       {file ? (
-        <div className={styles.fileMeta}>
-          <span className={styles.fileName}>{file.name}</span>
-          <span className={styles.fileSize}>
-            {(file.size / 1024 / 1024).toFixed(1)} MB
-          </span>
-          <button
-            type="button"
-            onClick={removePhoto}
-            className={styles.textButton}
-            disabled={disabled}
-          >
-            {t.removePhoto}
-          </button>
-        </div>
+        <PhotoFileMeta file={file} onRemove={removePhoto} disabled={disabled} />
+      ) : null}
+      {!file && currentUrl ? (
+        <p className={styles.note}>{t.keepPhotoNote}</p>
       ) : null}
       {error ? (
         <p id="images-error" className={styles.error}>

@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 
 import {
-  checkImageFile,
-  TEXT_FIELDS,
-  validateEntry,
-} from "@/lib/entryValidation";
+  fail,
+  readEntryForm,
+  removePhotos,
+  uploadPhoto,
+} from "@/lib/entryServer";
 import { createClient } from "@/lib/supabase/server";
-
-function fail(error, status, fields) {
-  return NextResponse.json({ error, fields }, { status });
-}
 
 export async function POST(request) {
   const supabase = await createClient();
@@ -18,51 +15,28 @@ export async function POST(request) {
   } = await supabase.auth.getUser();
   if (!user) return fail("notSignedIn", 401);
 
-  let form;
-  try {
-    form = await request.formData();
-  } catch (err) {
-    console.error("Could not read contribute form data:", err);
-    return fail("badRequest", 400);
-  }
+  const form = await readEntryForm(request, { photoRequired: true });
+  if (form.badRequest) return fail("badRequest", 400);
+  if (Object.keys(form.errors).length > 0)
+    return fail("invalid", 400, form.errors);
 
-  const input = {};
-  for (const name of TEXT_FIELDS) input[name] = form.get(name);
-  const { values, errors } = validateEntry(input);
-
-  const image = form.get("images");
-  const imageCheck = await checkImageFile(image);
-  if (imageCheck.error) errors.images = imageCheck.error;
-
-  if (Object.keys(errors).length > 0) return fail("invalid", 400, errors);
-
-  const path = `${user.id}/${crypto.randomUUID()}.${imageCheck.ext}`;
-  const photos = supabase.storage.from("photos");
-
-  const { error: uploadError } = await photos.upload(path, image, {
-    contentType: imageCheck.type,
-    upsert: false,
-  });
-  if (uploadError) {
-    console.error("Photo upload failed:", uploadError);
-    return fail("uploadFailed", 500);
-  }
-
-  const {
-    data: { publicUrl },
-  } = photos.getPublicUrl(path);
+  const photo = await uploadPhoto(
+    supabase,
+    user.id,
+    form.image,
+    form.imageCheck,
+  );
+  if (!photo) return fail("uploadFailed", 500);
 
   const { data: entry, error: insertError } = await supabase
     .from("entries")
-    .insert({ ...values, owner: user.id, images: publicUrl })
+    .insert({ ...form.values, owner: user.id, images: photo.url })
     .select("id")
     .single();
 
   if (insertError) {
     console.error("Entry insert failed:", insertError);
-    const { error: cleanupError } = await photos.remove([path]);
-    if (cleanupError)
-      console.error("Orphaned photo not removed:", path, cleanupError);
+    await removePhotos(supabase, [photo.path]);
     return fail("saveFailed", 500);
   }
 
