@@ -59,9 +59,19 @@ export async function generateMetadata({ params }) {
     }
 
     const entry = transformEntry(dbEntries[0]);
+    const title = `${entry.title} — ${collection.name}`;
     return {
-      title: `${entry.title} — ${collection.name}`,
+      title,
       description: entry.description,
+      openGraph: {
+        type: "article",
+        siteName: collection.name,
+        title,
+        description: entry.description,
+        // A page-level openGraph replaces the inherited one, so re-add the
+        // shared logo image (app/opengraph-image.jpg).
+        images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630 }],
+      },
     };
   } catch {
     return {};

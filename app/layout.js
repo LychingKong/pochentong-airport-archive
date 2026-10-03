@@ -5,9 +5,18 @@ import LanguageProvider from "../components/LanguageProvider";
 
 import "./theme.css";
 
+// The favicon (icon.png, apple-icon.png) and share image
+// (opengraph-image.jpg) are files in app/ that Next.js picks up by name.
 export const metadata = {
   title: `${collection.name} — Khmer Living Archive`,
   description: collection.description,
+  openGraph: {
+    type: "website",
+    siteName: collection.name,
+    title: `${collection.name} — Khmer Living Archive`,
+    description: collection.description,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 // Runs before the page is shown, so a saved dark/light choice applies
