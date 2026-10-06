@@ -7,10 +7,12 @@ import { createClient } from "@/lib/supabase/client";
 import { uiText } from "@/lib/translations";
 
 import { useLanguage } from "@/components/LanguageProvider";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const styles = {
   langSwitcher: {
     display: "flex",
+    alignItems: "center",
     gap: 8,
     marginBottom: "clamp(40px, 6vw, 64px)",
   },
@@ -179,6 +181,7 @@ export default function LoginPage() {
         >
           KH
         </button>
+        <ThemeToggle />
       </div>
 
       <div style={styles.formContainer}>
