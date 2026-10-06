@@ -19,7 +19,7 @@ export default function BackLink() {
 
   return (
     <Link href="/" style={style}>
-      {t.backToArchive}
+      {t.backToHome}
     </Link>
   );
 }
