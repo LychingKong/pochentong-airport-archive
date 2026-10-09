@@ -1,28 +1,37 @@
 import styles from "./VideoTitle.module.css";
 
-// Drawing units: the font is 100 per line, and the box fits the longest line.
-const WIDTH = 920;
-const HEIGHT = 250;
-const STRETCH = 1.25;
-const FIRST_BASELINE = 100;
-const SECOND_BASELINE = 210;
+// Drawing units per language: the font is 100 per line, and the box fits the
+// longest line. Khmer needs more height for its tall marks above and below.
+const LAYOUTS = {
+  en: { width: 920, height: 250, baselines: [100, 210], stretch: 1.25 },
+  km: { width: 900, height: 330, baselines: [140, 280], stretch: 1.1 },
+};
 
-// Scales a line up and down from its baseline, so it grows taller without moving off its line.
-const stretchFrom = (baseline) =>
-  `translate(0 ${baseline}) scale(1 ${STRETCH}) translate(0 ${-baseline})`;
+// Uses the given lines when there are any (Khmer); otherwise puts the first
+// word on line 1 and the rest on line 2.
+function splitLines(name, lines) {
+  if (lines) return lines;
+  const [first, ...rest] = name.split(" ");
+  return [first, rest.join(" ")];
+}
 
 // The title text is a mask: the video shows only inside the letters.
 // The real <h1> stays for screen readers and search engines.
-export default function VideoTitle({ name, src }) {
-  const [firstLine, ...restWords] = name.split(" ");
-  const secondLine = restWords.join(" ");
+export default function VideoTitle({ name, src, language, lines }) {
+  const { width, height, baselines, stretch } =
+    LAYOUTS[language === "km" ? "km" : "en"];
+  const titleLines = splitLines(name, lines);
+
+  // Scales a line up from its baseline, so it grows taller without moving off its line.
+  const stretchFrom = (baseline) =>
+    `translate(0 ${baseline}) scale(1 ${stretch}) translate(0 ${-baseline})`;
 
   return (
     <div className={styles.wrap}>
       <h1 className={styles.srOnly}>{name}</h1>
       <svg
         className={styles.svg}
-        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+        viewBox={`0 0 ${width} ${height}`}
         aria-hidden="true"
         focusable="false"
       >
@@ -32,31 +41,27 @@ export default function VideoTitle({ name, src }) {
             maskUnits="userSpaceOnUse"
             x="0"
             y="0"
-            width={WIDTH}
-            height={HEIGHT}
+            width={width}
+            height={height}
           >
-            <rect width={WIDTH} height={HEIGHT} fill="black" />
+            <rect width={width} height={height} fill="black" />
             <g className={styles.glyphs} fill="white">
-              <text
-                x="0"
-                y={FIRST_BASELINE}
-                transform={stretchFrom(FIRST_BASELINE)}
-              >
-                {firstLine}
-              </text>
-              <text
-                x="0"
-                y={SECOND_BASELINE}
-                transform={stretchFrom(SECOND_BASELINE)}
-              >
-                {secondLine}
-              </text>
+              {titleLines.map((line, index) => (
+                <text
+                  key={index}
+                  x="0"
+                  y={baselines[index]}
+                  transform={stretchFrom(baselines[index])}
+                >
+                  {line}
+                </text>
+              ))}
             </g>
           </mask>
         </defs>
         <foreignObject
-          width={WIDTH}
-          height={HEIGHT}
+          width={width}
+          height={height}
           mask="url(#title-video-mask)"
         >
           <div className={styles.media}>

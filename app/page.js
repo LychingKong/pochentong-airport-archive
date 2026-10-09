@@ -154,11 +154,12 @@ export default function Home() {
         <p className="subtitle" style={styles.kicker}>
           {t.kicker}
         </p>
-        {language === "km" ? (
-          <h1 style={styles.title}>{localizedCollection.name}</h1>
-        ) : (
-          <VideoTitle name={localizedCollection.name} src="/videos/hero.mp4" />
-        )}
+        <VideoTitle
+          name={localizedCollection.name}
+          src="/videos/hero.mp4"
+          language={language}
+          lines={localizedCollection.nameLines}
+        />
         <p style={styles.description}>{localizedCollection.description}</p>
       </div>
 

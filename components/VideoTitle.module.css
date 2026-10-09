@@ -20,6 +20,12 @@
   letter-spacing: -3px;
 }
 
+/* Khmer: the global Khmer rule in theme.css already sets Kantumruy Pro. */
+:global(html[lang="km"]) .glyphs text {
+  font-weight: 700;
+  font-size: 100px;
+}
+
 .media {
   position: relative;
   width: 100%;

@@ -23,7 +23,7 @@ export const metadata = {
 
 const kantumruy = Kantumruy_Pro({
   subsets: ["khmer", "latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
   variable: "--font-khmer",
   display: "swap",
 });
