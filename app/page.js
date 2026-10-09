@@ -167,7 +167,7 @@ export default function Home() {
       </div>
 
       {isLoading ? (
-        <div style={styles.loadingPlaceholder}>Loading entries...</div>
+        <div style={styles.loadingPlaceholder}>{t.loadingEntries}</div>
       ) : (
         <ArchiveGrid entries={entries} />
       )}

@@ -145,6 +145,11 @@
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
+.input::placeholder {
+  color: var(--color-faint);
+  opacity: 1;
+}
+
 .input:lang(km) {
   line-height: 1.9;
 }
@@ -175,6 +180,12 @@
 textarea.input {
   resize: vertical;
   min-height: 96px;
+}
+
+.limitNote {
+  font-size: 13px;
+  color: var(--color-error);
+  margin: 0;
 }
 
 .error {

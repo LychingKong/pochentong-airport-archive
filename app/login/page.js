@@ -231,7 +231,7 @@ export default function LoginPage() {
             onMouseEnter={() => setButtonHovered(true)}
             onMouseLeave={() => setButtonHovered(false)}
           >
-            {loading ? "Signing in..." : t.loginButton}
+            {loading ? t.signingIn : t.loginButton}
           </button>
         </form>
 

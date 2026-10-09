@@ -249,7 +249,7 @@ export default function SignupPage() {
             onMouseEnter={() => setButtonHovered(true)}
             onMouseLeave={() => setButtonHovered(false)}
           >
-            {loading ? "Creating account..." : t.signupButton}
+            {loading ? t.creatingAccount : t.signupButton}
           </button>
         </form>
 

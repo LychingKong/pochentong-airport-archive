@@ -75,7 +75,7 @@ const styles = {
 };
 
 export default function Header() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [linkHovered, setLinkHovered] = useState(null);
@@ -139,7 +139,7 @@ export default function Header() {
               onMouseEnter={() => setButtonHovered(true)}
               onMouseLeave={() => setButtonHovered(false)}
             >
-              Log Out
+              {t.logOut}
             </button>
           </>
         ) : (
@@ -153,7 +153,7 @@ export default function Header() {
               onMouseEnter={() => setLinkHovered("login")}
               onMouseLeave={() => setLinkHovered(null)}
             >
-              Sign In
+              {t.login}
             </a>
             <a
               href="/signup"
@@ -164,7 +164,7 @@ export default function Header() {
               onMouseEnter={() => setLinkHovered("signup")}
               onMouseLeave={() => setLinkHovered(null)}
             >
-              Sign Up
+              {t.signup}
             </a>
           </>
         )}

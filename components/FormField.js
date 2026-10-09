@@ -1,7 +1,9 @@
 "use client";
 
-import { fieldUsage } from "../lib/entryValidation";
-import { formatFieldError } from "../lib/translations";
+import { useState } from "react";
+
+import { fieldUsage, limitFieldInput } from "../lib/entryValidation";
+import { fieldPlaceholders, formatFieldError } from "../lib/translations";
 import styles from "./ContributeForm.module.css";
 import { useLanguage } from "./LanguageProvider";
 
@@ -18,12 +20,25 @@ export default function FormField({
   const isKhmer = name.endsWith("_km");
   const { used, max, unit } = fieldUsage(name, value);
   const errorId = `${name}-error`;
+  const [limitNote, setLimitNote] = useState("");
+
+  function handleChange(raw) {
+    const result = limitFieldInput(name, value, raw);
+    setLimitNote(
+      result.limit
+        ? t.limitReached[result.limit].replace("{max}", result.max)
+        : "",
+    );
+    onChange(name, result.value);
+  }
 
   const inputProps = {
     id: name,
     name,
     value,
-    onChange: (e) => onChange(name, e.target.value),
+    onChange: (e) => handleChange(e.target.value),
+    onBlur: () => setLimitNote(""),
+    placeholder: fieldPlaceholders[name],
     className: styles.input,
     lang: isKhmer ? "km" : "en",
     disabled,
@@ -54,6 +69,11 @@ export default function FormField({
       ) : (
         <input {...inputProps} type="text" />
       )}
+      {limitNote ? (
+        <p className={styles.limitNote} role="status">
+          {limitNote}
+        </p>
+      ) : null}
       {error ? (
         <p id={errorId} className={styles.error}>
           {formatFieldError(t, error)}
