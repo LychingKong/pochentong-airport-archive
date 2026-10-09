@@ -1,0 +1,57 @@
+.wrap {
+  position: relative;
+  margin: 16px 0 14px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  overflow: visible;
+}
+
+/* The English body rule in theme.css uses !important on every element,
+   so this selector is more specific to keep Baloo 2 on the title. */
+:global(html:not([lang="km"])) .glyphs text {
+  font-family: var(--font-heading), sans-serif !important;
+  font-weight: 800;
+  font-size: 100px;
+  letter-spacing: -3px;
+}
+
+.media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-accent);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.7);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+/* Reduced motion: the letters stay solid navy and the video is not shown. */
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    display: none;
+  }
+}

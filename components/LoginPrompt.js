@@ -10,7 +10,7 @@ export default function LoginPrompt() {
 
   return (
     <div className={styles.pageHead}>
-      <p className={styles.kicker}>{t.contributeKicker}</p>
+      <p className={`subtitle ${styles.kicker}`}>{t.contributeKicker}</p>
       <h1 className={styles.title}>{t.contributeTitle}</h1>
       <p className={styles.intro}>{t.contributeLoginPrompt}</p>
       <p>

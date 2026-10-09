@@ -1,4 +1,4 @@
-import { Kantumruy_Pro } from "next/font/google";
+import { Baloo_2, Kantumruy_Pro, Poppins, Schoolbell } from "next/font/google";
 import Script from "next/script";
 
 import collection from "../collection.config.js";
@@ -29,6 +29,27 @@ const kantumruy = Kantumruy_Pro({
 
 // Runs before the page is shown, so a saved dark/light choice applies
 // without a flash of the other theme. Must match THEME_KEY in lib/themeTransition.js.
+const baloo = Baloo_2({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const schoolbell = Schoolbell({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-subtitle",
+  display: "swap",
+});
+
 const applySavedTheme = `
 try {
   var saved = localStorage.getItem("pochentong-theme");
@@ -41,7 +62,11 @@ try {
 export default function RootLayout({ children }) {
   return (
     // The script above may add data-theme before React loads; that's expected.
-    <html lang="en" suppressHydrationWarning className={kantumruy.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${schoolbell.variable} ${poppins.variable} ${baloo.variable} ${kantumruy.variable}`}
+    >
       <body
         style={{
           margin: 0,

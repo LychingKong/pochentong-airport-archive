@@ -185,7 +185,9 @@ export default function LoginPage() {
       </div>
 
       <div style={styles.formContainer}>
-        <p style={styles.kicker}>{t.kicker}</p>
+        <p className="subtitle" style={styles.kicker}>
+          {t.kicker}
+        </p>
         <h1 style={styles.title}>{t.login}</h1>
 
         <form style={styles.form} onSubmit={handleSubmit}>

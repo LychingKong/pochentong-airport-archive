@@ -25,7 +25,7 @@ export default function ContributeForm({ entry }) {
   return (
     <form onSubmit={form.handleSubmit} noValidate className={styles.form}>
       <header className={styles.pageHead}>
-        <p className={styles.kicker}>
+        <p className={`subtitle ${styles.kicker}`}>
           {editing ? t.editKicker : t.contributeKicker}
         </p>
         <h1 className={styles.title}>

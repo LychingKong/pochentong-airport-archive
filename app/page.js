@@ -6,6 +6,7 @@ import collection from "../collection.config.js";
 import ArchiveGrid from "../components/ArchiveGrid";
 import Header from "../components/Header";
 import { useLanguage } from "../components/LanguageProvider";
+import VideoTitle from "../components/VideoTitle";
 import { createClient } from "../lib/supabase/client";
 import { collectionText } from "../lib/translations";
 
@@ -16,7 +17,6 @@ const styles = {
     padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
   },
   hero: {
-    maxWidth: 680,
     marginBottom: "clamp(40px, 6vw, 64px)",
   },
   kicker: {
@@ -39,6 +39,7 @@ const styles = {
     color: "var(--color-muted)",
     lineHeight: 1.65,
     margin: 0,
+    maxWidth: 680,
   },
   metaRow: {
     display: "flex",
@@ -150,8 +151,14 @@ export default function Home() {
     <main style={styles.wrap}>
       <Header />
       <div style={styles.hero}>
-        <p style={styles.kicker}>{t.kicker}</p>
-        <h1 style={styles.title}>{localizedCollection.name}</h1>
+        <p className="subtitle" style={styles.kicker}>
+          {t.kicker}
+        </p>
+        {language === "km" ? (
+          <h1 style={styles.title}>{localizedCollection.name}</h1>
+        ) : (
+          <VideoTitle name={localizedCollection.name} src="/videos/hero.mp4" />
+        )}
         <p style={styles.description}>{localizedCollection.description}</p>
       </div>
 

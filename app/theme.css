@@ -128,3 +128,32 @@ html[lang="km"],
 html[lang="km"] * {
   font-family: var(--font-khmer), sans-serif !important;
 }
+
+/* English text: Baloo 2 for headings, Poppins for everything else.
+   Inline styles set Georgia or Courier on many elements, so this needs !important. */
+html:not([lang="km"]),
+html:not([lang="km"]) * {
+  font-family: var(--font-body), sans-serif !important;
+}
+
+html:not([lang="km"]) h1,
+html:not([lang="km"]) h2,
+html:not([lang="km"]) h3 {
+  font-family: var(--font-heading), sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.2 !important;
+  text-wrap: balance;
+}
+
+html:not([lang="km"]) p {
+  text-wrap: pretty;
+}
+
+/* Short subtitles above page titles (class "subtitle") use Schoolbell in English. */
+html:not([lang="km"]) .subtitle {
+  font-family: var(--font-subtitle), cursive !important;
+  font-size: 22px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: none !important;
+}
