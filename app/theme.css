@@ -121,3 +121,10 @@
   transition: background-color 350ms ease, color 350ms ease,
     border-color 350ms ease, box-shadow 350ms ease !important;
 }
+
+/* Khmer text uses Kantumruy Pro (loaded in app/layout.js). Inline styles
+   set Georgia or Courier on many elements, so this rule needs !important. */
+html[lang="km"],
+html[lang="km"] * {
+  font-family: var(--font-khmer), sans-serif !important;
+}

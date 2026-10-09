@@ -1,3 +1,4 @@
+import { Kantumruy_Pro } from "next/font/google";
 import Script from "next/script";
 
 import collection from "../collection.config.js";
@@ -19,6 +20,13 @@ export const metadata = {
   twitter: { card: "summary_large_image" },
 };
 
+const kantumruy = Kantumruy_Pro({
+  subsets: ["khmer", "latin"],
+  weight: ["400", "600"],
+  variable: "--font-khmer",
+  display: "swap",
+});
+
 // Runs before the page is shown, so a saved dark/light choice applies
 // without a flash of the other theme. Must match THEME_KEY in lib/themeTransition.js.
 const applySavedTheme = `
@@ -33,7 +41,7 @@ try {
 export default function RootLayout({ children }) {
   return (
     // The script above may add data-theme before React loads; that's expected.
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={kantumruy.variable}>
       <body
         style={{
           margin: 0,

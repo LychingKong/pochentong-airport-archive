@@ -12,7 +12,8 @@ export default function FormSection({ id, number, required, children }) {
       <div>
         <span className={styles.sectionNumber}>{number}</span>
         <h2 id={`${id}-heading`} className={styles.sectionTitle}>
-          {required ? `${title} *` : title}
+          {title}
+          {required ? <span className={styles.required}> *</span> : null}
           {required ? null : (
             <span className={styles.optional}>{t.optional}</span>
           )}
