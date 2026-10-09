@@ -18,7 +18,7 @@ export default function BackLink() {
   const { t } = useLanguage();
 
   return (
-    <Link href="/" style={style}>
+    <Link href="/" style={style} data-direction="back">
       {t.backToHome}
     </Link>
   );

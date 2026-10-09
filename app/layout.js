@@ -3,6 +3,7 @@ import Script from "next/script";
 
 import collection from "../collection.config.js";
 import LanguageProvider from "../components/LanguageProvider";
+import PageTransition from "../components/PageTransition";
 
 import "./theme.css";
 
@@ -68,6 +69,7 @@ export default function RootLayout({ children }) {
       className={`${schoolbell.variable} ${poppins.variable} ${baloo.variable} ${kantumruy.variable}`}
     >
       <body
+        suppressHydrationWarning
         style={{
           margin: 0,
           backgroundColor: "var(--color-bg)",
@@ -80,7 +82,10 @@ export default function RootLayout({ children }) {
         <Script id="apply-saved-theme" strategy="beforeInteractive">
           {applySavedTheme}
         </Script>
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          {children}
+          <PageTransition />
+        </LanguageProvider>
       </body>
     </html>
   );
