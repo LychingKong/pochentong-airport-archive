@@ -1,3 +1,6 @@
+"use client";
+
+import { useVideoTitle } from "../lib/useVideoTitle";
 import styles from "./VideoTitle.module.css";
 
 // Drawing units per language: the font is 100 per line, and the box fits the
@@ -15,68 +18,39 @@ function splitLines(name, lines) {
   return [first, rest.join(" ")];
 }
 
-// The title text is a mask: the video shows only inside the letters.
+// The title letters are drawn on a canvas with the video playing inside them.
 // The real <h1> stays for screen readers and search engines.
 export default function VideoTitle({ name, src, language, lines }) {
-  const { width, height, baselines, stretch } =
-    LAYOUTS[language === "km" ? "km" : "en"];
-  const titleLines = splitLines(name, lines);
-
-  // Scales a line up from its baseline, so it grows taller without moving off its line.
-  const stretchFrom = (baseline) =>
-    `translate(0 ${baseline}) scale(1 ${stretch}) translate(0 ${-baseline})`;
+  const khmer = language === "km";
+  const layout = LAYOUTS[khmer ? "km" : "en"];
+  const { canvasRef, videoRef } = useVideoTitle({
+    lines: splitLines(name, lines),
+    layout,
+    fontVar: khmer ? "--font-khmer" : "--font-heading",
+    weight: khmer ? 700 : 800,
+    spacing: khmer ? 0 : -3,
+  });
 
   return (
     <div className={styles.wrap}>
       <h1 className={styles.srOnly}>{name}</h1>
-      <svg
-        className={styles.svg}
-        viewBox={`0 0 ${width} ${height}`}
+      <canvas
+        ref={canvasRef}
+        className={styles.canvas}
+        style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
         aria-hidden="true"
-        focusable="false"
-      >
-        <defs>
-          <mask
-            id="title-video-mask"
-            maskUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width={width}
-            height={height}
-          >
-            <rect width={width} height={height} fill="black" />
-            <g className={styles.glyphs} fill="white">
-              {titleLines.map((line, index) => (
-                <text
-                  key={index}
-                  x="0"
-                  y={baselines[index]}
-                  transform={stretchFrom(baselines[index])}
-                >
-                  {line}
-                </text>
-              ))}
-            </g>
-          </mask>
-        </defs>
-        <foreignObject
-          width={width}
-          height={height}
-          mask="url(#title-video-mask)"
-        >
-          <div className={styles.media}>
-            <video
-              className={styles.video}
-              src={src}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
-          </div>
-        </foreignObject>
-      </svg>
+      />
+      <video
+        ref={videoRef}
+        className={styles.video}
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
     </div>
   );
 }

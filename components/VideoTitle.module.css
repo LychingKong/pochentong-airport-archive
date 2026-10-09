@@ -3,44 +3,25 @@
   margin: 16px 0 14px;
 }
 
-.svg {
+/* Letters are drawn in this color when there is no video to show. */
+.canvas {
   display: block;
   width: 100%;
   max-width: 1000px;
   height: auto;
-  overflow: visible;
+  color: var(--color-accent);
 }
 
-/* The English body rule in theme.css uses !important on every element,
-   so this selector is more specific to keep Baloo 2 on the title. */
-:global(html:not([lang="km"])) .glyphs text {
-  font-family: var(--font-heading), sans-serif !important;
-  font-weight: 800;
-  font-size: 100px;
-  letter-spacing: -3px;
-}
-
-/* Khmer: the global Khmer rule in theme.css already sets Kantumruy Pro. */
-:global(html[lang="km"]) .glyphs text {
-  font-weight: 700;
-  font-size: 100px;
-}
-
-.media {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-accent);
-}
-
+/* The video is only a picture source for the canvas, so it stays invisible.
+   iPhones won't play a video that is display:none, so it is shrunk instead. */
 .video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: brightness(0.7);
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .srOnly {
@@ -53,11 +34,4 @@
   margin: -1px;
   padding: 0;
   border: 0;
-}
-
-/* Reduced motion: the letters stay solid navy and the video is not shown. */
-@media (prefers-reduced-motion: reduce) {
-  .video {
-    display: none;
-  }
 }
