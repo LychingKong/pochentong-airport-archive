@@ -3,25 +3,29 @@
   margin: 16px 0 14px;
 }
 
-/* Letters are drawn in this color when there is no video to show. */
-.canvas {
-  display: block;
+/* The box is cut to the shape of the letters by a mask image (set in
+   VideoTitle.js). The background color shows as solid letters when the
+   video can't play. */
+.stage {
+  position: relative;
   width: 100%;
   max-width: 1000px;
-  height: auto;
-  color: var(--color-accent);
+  overflow: hidden;
+  background-color: var(--color-accent);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
 }
 
-/* The video is only a picture source for the canvas, so it stays invisible.
-   iPhones won't play a video that is display:none, so it is shrunk instead. */
 .video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.7);
 }
 
 .srOnly {
@@ -34,4 +38,11 @@
   margin: -1px;
   padding: 0;
   border: 0;
+}
+
+/* Reduced motion: solid letters, no video. */
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    display: none;
+  }
 }

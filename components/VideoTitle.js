@@ -1,6 +1,6 @@
 "use client";
 
-import { useVideoTitle } from "../lib/useVideoTitle";
+import { useTitleMask } from "../lib/useTitleMask";
 import styles from "./VideoTitle.module.css";
 
 // Drawing units per language: the font is 100 per line, and the box fits the
@@ -18,12 +18,12 @@ function splitLines(name, lines) {
   return [first, rest.join(" ")];
 }
 
-// The title letters are drawn on a canvas with the video playing inside them.
-// The real <h1> stays for screen readers and search engines.
+// A video plays inside a box that is masked to the shape of the title
+// letters. The real <h1> stays for screen readers and search engines.
 export default function VideoTitle({ name, src, language, lines }) {
   const khmer = language === "km";
   const layout = LAYOUTS[khmer ? "km" : "en"];
-  const { canvasRef, videoRef } = useVideoTitle({
+  const { stageRef, videoRef, maskUrl } = useTitleMask({
     lines: splitLines(name, lines),
     layout,
     fontVar: khmer ? "--font-khmer" : "--font-heading",
@@ -31,26 +31,30 @@ export default function VideoTitle({ name, src, language, lines }) {
     spacing: khmer ? 0 : -3,
   });
 
+  const stageStyle = { aspectRatio: `${layout.width} / ${layout.height}` };
+  if (maskUrl) {
+    stageStyle.maskImage = `url(${maskUrl})`;
+    stageStyle.WebkitMaskImage = `url(${maskUrl})`;
+  } else {
+    stageStyle.visibility = "hidden";
+  }
+
   return (
     <div className={styles.wrap}>
       <h1 className={styles.srOnly}>{name}</h1>
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-        style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
-        aria-hidden="true"
-      />
-      <video
-        ref={videoRef}
-        className={styles.video}
-        src={src}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-      />
+      <div ref={stageRef} className={styles.stage} style={stageStyle}>
+        <video
+          ref={videoRef}
+          className={styles.video}
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+      </div>
     </div>
   );
 }
