@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import collection from "../../../collection.config.js";
@@ -44,15 +45,29 @@ function transformEntry(dbEntry) {
   };
 }
 
+// One database lookup per request, shared by the page and its <title> tag.
+const loadEntryRows = cache(async (id) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("entries")
+    .select("*")
+    .eq("id", id);
+  return error ? null : data;
+});
+
+async function loadCurrentUser() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+}
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
 
   try {
-    const supabase = await createClient();
-    const { data: dbEntries } = await supabase
-      .from("entries")
-      .select("*")
-      .eq("id", id);
+    const dbEntries = await loadEntryRows(id);
 
     if (!dbEntries || dbEntries.length === 0) {
       return {};
@@ -96,24 +111,17 @@ export default async function EntryPage({ params }) {
   const { id } = await params;
 
   try {
-    const supabase = await createClient();
-    const { data: dbEntries, error } = await supabase
-      .from("entries")
-      .select("*")
-      .eq("id", id);
-
-    if (error) {
-      notFound();
-    }
+    // Look up the entry and the signed-in user at the same time.
+    const [dbEntries, user] = await Promise.all([
+      loadEntryRows(id),
+      loadCurrentUser(),
+    ]);
 
     if (!dbEntries || dbEntries.length === 0) {
       notFound();
     }
 
     const entry = transformEntry(dbEntries[0]);
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
     const isOwner = Boolean(user) && user.id === dbEntries[0].owner;
 
     return (

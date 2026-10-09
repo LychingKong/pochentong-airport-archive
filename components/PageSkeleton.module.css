@@ -1,0 +1,42 @@
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(32px, 5vw, 64px);
+}
+
+.block {
+  border-radius: 12px;
+  background-color: var(--color-subtle);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.bar {
+  height: 18px;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  background-color: var(--color-subtle);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.image {
+  aspect-ratio: 16 / 9;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block,
+  .bar {
+    animation: none;
+  }
+}

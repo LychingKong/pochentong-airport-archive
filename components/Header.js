@@ -84,10 +84,12 @@ export default function Header() {
   useEffect(() => {
     const checkAuth = async () => {
       const supabase = createClient();
+      // getSession reads the saved login on this device (no network call), so
+      // the header appears right away on every page.
       const {
-        data: { user: currentUser },
-      } = await supabase.auth.getUser();
-      setUser(currentUser);
+        data: { session },
+      } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
     };
 
     checkAuth();

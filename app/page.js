@@ -115,10 +115,14 @@ function transformEntry(dbEntry) {
   };
 }
 
+// Remembers the last list while the tab is open, so coming back to the home
+// page shows it at once and refreshes it in the background.
+let cachedEntries = null;
+
 export default function Home() {
   const { language, t } = useLanguage();
-  const [entries, setEntries] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [entries, setEntries] = useState(cachedEntries ?? []);
+  const [isLoading, setIsLoading] = useState(cachedEntries === null);
 
   useEffect(() => {
     async function fetchEntries() {
@@ -132,10 +136,11 @@ export default function Home() {
         if (error) throw error;
 
         const transformed = data.map(transformEntry);
+        cachedEntries = transformed;
         setEntries(transformed);
       } catch (err) {
         console.error("Failed to fetch entries:", err);
-        setEntries([]);
+        if (cachedEntries === null) setEntries([]);
       } finally {
         setIsLoading(false);
       }

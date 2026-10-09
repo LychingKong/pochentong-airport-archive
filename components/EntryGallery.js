@@ -47,6 +47,8 @@ export default function EntryGallery({ images, title }) {
         <img
           src={hero}
           alt={title || "Archive entry image"}
+          fetchPriority="high"
+          decoding="async"
           style={styles.heroImg}
         />
       </div>
@@ -57,6 +59,8 @@ export default function EntryGallery({ images, title }) {
               <img
                 src={src}
                 alt={`${title || "Archive entry"} — image ${index + 2}`}
+                loading="lazy"
+                decoding="async"
                 style={styles.thumbImg}
               />
             </div>

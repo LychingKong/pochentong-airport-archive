@@ -93,6 +93,8 @@ export default function EntryCard({
         <img
           src={imgSrc}
           alt=""
+          loading="lazy"
+          decoding="async"
           style={styles.mainImg}
           className={motion.mainImg}
         />

@@ -7,11 +7,11 @@
 }
 
 .leaving {
-  animation: fadeIn 150ms ease forwards;
+  animation: fadeIn 100ms ease forwards;
 }
 
 .arriving {
-  animation: fadeOut 200ms ease 300ms forwards;
+  animation: fadeOut 150ms ease 200ms forwards;
 }
 
 .plane {
@@ -22,7 +22,7 @@
   height: 120px;
   color: var(--color-accent);
   transform: rotate(90deg);
-  animation: fly 500ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
+  animation: fly 350ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
 }
 
 .back .plane {
