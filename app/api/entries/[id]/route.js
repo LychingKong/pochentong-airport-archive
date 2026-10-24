@@ -49,9 +49,13 @@ export async function PATCH(request, { params }) {
     ? [photo.url, ...otherImages.map((url) => url.trim())].join(", ")
     : current.images;
 
+  // An owner's edit goes back to review; a reviewer's edit keeps its status.
+  const { data: reviewer } = await supabase.rpc("is_reviewer");
+  const statusChange = reviewer ? {} : { status: "pending" };
+
   const { data: rows, error } = await supabase
     .from("entries")
-    .update({ ...form.values, images })
+    .update({ ...form.values, images, ...statusChange })
     .eq("id", id)
     .eq("owner", user.id)
     .select("id");

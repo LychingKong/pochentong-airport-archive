@@ -22,6 +22,16 @@ export default function ContributeForm({ entry }) {
   const form = useContributeForm(entry);
   const editing = Boolean(entry);
 
+  if (form.submitted) {
+    return (
+      <div className={styles.pageHead}>
+        <p className={styles.intro} role="status">
+          {t.submittedMessage}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={form.handleSubmit} noValidate className={styles.form}>
       <header className={styles.pageHead}>

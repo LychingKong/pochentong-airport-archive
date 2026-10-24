@@ -5,25 +5,12 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "../lib/supabase/client";
 import ContributeButton from "./ContributeButton";
+import headerStyles from "./Header.module.css";
 import { useLanguage } from "./LanguageProvider";
+import MyEntriesButton from "./MyEntriesButton";
 import ThemeToggle from "./ThemeToggle";
 
 const styles = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "clamp(40px, 6vw, 64px)",
-    paddingBottom: 16,
-    borderBottom: "1px solid var(--color-line)",
-  },
-  headerContent: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    flexWrap: "wrap",
-    gap: 20,
-  },
   languageButton: {
     fontFamily: "'Courier New', monospace",
     fontSize: 12,
@@ -103,9 +90,8 @@ export default function Header() {
   };
 
   return (
-    <div style={styles.header}>
-      <div />
-      <div style={styles.headerContent}>
+    <div className={headerStyles.header}>
+      <div className={headerStyles.headerContent}>
         <button
           onClick={() => setLanguage("en")}
           style={{
@@ -131,6 +117,7 @@ export default function Header() {
 
         {user ? (
           <>
+            <MyEntriesButton />
             <p style={styles.userEmail}>{user.email}</p>
             <button
               onClick={handleLogout}
