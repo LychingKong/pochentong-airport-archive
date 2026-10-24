@@ -9,6 +9,10 @@ const styles = {
     fontSize: "clamp(28px, 4vw, 40px)",
     margin: "0 0 clamp(24px, 4vw, 40px)",
   },
+  empty: {
+    fontSize: 16,
+    color: "var(--color-muted)",
+  },
   list: {
     listStyle: "none",
     margin: 0,
@@ -41,6 +45,9 @@ export default function MyEntriesList({ entries }) {
   return (
     <section>
       <h1 style={styles.heading}>{t.myEntries}</h1>
+      {entries.length === 0 ? (
+        <p style={styles.empty}>{t.noMyEntries}</p>
+      ) : null}
       <ul style={styles.list}>
         {entries.map((entry) => (
           <li key={entry.id}>
