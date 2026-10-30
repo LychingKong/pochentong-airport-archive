@@ -28,7 +28,7 @@ export default async function MyEntriesPage() {
   // Only this user's entries, in any status. Row-level security allows it.
   const { data: entries } = await supabase
     .from("entries")
-    .select("id, title, title_km, status")
+    .select("id, title, title_km, status, review_note")
     .eq("owner", user.id)
     .order("created_at", { ascending: false });
 

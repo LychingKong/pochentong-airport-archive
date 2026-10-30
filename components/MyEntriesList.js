@@ -37,6 +37,12 @@ const styles = {
     color: "var(--color-muted)",
     whiteSpace: "nowrap",
   },
+  note: {
+    width: "100%",
+    fontSize: 14,
+    lineHeight: 1.5,
+    color: "var(--color-text-soft)",
+  },
 };
 
 export default function MyEntriesList({ entries }) {
@@ -58,6 +64,11 @@ export default function MyEntriesList({ entries }) {
                   : entry.title}
               </span>
               <span style={styles.status}>{t.statuses[entry.status]}</span>
+              {entry.status === "returned" && entry.review_note ? (
+                <span style={styles.note}>
+                  {t.reviewerNoteLabel} {entry.review_note}
+                </span>
+              ) : null}
             </Link>
           </li>
         ))}
