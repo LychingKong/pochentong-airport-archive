@@ -1,0 +1,81 @@
+.card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--color-line);
+}
+
+.title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin: 0 0 12px;
+}
+
+.story {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+  white-space: pre-line;
+  margin: 0 0 12px;
+}
+
+.meta {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  color: var(--color-faint);
+  margin: 0 0 8px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: 1px solid var(--color-accent);
+  background-color: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.publish {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.error {
+  width: 100%;
+  font-size: 14px;
+  color: var(--color-error);
+  margin: 12px 0 0;
+}

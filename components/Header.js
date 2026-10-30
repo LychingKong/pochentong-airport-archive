@@ -8,6 +8,7 @@ import ContributeButton from "./ContributeButton";
 import headerStyles from "./Header.module.css";
 import { useLanguage } from "./LanguageProvider";
 import MyEntriesButton from "./MyEntriesButton";
+import ReviewLink from "./ReviewLink";
 import ThemeToggle from "./ThemeToggle";
 
 const styles = {
@@ -118,6 +119,7 @@ export default function Header() {
         {user ? (
           <>
             <MyEntriesButton />
+            <ReviewLink />
             <p style={styles.userEmail}>{user.email}</p>
             <button
               onClick={handleLogout}
