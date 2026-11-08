@@ -54,6 +54,7 @@ export default function EntryDetail({ entry }) {
       fontSize: 16,
       lineHeight: 1.8,
       color: "var(--color-text-soft)",
+      whiteSpace: "pre-wrap",
       margin: "0 0 18px",
     },
   };
