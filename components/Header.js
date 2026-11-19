@@ -4,70 +4,21 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "../lib/supabase/client";
+import BrandLink from "./BrandLink";
 import ContributeButton from "./ContributeButton";
-import headerStyles from "./Header.module.css";
+import styles from "./Header.module.css";
 import { useLanguage } from "./LanguageProvider";
+import LanguageToggle from "./LanguageToggle";
 import MyEntriesButton from "./MyEntriesButton";
+import buttons from "./NavButton.module.css";
 import ReviewLink from "./ReviewLink";
 import ThemeToggle from "./ThemeToggle";
 
-const styles = {
-  languageButton: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 12,
-    letterSpacing: 1,
-    padding: "6px 10px",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "var(--color-line)",
-    backgroundColor: "transparent",
-    color: "var(--color-accent)",
-    cursor: "pointer",
-    textTransform: "uppercase",
-  },
-  languageButtonActive: {
-    backgroundColor: "var(--color-accent)",
-    color: "var(--color-on-accent)",
-    borderColor: "var(--color-accent)",
-  },
-  userEmail: {
-    fontSize: 14,
-    color: "var(--color-muted)",
-    margin: 0,
-  },
-  authLink: {
-    fontSize: 14,
-    color: "var(--color-accent)",
-    textDecoration: "none",
-    marginLeft: 16,
-  },
-  authLinkHover: {
-    textDecoration: "underline",
-  },
-  logoutButton: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: 14,
-    fontWeight: 600,
-    padding: "8px 16px",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "var(--color-accent)",
-    backgroundColor: "transparent",
-    color: "var(--color-accent)",
-    cursor: "pointer",
-  },
-  logoutButtonHover: {
-    backgroundColor: "var(--color-accent)",
-    color: "var(--color-on-accent)",
-  },
-};
-
+// Brand on the left; actions, then the language and theme switches.
 export default function Header() {
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [linkHovered, setLinkHovered] = useState(null);
-  const [buttonHovered, setButtonHovered] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -90,76 +41,41 @@ export default function Header() {
     router.push("/");
   };
 
+  const ghost = `${buttons.button} ${buttons.ghost}`;
+
   return (
-    <div className={headerStyles.header}>
-      <div className={headerStyles.headerContent}>
-        <button
-          onClick={() => setLanguage("en")}
-          style={{
-            ...styles.languageButton,
-            ...(language === "en" ? styles.languageButtonActive : {}),
-          }}
-        >
-          EN
-        </button>
-        <button
-          onClick={() => setLanguage("km")}
-          style={{
-            ...styles.languageButton,
-            ...(language === "km" ? styles.languageButtonActive : {}),
-          }}
-        >
-          KH
-        </button>
-
-        <ThemeToggle />
-
+    <header className={styles.header}>
+      <BrandLink />
+      <div className={styles.nav}>
         <ContributeButton />
-
         {user ? (
           <>
             <MyEntriesButton />
             <ReviewLink />
-            <p style={styles.userEmail}>{user.email}</p>
-            <button
-              onClick={handleLogout}
-              style={{
-                ...styles.logoutButton,
-                ...(buttonHovered ? styles.logoutButtonHover : {}),
-              }}
-              onMouseEnter={() => setButtonHovered(true)}
-              onMouseLeave={() => setButtonHovered(false)}
-            >
+            <span className={styles.userEmail} title={user.email}>
+              {user.email}
+            </span>
+            <button type="button" onClick={handleLogout} className={ghost}>
               {t.logOut}
             </button>
           </>
         ) : (
           <>
-            <a
-              href="/login"
-              style={{
-                ...styles.authLink,
-                ...(linkHovered === "login" ? styles.authLinkHover : {}),
-              }}
-              onMouseEnter={() => setLinkHovered("login")}
-              onMouseLeave={() => setLinkHovered(null)}
-            >
+            <a href="/login" className={ghost}>
               {t.login}
             </a>
             <a
               href="/signup"
-              style={{
-                ...styles.authLink,
-                ...(linkHovered === "signup" ? styles.authLinkHover : {}),
-              }}
-              onMouseEnter={() => setLinkHovered("signup")}
-              onMouseLeave={() => setLinkHovered(null)}
+              className={`${buttons.button} ${buttons.secondary}`}
             >
               {t.signup}
             </a>
           </>
         )}
+        <span className={styles.divider} aria-hidden="true" />
+        <LanguageToggle />
+        <ThemeToggle />
       </div>
-    </div>
+    </header>
   );
 }

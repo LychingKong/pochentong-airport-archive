@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 
 import { getLocalizedEntryField } from "../lib/translations";
+import styles from "./ArchiveGrid.module.css";
 import EntryCard from "./EntryCard";
 import { useLanguage } from "./LanguageProvider";
+import NoResults from "./NoResults";
 import SearchInput from "./SearchInput";
 
 // Search against the fields in the currently selected language
@@ -55,58 +57,27 @@ export default function ArchiveGrid({ entries }) {
     return q ? entries.filter((entry) => matches(entry, q, language)) : entries;
   }, [entries, query, language]);
 
-  const styles = {
-    sectionHead: {
-      display: "flex",
-      alignItems: "baseline",
-      justifyContent: "space-between",
-      marginBottom: "clamp(28px, 4vw, 40px)",
-    },
-    sectionTitle: {
-      fontFamily: "Georgia, 'Times New Roman', serif",
-      fontSize: 22,
-      fontWeight: 600,
-      margin: 0,
-      color: "var(--color-text)",
-    },
-    count: {
-      fontFamily: "'Courier New', monospace",
-      fontSize: 13,
-      color: "var(--color-detail)",
-    },
-    grid: {
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-      gap: "clamp(32px, 5vw, 56px)",
-    },
-    empty: {
-      fontSize: 15,
-      color: "var(--color-muted)",
-      lineHeight: 1.6,
-      padding: "8px 0 24px",
-    },
-  };
-
   return (
     <section>
-      <SearchInput
-        value={query}
-        onChange={setQuery}
-        placeholder={t.searchPlaceholder}
-      />
-
-      <div style={styles.sectionHead}>
-        <h2 style={styles.sectionTitle}>{t.collectionSectionTitle}</h2>
-        {/* Live count updates as search results change */}
-        <span style={styles.count}>
-          {filtered.length}{" "}
-          {filtered.length === 1 ? t.entryCountSingular : t.entryCountPlural}
-        </span>
+      {/* Title and live count on the left, search on the right (stacks on phones) */}
+      <div className={styles.toolbar}>
+        <div className={styles.heading}>
+          <h2 className={styles.title}>{t.collectionSectionTitle}</h2>
+          <span className={styles.count}>
+            {filtered.length}{" "}
+            {filtered.length === 1 ? t.entryCountSingular : t.entryCountPlural}
+          </span>
+        </div>
+        <SearchInput
+          value={query}
+          onChange={setQuery}
+          placeholder={t.searchPlaceholder}
+        />
       </div>
 
       {/* Show grid of results if any match, otherwise show "no results" message */}
       {filtered.length > 0 ? (
-        <div style={styles.grid}>
+        <div className={styles.grid}>
           {filtered.map((entry) => (
             <EntryCard
               key={entry.id}
@@ -128,8 +99,12 @@ export default function ArchiveGrid({ entries }) {
             />
           ))}
         </div>
+      ) : query.trim() ? (
+        // A search found nothing: illustrated "no entries found" message.
+        <NoResults />
       ) : (
-        <p style={styles.empty}>{t.noResults}</p>
+        // Nothing published yet (no search typed): keep the short message.
+        <p className={styles.empty}>{t.noResults}</p>
       )}
     </section>
   );

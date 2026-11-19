@@ -1,41 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 
 import { useLanguage } from "./LanguageProvider";
+import styles from "./NavButton.module.css";
 
-const styles = {
-  button: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: 14,
-    fontWeight: 600,
-    padding: "8px 16px",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "var(--color-accent)",
-    backgroundColor: "var(--color-accent)",
-    color: "var(--color-on-accent)",
-    textDecoration: "none",
-    whiteSpace: "nowrap",
-  },
-  hover: {
-    backgroundColor: "var(--color-accent-hover)",
-    borderColor: "var(--color-accent-hover)",
-  },
-};
-
+// The filled main action in the header.
 export default function ContributeButton() {
   const { t } = useLanguage();
-  const [hovered, setHovered] = useState(false);
 
   return (
-    <Link
-      href="/contribute"
-      style={{ ...styles.button, ...(hovered ? styles.hover : {}) }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <Link href="/contribute" className={`${styles.button} ${styles.primary}`}>
       {t.contributeButton}
     </Link>
   );

@@ -1,58 +1,39 @@
 "use client";
 
 import { useLanguage } from "./LanguageProvider";
+import styles from "./SearchInput.module.css";
 
+// Only the look lives here; ArchiveGrid does the filtering.
 export default function SearchInput({ value, onChange, placeholder }) {
   const { t } = useLanguage();
 
-  const styles = {
-    wrap: {
-      position: "relative",
-      maxWidth: 440,
-      marginBottom: "clamp(40px, 6vw, 56px)",
-    },
-    input: {
-      width: "100%",
-      boxSizing: "border-box",
-      padding: "13px 40px 13px 16px",
-      fontSize: 15,
-      fontFamily: "inherit",
-      color: "var(--color-text)",
-      backgroundColor: "var(--color-on-accent)",
-      border: "1px solid var(--color-line)",
-      borderRadius: 10,
-      outline: "none",
-    },
-    clear: {
-      position: "absolute",
-      right: 8,
-      top: "50%",
-      transform: "translateY(-50%)",
-      border: "none",
-      background: "none",
-      color: "var(--color-faint)",
-      fontSize: 20,
-      lineHeight: 1,
-      cursor: "pointer",
-      padding: 6,
-    },
-  };
-
   return (
-    <div style={styles.wrap}>
+    <div className={styles.wrap}>
+      <svg
+        className={styles.icon}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7" />
+        <path d="M20 20l-3.5-3.5" />
+      </svg>
       <input
         type="text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        style={styles.input}
+        className={styles.input}
       />
       {value ? (
         <button
           type="button"
           onClick={() => onChange("")}
-          style={styles.clear}
+          className={styles.clear}
           aria-label={t.clearSearchLabel}
         >
           ×

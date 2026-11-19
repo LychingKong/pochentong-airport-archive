@@ -15,6 +15,8 @@
   --color-surface: #ffffff;
   --color-surface-tint: #fdf9f6;
   --color-subtle: #f1eeea;
+  --color-stage: #ebe7e1; /* the homepage hero's grey stage */
+  --color-cloud: #ffffff; /* hero clouds */
 
   /* text */
   --color-text: #0e1420;
@@ -42,6 +44,15 @@
   --color-error-soft: #fbeceb;
   --color-error-line: #f2cfcc;
   --color-error-ring: rgba(179, 38, 30, 0.15);
+
+  /* corner radius: small for inputs and tags, larger for cards */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* elevation: a soft resting shadow and a lifted hover shadow */
+  --shadow-soft: 0 12px 28px rgba(18, 21, 28, 0.1);
+  --shadow-lift: 0 20px 40px rgba(18, 21, 28, 0.18);
 }
 
 /* The dark palette is written twice because CSS can't share one block
@@ -54,6 +65,8 @@
     --color-surface: #111a2a;
     --color-surface-tint: #152036;
     --color-subtle: #182337;
+    --color-stage: #2a3953;
+    --color-cloud: rgba(255, 255, 255, 0.16);
     --color-text: #e9edf4;
     --color-text-soft: #c8d0dd;
     --color-muted: #96a2b6;
@@ -71,6 +84,8 @@
     --color-error-soft: rgba(255, 111, 97, 0.12);
     --color-error-line: rgba(255, 111, 97, 0.35);
     --color-error-ring: rgba(255, 111, 97, 0.25);
+    --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.35);
+    --shadow-lift: 0 20px 40px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -80,6 +95,8 @@
   --color-surface: #111a2a;
   --color-surface-tint: #152036;
   --color-subtle: #182337;
+  --color-stage: #2a3953;
+  --color-cloud: rgba(255, 255, 255, 0.16);
   --color-text: #e9edf4;
   --color-text-soft: #c8d0dd;
   --color-muted: #96a2b6;
@@ -97,6 +114,8 @@
   --color-error-soft: rgba(255, 111, 97, 0.12);
   --color-error-line: rgba(255, 111, 97, 0.35);
   --color-error-ring: rgba(255, 111, 97, 0.25);
+  --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Theme switch animation (see lib/themeTransition.js).

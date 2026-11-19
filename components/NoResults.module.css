@@ -1,0 +1,213 @@
+/* "No entries found" (NoResults.js) and its picture (NoResultsWindow,
+   NoResultsItems, NoResultsIllustration). Window, frame and clouds use
+   theme colors so they follow dark mode; the objects keep warm fixed
+   colors, like the airliner in the hero. */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px clamp(16px, 3vw, 32px);
+  text-align: center;
+}
+
+.art {
+  width: min(100%, 560px);
+  height: auto;
+  margin-bottom: 4px;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 3.4vw, 36px);
+  color: var(--color-text);
+}
+
+.hint {
+  max-width: 46ch;
+  margin: 0 0 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* A soft tip, styled so it doesn't look clickable. */
+.tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  background-color: var(--color-stage);
+  border-radius: 999px;
+}
+
+.tip svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+/* ---------- window (background) ---------- */
+
+.sky {
+  fill: var(--color-stage);
+}
+
+.cloud {
+  fill: var(--color-cloud);
+}
+
+.distant {
+  fill: var(--color-surface);
+  opacity: 0.75;
+}
+
+.stripe {
+  fill: var(--color-detail);
+  opacity: 0.5;
+}
+
+.glass {
+  fill: #1c2a40;
+  opacity: 0.5;
+}
+
+.sill {
+  fill: var(--color-bg);
+  opacity: 0.55;
+}
+
+/* Frame bars in the page color, so they read as the window's mullions. */
+.frame {
+  fill: none;
+  stroke: var(--color-bg);
+  stroke-width: 9;
+  opacity: 0.9;
+}
+
+/* ---------- items (foreground) ---------- */
+
+.shadow {
+  fill: rgba(18, 21, 28, 0.08);
+}
+
+.leaf {
+  fill: #8f9b6d;
+}
+
+.pot {
+  fill: #e9cfa9;
+}
+
+.case {
+  fill: #b8643a;
+}
+
+.caseLine {
+  fill: none;
+  stroke: #9a4f2b;
+  stroke-width: 4;
+}
+
+.handle {
+  fill: none;
+  stroke: #7a3f22;
+  stroke-width: 8;
+}
+
+.tagString {
+  stroke: #7a3f22;
+  stroke-width: 2;
+}
+
+.tag {
+  fill: #f3dfc1;
+}
+
+.tagText {
+  font-size: 11px;
+  font-weight: 700;
+  fill: #7a3f22;
+}
+
+.photo {
+  fill: #fffaf3;
+  stroke: rgba(18, 21, 28, 0.08);
+  stroke-width: 1;
+}
+
+.sepia {
+  fill: #d9c2a3;
+}
+
+.sepiaInk {
+  fill: #a88a68;
+}
+
+.lensHandle {
+  fill: none;
+  stroke: #7a3f22;
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.lens {
+  fill: rgba(255, 255, 255, 0.6);
+  stroke: #8a4a26;
+  stroke-width: 9;
+}
+
+.question {
+  font-size: 46px;
+  font-weight: 700;
+  fill: #8a4a26;
+}
+
+.spark {
+  fill: none;
+  stroke: var(--color-detail);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.trail {
+  fill: none;
+  stroke: var(--color-detail);
+  stroke-width: 2;
+  stroke-dasharray: 6 8;
+  opacity: 0.5;
+}
+
+.trailPlane {
+  fill: var(--color-detail);
+  opacity: 0.85;
+}
+
+/* The magnifying glass sways a little, as if still searching. */
+.magnifier {
+  transform-box: view-box;
+  transform-origin: 470px 270px;
+  animation: search 4s ease-in-out infinite alternate;
+}
+
+@keyframes search {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnifier {
+    animation: none;
+  }
+}

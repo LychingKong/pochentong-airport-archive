@@ -1,7 +1,54 @@
-/* Hover-only motion for the 3-image collage. Kept separate from
-   EntryCard.js's inline styles because :hover and prefers-reduced-motion
-   can't be expressed with inline style objects. Resting values below
-   match what used to be inline, so the design is unchanged at rest. */
+/* The card's text, plus hover-only motion for the 3-image collage. Kept in
+   CSS because :hover and prefers-reduced-motion can't be expressed with
+   inline style objects. */
+
+/* Each card fills its grid row, so the meta line lines up along the row. */
+.card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 6px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: clamp(19px, 2vw, 21px);
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 200ms ease;
+}
+
+.card:hover .title {
+  color: var(--color-detail);
+}
+
+.body {
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--color-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.meta {
+  margin: auto 0 0;
+  font-size: 12.5px;
+  color: var(--color-faint);
+}
+
+.contributor {
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
 
 .echoBack,
 .echoMid,
@@ -24,7 +71,7 @@
 
 .mainImg {
   transform: scale(1);
-  box-shadow: 0 12px 28px rgba(18, 21, 28, 0.1);
+  box-shadow: var(--shadow-soft);
 }
 
 .collage:hover .echoBack {
@@ -41,7 +88,7 @@
 
 .collage:hover .mainImg {
   transform: scale(1.02);
-  box-shadow: 0 20px 40px rgba(18, 21, 28, 0.18);
+  box-shadow: var(--shadow-lift);
 }
 
 @media (hover: none) {
@@ -59,7 +106,7 @@
 
   .collage:hover .mainImg {
     transform: scale(1);
-    box-shadow: 0 12px 28px rgba(18, 21, 28, 0.1);
+    box-shadow: var(--shadow-soft);
   }
 }
 

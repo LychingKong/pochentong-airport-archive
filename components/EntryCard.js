@@ -13,35 +13,22 @@ export default function EntryCard({
 }) {
   const imgSrc = image && image.length > 0 ? image : "/placeholder-image.png";
 
+  // The two "echo" layers behind the photo share this background.
+  const echo = {
+    position: "absolute",
+    inset: 0,
+    backgroundImage: `url(${imgSrc})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    borderRadius: "var(--radius-md)",
+    border: "1px solid var(--color-line)",
+  };
+
   const styles = {
-    card: {
-      display: "flex",
-      flexDirection: "column",
-      textDecoration: "none",
-      color: "inherit",
-    },
     collage: {
       position: "relative",
       aspectRatio: "4 / 3",
-      marginBottom: "clamp(20px, 3vw, 28px)",
-    },
-    echoBack: {
-      position: "absolute",
-      inset: 0,
-      backgroundImage: `url(${imgSrc})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      borderRadius: 10,
-      border: "1px solid var(--color-line)",
-    },
-    echoMid: {
-      position: "absolute",
-      inset: 0,
-      backgroundImage: `url(${imgSrc})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      borderRadius: 10,
-      border: "1px solid var(--color-line)",
+      marginBottom: "clamp(20px, 3vw, 26px)",
     },
     mainImg: {
       position: "absolute",
@@ -49,47 +36,17 @@ export default function EntryCard({
       width: "100%",
       height: "100%",
       objectFit: "cover",
-      borderRadius: 10,
+      borderRadius: "var(--radius-md)",
       border: "1px solid var(--color-line)",
-    },
-    title: {
-      fontFamily: "Georgia, 'Times New Roman', serif",
-      fontSize: "clamp(19px, 2vw, 22px)",
-      fontWeight: 600,
-      margin: "0 0 8px",
-      color: "var(--color-text)",
-    },
-    body: {
-      fontSize: 14.5,
-      color: "var(--color-muted)",
-      lineHeight: 1.6,
-      margin: "0 0 14px",
-      display: "-webkit-box",
-      WebkitLineClamp: 2,
-      WebkitBoxOrient: "vertical",
-      overflow: "hidden",
-    },
-    meta: {
-      fontFamily: "'Courier New', monospace",
-      fontSize: 12,
-      letterSpacing: 0.5,
-      color: "var(--color-faint)",
+      backgroundColor: "var(--color-subtle)",
     },
   };
 
   return (
-    <Link href={`/entries/${id}`} style={styles.card}>
+    <Link href={`/entries/${id}`} className={motion.card}>
       <div style={styles.collage} className={motion.collage}>
-        <div
-          style={styles.echoBack}
-          className={motion.echoBack}
-          aria-hidden="true"
-        />
-        <div
-          style={styles.echoMid}
-          className={motion.echoMid}
-          aria-hidden="true"
-        />
+        <div style={echo} className={motion.echoBack} aria-hidden="true" />
+        <div style={echo} className={motion.echoMid} aria-hidden="true" />
         <img
           src={imgSrc}
           alt=""
@@ -99,11 +56,13 @@ export default function EntryCard({
           className={motion.mainImg}
         />
       </div>
-      <h2 style={styles.title}>{title || untitledLabel}</h2>
-      {description ? <p style={styles.body}>{description}</p> : null}
-      <p style={styles.meta}>
-        {contributor}
-        {contributor && date ? "  ·  " : ""}
+      <h2 className={motion.title}>{title || untitledLabel}</h2>
+      {description ? <p className={motion.body}>{description}</p> : null}
+      <p className={motion.meta}>
+        {contributor ? (
+          <span className={motion.contributor}>{contributor}</span>
+        ) : null}
+        {contributor && date ? <span aria-hidden="true"> · </span> : null}
         {date}
       </p>
     </Link>

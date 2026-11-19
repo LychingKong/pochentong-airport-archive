@@ -1,0 +1,102 @@
+/* Background motion for the homepage hero (see HeroSky.js). Fills the grey
+   panel, which clips it, and sits behind the big airliner. */
+
+.sky {
+  position: absolute;
+  inset: 0;
+}
+
+/* Clouds drift right to left, as if the parked plane were moving. */
+.cloud {
+  position: absolute;
+  height: auto;
+  color: var(--color-cloud);
+  /* A faint shadow so white clouds still read on the pale stage. */
+  filter: drop-shadow(0 6px 10px rgba(18, 21, 28, 0.06));
+  animation-name: drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: left;
+}
+
+@keyframes drift {
+  from {
+    left: 100%;
+  }
+  to {
+    left: -160px;
+  }
+}
+
+/* The small plane crosses in the first 55% of each cycle, then waits
+   off-screen, so it passes by now and then instead of nonstop. */
+.flight {
+  position: absolute;
+  top: 12%;
+  left: -160px;
+  animation: fly 24s linear -3s infinite;
+  will-change: left;
+}
+
+@keyframes fly {
+  0% {
+    left: -160px;
+  }
+  55%,
+  100% {
+    left: 100%;
+  }
+}
+
+.craft {
+  display: flex;
+  align-items: center;
+  animation: bob 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes bob {
+  from {
+    transform: translateY(-5px);
+  }
+  to {
+    transform: translateY(5px);
+  }
+}
+
+/* Dashed contrail that fades out behind the plane. */
+.trail {
+  width: 100px;
+  height: 2px;
+  margin-right: 4px;
+  color: var(--color-accent);
+  opacity: 0.35;
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor 0 8px,
+    transparent 8px 14px
+  );
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000);
+  mask-image: linear-gradient(90deg, transparent, #000);
+}
+
+/* PlaneIcon points up; turning it 90deg makes it face right. */
+.miniPlane {
+  width: 26px;
+  height: 26px;
+  color: var(--color-accent);
+  opacity: 0.75;
+  transform: rotate(90deg);
+}
+
+/* Reduced motion: clouds hold still and the small plane stays away. */
+@media (prefers-reduced-motion: reduce) {
+  .cloud,
+  .flight,
+  .craft {
+    animation: none;
+  }
+
+  .flight {
+    display: none;
+  }
+}

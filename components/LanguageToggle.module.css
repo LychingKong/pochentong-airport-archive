@@ -1,0 +1,41 @@
+.group {
+  display: inline-flex;
+  padding: 3px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+}
+
+.option {
+  padding: 4px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-muted);
+  background-color: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.option:hover {
+  color: var(--color-text);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.option[aria-pressed="true"] {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+}
+
+/* "ខ្មែរ" keeps the Khmer font even while the page is in English (theme.css
+   sets every element to Poppins there; this selector is more specific). */
+.option:lang(km) {
+  font-family: var(--font-khmer), sans-serif !important;
+}

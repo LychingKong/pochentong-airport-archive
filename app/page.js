@@ -3,81 +3,15 @@
 import { useEffect, useState } from "react";
 
 import collection from "../collection.config.js";
+import ArchiveCredits from "../components/ArchiveCredits";
 import ArchiveGrid from "../components/ArchiveGrid";
 import Header from "../components/Header";
+import HomeHero from "../components/HomeHero";
 import { useLanguage } from "../components/LanguageProvider";
-import VideoTitle from "../components/VideoTitle";
+import PlaneIcon from "../components/PlaneIcon";
 import { createClient } from "../lib/supabase/client";
 import { collectionText } from "../lib/translations";
-
-const styles = {
-  wrap: {
-    maxWidth: 1160,
-    margin: "0 auto",
-    padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
-  },
-  hero: {
-    marginBottom: "clamp(40px, 6vw, 64px)",
-  },
-  kicker: {
-    fontFamily: "'Courier New', monospace",
-    color: "var(--color-detail)",
-    fontSize: 13,
-    letterSpacing: 2,
-    margin: 0,
-  },
-  title: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: "clamp(34px, 5vw, 52px)",
-    fontWeight: 600,
-    margin: "16px 0 14px",
-    lineHeight: 1.15,
-    color: "var(--color-text)",
-  },
-  description: {
-    fontSize: 17,
-    color: "var(--color-muted)",
-    lineHeight: 1.65,
-    margin: 0,
-    maxWidth: 680,
-  },
-  metaRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "clamp(28px, 5vw, 56px)",
-    padding: "24px 0",
-    borderTop: "1px solid var(--color-line)",
-    borderBottom: "1px solid var(--color-line)",
-    marginBottom: "clamp(48px, 7vw, 80px)",
-  },
-  metaLabel: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 11,
-    letterSpacing: 1,
-    color: "var(--color-faint)",
-    margin: "0 0 6px",
-  },
-  metaValue: {
-    fontSize: 15,
-    lineHeight: 1.5,
-    margin: 0,
-    color: "var(--color-text-soft)",
-    maxWidth: 420,
-  },
-  footer: {
-    marginTop: "clamp(64px, 9vw, 96px)",
-    paddingTop: 24,
-    borderTop: "1px solid var(--color-line)",
-    fontSize: 13,
-    color: "var(--color-faint)",
-  },
-  loadingPlaceholder: {
-    fontSize: 15,
-    color: "var(--color-muted)",
-    lineHeight: 1.6,
-    padding: "32px 0",
-  },
-};
+import styles from "./page.module.css";
 
 function formatDate(isoDate) {
   if (!isoDate) return "";
@@ -154,39 +88,33 @@ export default function Home() {
     language === "km" ? { ...collection, ...collectionText.km } : collection;
 
   return (
-    <main style={styles.wrap}>
+    <main className={styles.page}>
       <Header />
-      <div style={styles.hero}>
-        <p className="subtitle" style={styles.kicker}>
-          {t.kicker}
-        </p>
-        <VideoTitle
-          name={localizedCollection.name}
-          src="/videos/hero.mp4"
-          language={language}
-          lines={localizedCollection.nameLines}
-        />
-        <p style={styles.description}>{localizedCollection.description}</p>
-      </div>
 
-      <div style={styles.metaRow}>
-        <div>
-          <p style={styles.metaLabel}>{t.curatedByLabel}</p>
-          <p style={styles.metaValue}>{localizedCollection.curator}</p>
-        </div>
-        <div>
-          <p style={styles.metaLabel}>{t.sourceLabel}</p>
-          <p style={styles.metaValue}>{localizedCollection.source}</p>
-        </div>
-      </div>
+      <HomeHero collection={localizedCollection} entries={entries} />
+
+      <ArchiveCredits
+        curator={localizedCollection.curator}
+        source={localizedCollection.source}
+      />
 
       {isLoading ? (
-        <div style={styles.loadingPlaceholder}>{t.loadingEntries}</div>
+        <p className={styles.loading} role="status">
+          {t.loadingEntries}
+        </p>
       ) : (
-        <ArchiveGrid entries={entries} />
+        // id="collection" is where the hero's orange arrow scrolls to.
+        <div id="collection" className={styles.collection}>
+          <ArchiveGrid entries={entries} />
+        </div>
       )}
 
-      <footer style={styles.footer}>{t.footer}</footer>
+      <footer className={styles.footer}>
+        <span className={styles.footerMark} aria-hidden="true">
+          <PlaneIcon className={styles.footerIcon} />
+        </span>
+        <p className={styles.footerText}>{t.footer}</p>
+      </footer>
     </main>
   );
 }

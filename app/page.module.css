@@ -1,0 +1,72 @@
+/* Homepage layout: page width, loading message and footer. The hero,
+   the curator/source tiles (ArchiveCredits) and the collection grid style
+   themselves in their own CSS files under components/. */
+
+.page {
+  box-sizing: border-box;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px) clamp(48px, 7vw, 80px);
+}
+
+/* On phones the cards' tilted back photos poke ~1px past the screen edge and
+   cause sideways scrolling; clip them (their hover spread is off on touch). */
+@media (max-width: 720px) {
+  .page {
+    overflow-x: clip;
+  }
+}
+
+/* Leaves a little room above the collection when the hero arrow jumps here. */
+.collection {
+  scroll-margin-top: 24px;
+}
+
+/* ---------- loading ---------- */
+
+.loading {
+  margin: 0;
+  padding: clamp(40px, 6vw, 64px) 24px;
+  font-size: 15px;
+  text-align: center;
+  color: var(--color-muted);
+  background-color: var(--color-surface-tint);
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- footer ---------- */
+
+.footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: clamp(72px, 10vw, 120px);
+  padding-top: 28px;
+  border-top: 1px solid var(--color-line);
+}
+
+.footerMark {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-detail);
+  background-color: var(--color-detail-soft);
+}
+
+.footerIcon {
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+}
+
+.footerText {
+  max-width: 640px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
