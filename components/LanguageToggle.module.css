@@ -1,8 +1,8 @@
+/* A soft grey track (no outline) so it sits quietly inside the header bar. */
 .group {
   display: inline-flex;
   padding: 3px;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-line);
+  background-color: var(--color-subtle);
   border-radius: 999px;
 }
 

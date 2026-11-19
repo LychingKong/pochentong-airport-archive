@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { createClient } from "../lib/supabase/client";
 import { useLanguage } from "./LanguageProvider";
@@ -11,6 +12,7 @@ import styles from "./NavButton.module.css";
 export default function ReviewLink() {
   const { t } = useLanguage();
   const [isReviewer, setIsReviewer] = useState(false);
+  const current = usePathname() === "/review";
 
   useEffect(() => {
     async function checkReviewer() {
@@ -25,7 +27,11 @@ export default function ReviewLink() {
   if (!isReviewer) return null;
 
   return (
-    <Link href="/review" className={`${styles.button} ${styles.secondary}`}>
+    <Link
+      href="/review"
+      className={`${styles.button} ${styles.ghost}`}
+      aria-current={current ? "page" : undefined}
+    >
       {t.reviewLink}
     </Link>
   );

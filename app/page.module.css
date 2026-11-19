@@ -17,9 +17,16 @@
   }
 }
 
-/* Leaves a little room above the collection when the hero arrow jumps here. */
+/* When the hero arrow jumps here, stop below the sticky header (about 73px
+   tall on desktop, about 107px on phones where it has two rows). */
 .collection {
-  scroll-margin-top: 24px;
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 720px) {
+  .collection {
+    scroll-margin-top: 128px;
+  }
 }
 
 /* ---------- loading ---------- */

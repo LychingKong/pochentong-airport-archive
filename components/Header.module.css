@@ -1,99 +1,157 @@
 /* Shared by Header and BrandLink.
-   Desktop: brand on the left, controls on the right. On narrow screens the
-   controls drop below the brand and wrap inside the screen. */
+
+   The header is a floating capsule ("bar") that sticks near the top of the
+   window while the page scrolls past around it. z-index 50 keeps it above
+   the page (the hero uses 1-2) but under the plane page transition (1000).
+
+   Desktop: brand left, page links centred, tools right. Phones: two rows. */
+
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding-top: 12px;
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+
+.bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px 24px;
-  padding: 18px 0;
-  margin-bottom: clamp(40px, 6vw, 72px);
-  border-bottom: 1px solid var(--color-line);
+  gap: 12px;
+  padding: 7px 8px 7px 8px;
+  /* Slightly see-through white with a blur, so scrolling content shows
+     faintly behind it, like frosted glass. */
+  background-color: color-mix(in srgb, var(--color-surface) 86%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px -14px rgba(18, 21, 28, 0.25);
+}
+
+/* Brand and the right-hand group share the leftover space equally, so the
+   page links in between sit in the true centre of the bar. */
+.brand,
+.right {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
   color: var(--color-text);
   text-decoration: none;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
 }
 
 .brand:focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
-.brandMark {
+/* The round logo badge (LogoMark); its height follows from the width. */
+.logo {
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  color: var(--color-on-accent);
-  background-color: var(--color-accent);
-}
-
-.brandIcon {
-  width: 18px;
-  height: 18px;
-  transform: rotate(45deg);
+  width: 40px;
 }
 
 .brandName {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.3;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   transition: color 150ms ease;
+}
+
+/* The name uses the heading font (Baloo 2) in English; theme.css gives
+   every element Poppins with !important, so this more specific rule wins. */
+:global(html:not([lang="km"])) .brandName {
+  font-family: var(--font-heading), sans-serif !important;
+  letter-spacing: 0.005em;
 }
 
 .brand:hover .brandName {
   color: var(--color-detail);
 }
 
-.nav {
+.nav,
+.right,
+.tools,
+.cta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
-.userEmail {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 0 4px;
-  font-size: 13px;
-  color: var(--color-muted);
+.right {
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.divider {
-  width: 1px;
-  height: 24px;
-  margin: 0 6px;
-  background-color: var(--color-line);
-}
+/* ---------- phones: a rounded card with two rows ---------- */
 
 @media (max-width: 720px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
+    padding-top: 8px;
   }
 
-  .divider {
+  .bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    /* Contribute spans the two right columns, so the top row's switches
+       and account circle stay packed together at the right. */
+    grid-template-areas:
+      "brand tools account"
+      "nav cta cta";
+    gap: 8px;
+    padding: 8px;
+    border-radius: 22px;
+  }
+
+  /* The right-hand group's parts join the grid directly. */
+  .right {
+    display: contents;
+  }
+
+  .brand {
+    grid-area: brand;
+  }
+
+  .tools {
+    grid-area: tools;
+    justify-self: end;
+  }
+
+  .account {
+    grid-area: account;
+  }
+
+  .cta {
+    grid-area: cta;
+    justify-self: end;
+  }
+
+  .nav {
+    grid-area: nav;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
     display: none;
   }
 
-  /* Long emails get their own line on phones instead of squeezing buttons. */
-  .userEmail {
-    order: 10;
-    width: 100%;
-    max-width: none;
-    padding: 0;
+  /* The logo stands for the name here; screen readers still hear it. */
+  .brandName {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }

@@ -12,11 +12,9 @@ const style = {
   width: 34,
   height: 34,
   padding: 0,
-  borderWidth: 1,
-  borderStyle: "solid",
-  borderColor: "var(--color-line)",
+  border: "none",
   borderRadius: 999,
-  backgroundColor: "var(--color-surface)",
+  backgroundColor: "var(--color-subtle)",
   color: "var(--color-text-soft)",
   cursor: "pointer",
 };

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "../lib/supabase/client";
+import AccountMenu from "./AccountMenu";
 import BrandLink from "./BrandLink";
 import ContributeButton from "./ContributeButton";
 import styles from "./Header.module.css";
@@ -41,40 +42,48 @@ export default function Header() {
     router.push("/");
   };
 
-  const ghost = `${buttons.button} ${buttons.ghost}`;
-
+  // A floating capsule bar: brand left, page links centred, tools right.
+  // On phones it becomes two rows (see Header.module.css).
   return (
     <header className={styles.header}>
-      <BrandLink />
-      <div className={styles.nav}>
-        <ContributeButton />
-        {user ? (
-          <>
-            <MyEntriesButton />
-            <ReviewLink />
-            <span className={styles.userEmail} title={user.email}>
-              {user.email}
-            </span>
-            <button type="button" onClick={handleLogout} className={ghost}>
-              {t.logOut}
-            </button>
-          </>
-        ) : (
-          <>
-            <a href="/login" className={ghost}>
-              {t.login}
-            </a>
-            <a
-              href="/signup"
-              className={`${buttons.button} ${buttons.secondary}`}
-            >
-              {t.signup}
-            </a>
-          </>
-        )}
-        <span className={styles.divider} aria-hidden="true" />
-        <LanguageToggle />
-        <ThemeToggle />
+      <div className={styles.bar}>
+        <BrandLink />
+
+        {/* Page links for signed-in visitors; empty when signed out. */}
+        <nav className={styles.nav}>
+          {user ? (
+            <>
+              <MyEntriesButton />
+              <ReviewLink />
+            </>
+          ) : null}
+        </nav>
+
+        <div className={styles.right}>
+          <div className={styles.tools}>
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+          {/* Signed out: one Sign In button (the sign-in page links to
+              sign-up for new visitors), then Contribute. */}
+          <div className={styles.cta}>
+            {user ? null : (
+              <a
+                href="/login"
+                className={`${buttons.button} ${buttons.secondary}`}
+              >
+                {t.login}
+              </a>
+            )}
+            <ContributeButton />
+          </div>
+          {/* Signed in: the account circle with the email and Log Out. */}
+          {user ? (
+            <div className={styles.account}>
+              <AccountMenu email={user.email} onLogout={handleLogout} />
+            </div>
+          ) : null}
+        </div>
       </div>
     </header>
   );

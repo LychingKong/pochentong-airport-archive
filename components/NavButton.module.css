@@ -57,3 +57,9 @@
   color: var(--color-text);
   background-color: var(--color-subtle);
 }
+
+/* The link for the page being viewed (aria-current="page"). */
+.ghost[aria-current="page"] {
+  color: var(--color-text);
+  background-color: var(--color-subtle);
+}

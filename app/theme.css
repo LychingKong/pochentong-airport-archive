@@ -17,6 +17,8 @@
   --color-subtle: #f1eeea;
   --color-stage: #ebe7e1; /* the homepage hero's grey stage */
   --color-cloud: #ffffff; /* hero clouds */
+  --color-logo-sky-top: #142d52; /* header logo badge sky (LogoMark) */
+  --color-logo-sky-bottom: #3c5a82;
 
   /* text */
   --color-text: #0e1420;
@@ -67,6 +69,8 @@
     --color-subtle: #182337;
     --color-stage: #2a3953;
     --color-cloud: rgba(255, 255, 255, 0.16);
+    --color-logo-sky-top: #2c4c7a;
+    --color-logo-sky-bottom: #5d7fad;
     --color-text: #e9edf4;
     --color-text-soft: #c8d0dd;
     --color-muted: #96a2b6;
@@ -97,6 +101,8 @@
   --color-subtle: #182337;
   --color-stage: #2a3953;
   --color-cloud: rgba(255, 255, 255, 0.16);
+  --color-logo-sky-top: #2c4c7a;
+  --color-logo-sky-bottom: #5d7fad;
   --color-text: #e9edf4;
   --color-text-soft: #c8d0dd;
   --color-muted: #96a2b6;

@@ -1,0 +1,43 @@
+/* The round logo badge (LogoMark.js). The sky is a touch lighter in dark
+   mode (theme.css tokens) so the circle still stands out on a dark page. */
+
+.logo {
+  display: block;
+  height: auto;
+  border-radius: 50%;
+}
+
+.skyTop {
+  stop-color: var(--color-logo-sky-top);
+}
+
+.skyBottom {
+  stop-color: var(--color-logo-sky-bottom);
+}
+
+.tan {
+  fill: #ecd0ae;
+}
+
+.roof {
+  fill: #f6e3c9;
+}
+
+.glass {
+  fill: #1d3a63;
+}
+
+/* Dashed navy lines read as rows of window panes on the terminal. */
+.windows {
+  fill: none;
+  stroke: #1d3a63;
+  stroke-width: 3.5;
+  stroke-dasharray: 7 2.5;
+}
+
+.trail {
+  fill: none;
+  stroke: #ecd0ae;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
