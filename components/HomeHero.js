@@ -8,6 +8,21 @@ import styles from "./HomeHero.module.css";
 import { useLanguage } from "./LanguageProvider";
 import PlaneIllustration from "./PlaneIllustration";
 
+// Glide down to the collection instead of jumping. It still stops below
+// the sticky header (scroll-margin-top on #collection in page.module.css).
+// Visitors who ask for reduced motion keep the instant jump; without
+// JavaScript the plain #collection link still works.
+function scrollToCollection(event) {
+  const target = document.getElementById("collection");
+  if (!target) return;
+  event.preventDefault();
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({
+    behavior: reduce ? "auto" : "smooth",
+    block: "start",
+  });
+}
+
 // Homepage hero: title top-left, entry count top-right, then a soft stage
 // with an airliner breaking out of its top edge. The description sits in a
 // notch cut from the stage's bottom-left; the newest story floats on the right.
@@ -42,6 +57,7 @@ export default function HomeHero({ collection, entries }) {
             href="#collection"
             className={styles.jump}
             aria-label={t.collectionSectionTitle}
+            onClick={scrollToCollection}
           >
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path
