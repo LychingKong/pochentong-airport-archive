@@ -10,6 +10,7 @@ import ContributeButton from "./ContributeButton";
 import styles from "./Header.module.css";
 import { useLanguage } from "./LanguageProvider";
 import LanguageToggle from "./LanguageToggle";
+import MenuToggle from "./MenuToggle";
 import MyEntriesButton from "./MyEntriesButton";
 import buttons from "./NavButton.module.css";
 import ReviewLink from "./ReviewLink";
@@ -42,21 +43,44 @@ export default function Header() {
     router.push("/");
   };
 
+  // Phones only: the ☰ menu panel. Escape closes it.
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event) =>
+      event.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
+
   // A floating capsule bar: brand left, page links centred, tools right.
-  // On phones it becomes two rows (see Header.module.css).
+  // On phones: logo, Contribute, account and ☰; the links and switches
+  // move into the panel ☰ opens (see Header.module.css).
+  const barClass = `${styles.bar} ${menuOpen ? styles.open : ""}`;
   return (
     <header className={styles.header}>
-      <div className={styles.bar}>
+      <div className={barClass}>
         <BrandLink />
 
-        {/* Page links for signed-in visitors; empty when signed out. */}
-        <nav className={styles.nav}>
+        {/* Page links (signed in). Signed out, the panel offers Sign In. */}
+        <nav
+          id="header-menu"
+          className={styles.nav}
+          onClick={() => setMenuOpen(false)}
+        >
           {user ? (
             <>
               <MyEntriesButton />
               <ReviewLink />
             </>
-          ) : null}
+          ) : (
+            <a
+              href="/login"
+              className={`${buttons.button} ${buttons.ghost} ${styles.menuOnly}`}
+            >
+              {t.login}
+            </a>
+          )}
         </nav>
 
         <div className={styles.right}>
@@ -70,7 +94,7 @@ export default function Header() {
             {user ? null : (
               <a
                 href="/login"
-                className={`${buttons.button} ${buttons.secondary}`}
+                className={`${buttons.button} ${buttons.secondary} ${styles.barOnly}`}
               >
                 {t.login}
               </a>
@@ -83,6 +107,10 @@ export default function Header() {
               <AccountMenu email={user.email} onLogout={handleLogout} />
             </div>
           ) : null}
+          <MenuToggle
+            open={menuOpen}
+            onToggle={() => setMenuOpen((open) => !open)}
+          />
         </div>
       </div>
     </header>

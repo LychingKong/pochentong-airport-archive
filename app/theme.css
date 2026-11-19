@@ -47,8 +47,7 @@
   --color-error-line: #f2cfcc;
   --color-error-ring: rgba(179, 38, 30, 0.15);
 
-  /* corner radius: small for inputs and tags, larger for cards */
-  --radius-sm: 6px;
+  /* corner radius: medium for images, large for cards and panels */
   --radius-md: 10px;
   --radius-lg: 16px;
 

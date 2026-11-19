@@ -4,7 +4,9 @@
    window while the page scrolls past around it. z-index 50 keeps it above
    the page (the hero uses 1-2) but under the plane page transition (1000).
 
-   Desktop: brand left, page links centred, tools right. Phones: two rows. */
+   Wide screens (1100px+): brand left, page links in the exact centre, tools
+   right. Tablets and phones: a slim bar (logo, Contribute, account, ☰)
+   with the links and switches in the ☰ panel. */
 
 .header {
   position: sticky;
@@ -18,7 +20,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 7px 8px 7px 8px;
+  padding: 7px 8px;
   /* Slightly see-through white with a blur, so scrolling content shows
      faintly behind it, like frosted glass. */
   background-color: color-mix(in srgb, var(--color-surface) 86%, transparent);
@@ -29,18 +31,12 @@
   box-shadow: 0 10px 30px -14px rgba(18, 21, 28, 0.25);
 }
 
-/* Brand and the right-hand group share the leftover space equally, so the
-   page links in between sit in the true centre of the bar. */
-.brand,
-.right {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
 .brand {
   display: inline-flex;
+  flex: 0 1 auto;
   align-items: center;
   gap: 12px;
+  min-width: 0;
   color: var(--color-text);
   text-decoration: none;
   border-radius: 999px;
@@ -83,69 +79,38 @@
 .tools,
 .cta {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 6px;
 }
 
 .right {
-  justify-content: flex-end;
   gap: 10px;
 }
 
-/* ---------- phones: a rounded card with two rows ---------- */
+/* ---------- wide screens: page links in the exact centre ---------- */
 
-@media (max-width: 720px) {
-  .header {
-    padding-top: 8px;
-  }
-
-  .bar {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    /* Contribute spans the two right columns, so the top row's switches
-       and account circle stay packed together at the right. */
-    grid-template-areas:
-      "brand tools account"
-      "nav cta cta";
-    gap: 8px;
-    padding: 8px;
-    border-radius: 22px;
-  }
-
-  /* The right-hand group's parts join the grid directly. */
+/* Brand and the right-hand group share the leftover space equally, so the
+   links between them sit in the true centre. Only on wide screens: on
+   narrower ones the right group would not fit its half and would cover
+   the links. */
+@media (min-width: 1100px) {
+  .brand,
   .right {
-    display: contents;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
-  .brand {
-    grid-area: brand;
+  .right {
+    justify-content: flex-end;
   }
+}
 
-  .tools {
-    grid-area: tools;
-    justify-self: end;
-  }
+/* ---------- narrow phones: logo only ---------- */
 
-  .account {
-    grid-area: account;
-  }
-
-  .cta {
-    grid-area: cta;
-    justify-self: end;
-  }
-
-  .nav {
-    grid-area: nav;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* The logo stands for the name here; screen readers still hear it. */
+/* The logo stands for the name here, freeing room for the buttons;
+   screen readers still hear the name. */
+@media (max-width: 560px) {
   .brandName {
     position: absolute;
     width: 1px;
@@ -153,5 +118,206 @@
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
+  }
+}
+
+/* ---------- the tablet and phone menu (☰) ---------- */
+
+/* Hidden on wide screens, where everything fits in the bar. Written as
+   ".bar .x" so it outranks the shared button style (display: inline-flex
+   in NavButton.module.css), whatever order the two files load in. */
+.bar .menuToggle,
+.bar .menuOnly {
+  display: none;
+}
+
+.menuToggle {
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--color-text);
+  background-color: var(--color-subtle);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.menuToggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.menuToggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ---------- tablets and phones: one slim row, plus the ☰ panel ---------- */
+
+/* Below 1100px the links and switches no longer fit beside the name, so
+   tablets get the same design as phones.
+   Closed: logo (and name, above 560px), then Contribute, the account
+   circle and ☰ at the right.
+   Open: the bar grows into a rounded card; below a thin line come the page
+   links as full-width rows (or Sign In), then the language and theme
+   switches. The parts are reordered with `order`. */
+@media (max-width: 1099px) {
+  .header {
+    padding-top: 8px;
+  }
+
+  /* No gap between rows: the panel rows add their own spacing when open,
+     so the closed bar stays one slim row. Radius 28px keeps the closed bar
+     a pill and the open bar a rounded card, with no jump between them. */
+  .bar {
+    flex-wrap: wrap;
+    gap: 0 8px;
+    padding: 6px 6px 6px 7px;
+    border-radius: 28px;
+  }
+
+  /* The right-hand group's parts join the bar directly. */
+  .right {
+    display: contents;
+  }
+
+  .brand {
+    order: 1;
+    flex: 1 1 auto;
+  }
+
+  .cta {
+    order: 2;
+  }
+
+  .account {
+    order: 3;
+  }
+
+  .bar .menuToggle {
+    display: grid;
+    order: 4;
+  }
+
+  /* The bar's Sign In moves into the panel on phones and tablets. */
+  .bar .barOnly {
+    display: none;
+  }
+
+  .bar .menuOnly {
+    display: inline-flex;
+  }
+
+  /* Panel rows. Closed, they are folded to zero height, see-through and
+     hidden from keyboard and screen readers; opening unfolds them, so the
+     bar grows smoothly (and shrinks smoothly when closed). visibility
+     switches off only after the fold finishes (the 300ms delay). */
+  .nav,
+  .tools {
+    display: flex;
+    flex-basis: 100%;
+    box-sizing: border-box;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      max-height 300ms cubic-bezier(0.2, 0.7, 0.3, 1),
+      opacity 200ms ease,
+      margin 300ms cubic-bezier(0.2, 0.7, 0.3, 1),
+      padding 300ms cubic-bezier(0.2, 0.7, 0.3, 1),
+      border-color 300ms ease,
+      visibility 0s linear 300ms;
+  }
+
+  .nav {
+    order: 5;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    border-top: 1px solid transparent;
+  }
+
+  .nav a {
+    justify-content: flex-start;
+    padding: 11px 14px;
+    font-size: 15px;
+    border-radius: 16px;
+  }
+
+  /* Language and theme side by side at the left of the panel. */
+  .tools {
+    order: 6;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .open .nav,
+  .open .tools {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .open .nav {
+    max-height: 240px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top-color: var(--color-line);
+  }
+
+  .open .tools {
+    max-height: 80px;
+    padding: 6px 8px 4px;
+  }
+}
+
+/* ---------- extra motion for the ☰ panel ---------- */
+
+/* As the panel unfolds, the links slide down one after another and the
+   icon turns as it becomes ✕. Visitors who ask their device for reduced
+   motion get none of this: the panel simply appears and disappears. */
+@media (max-width: 1099px) and (prefers-reduced-motion: no-preference) {
+  .open .nav a {
+    animation: panelSlide 260ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+
+  .open .nav a:nth-child(2) {
+    animation-delay: 50ms;
+  }
+
+  .open .nav a:nth-child(3) {
+    animation-delay: 100ms;
+  }
+
+  .open .menuToggle svg {
+    animation: iconTurn 260ms ease-out both;
+  }
+}
+
+@media (max-width: 1099px) and (prefers-reduced-motion: reduce) {
+  .nav,
+  .tools {
+    transition: none;
+  }
+}
+
+@keyframes panelSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes iconTurn {
+  from {
+    opacity: 0.3;
+    transform: rotate(-90deg);
   }
 }
