@@ -2,7 +2,7 @@ import HeroSky from "./HeroSky";
 import styles from "./LoginScene.module.css";
 import LoginTerminal from "./LoginTerminal";
 
-// The picture half of the sign-in page: a sky with the homepage's drifting
+// The picture half of the sign-in and sign-up pages: a sky with the homepage's drifting
 // clouds, the archive's airliner (public/welcome-plane.webp) climbing out,
 // and the old terminal below. An orange band traces its curved edge.
 // Purely decorative, so screen readers skip it.

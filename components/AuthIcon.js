@@ -7,6 +7,8 @@ const PATHS = {
   eyeOff:
     "M3 3l18 18M10.6 6.1A9.6 9.6 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-3 3.6M6.6 7.6C4 9.3 2.5 12 2.5 12S6 18 12 18a9 9 0 0 0 4.4-1.1M9.9 9.9a3 3 0 0 0 4.2 4.2",
   signIn: "M10 4h8a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-8M3 12h11M10 8l4 4-4 4",
+  userPlus:
+    "M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2.5 21v-.5a6.5 6.5 0 0 1 11-4.7M18.5 14v7M15 17.5h7",
 };
 
 export default function AuthIcon({ name, className }) {

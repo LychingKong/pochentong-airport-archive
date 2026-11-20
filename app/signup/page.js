@@ -6,122 +6,21 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { uiText } from "@/lib/translations";
 
+import AuthField from "@/components/AuthField";
+import AuthIcon from "@/components/AuthIcon";
+import BackLink from "@/components/BackLink";
 import { useLanguage } from "@/components/LanguageProvider";
+import LanguageToggle from "@/components/LanguageToggle";
+import LoginBrand from "@/components/LoginBrand";
+import LoginScene from "@/components/LoginScene";
 import ThemeToggle from "@/components/ThemeToggle";
 
-const styles = {
-  langSwitcher: {
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: "clamp(40px, 6vw, 64px)",
-  },
-  langButton: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 12,
-    letterSpacing: 1,
-    padding: "6px 10px",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "var(--color-line)",
-    backgroundColor: "transparent",
-    color: "var(--color-accent)",
-    cursor: "pointer",
-    textTransform: "uppercase",
-  },
-  langButtonActive: {
-    backgroundColor: "var(--color-accent)",
-    color: "var(--color-on-accent)",
-    borderColor: "var(--color-accent)",
-  },
-  wrap: {
-    maxWidth: 1160,
-    margin: "0 auto",
-    padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
-  },
-  formContainer: {
-    maxWidth: 400,
-    margin: "0 auto",
-  },
-  kicker: {
-    fontFamily: "'Courier New', monospace",
-    color: "var(--color-detail)",
-    fontSize: 13,
-    letterSpacing: 2,
-    margin: "0 0 24px",
-    textTransform: "uppercase",
-  },
-  title: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: "clamp(28px, 4vw, 40px)",
-    fontWeight: 600,
-    margin: "0 0 32px",
-    lineHeight: 1.15,
-    color: "var(--color-text)",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 24,
-  },
-  fieldGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-  },
-  label: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 11,
-    letterSpacing: 1,
-    color: "var(--color-faint)",
-    margin: 0,
-    textTransform: "uppercase",
-  },
-  input: {
-    fontFamily: "inherit",
-    fontSize: 16,
-    padding: "12px 16px",
-    border: "1px solid var(--color-line)",
-    borderRadius: 0,
-    color: "var(--color-text-soft)",
-    backgroundColor: "var(--color-on-accent)",
-  },
-  button: {
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: 15,
-    fontWeight: 600,
-    padding: "14px 24px",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "var(--color-accent)",
-    backgroundColor: "var(--color-accent)",
-    color: "var(--color-on-accent)",
-    cursor: "pointer",
-    marginTop: 8,
-  },
-  buttonHover: {
-    backgroundColor: "var(--color-accent-hover)",
-    borderColor: "var(--color-accent-hover)",
-  },
-  error: {
-    fontSize: 14,
-    color: "var(--color-error)",
-    margin: 0,
-    fontFamily: "inherit",
-  },
-  link: {
-    fontSize: 14,
-    color: "var(--color-accent)",
-    textDecoration: "none",
-    marginTop: 16,
-  },
-  linkHover: {
-    textDecoration: "underline",
-  },
-};
+// Same split-screen layout as the sign-in page: its stylesheet is shared
+// rather than copied, so the two pages always match.
+import styles from "../login/page.module.css";
 
 export default function SignupPage() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = uiText[language];
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -129,8 +28,9 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [buttonHovered, setButtonHovered] = useState(false);
-  const [linkHovered, setLinkHovered] = useState(false);
+  // Display only: switch each password box between dots and plain text.
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -163,110 +63,98 @@ export default function SignupPage() {
     }
   };
 
+  // The eye button inside a password field.
+  function eyeButton(shown, setShown) {
+    return (
+      <button
+        type="button"
+        className={styles.eye}
+        onClick={() => setShown((value) => !value)}
+        aria-label={shown ? t.hidePassword : t.showPassword}
+        aria-pressed={shown}
+        disabled={loading}
+      >
+        <AuthIcon name={shown ? "eyeOff" : "eye"} />
+      </button>
+    );
+  }
+
+  // Split screen: the form on the left, the airliner scene on the right
+  // (on tablets and phones the scene becomes a banner above the form).
   return (
-    <main style={styles.wrap}>
-      <div style={styles.langSwitcher}>
-        <button
-          onClick={() => setLanguage("en")}
-          style={{
-            ...styles.langButton,
-            ...(language === "en" ? styles.langButtonActive : {}),
-          }}
-        >
-          EN
-        </button>
-        <button
-          onClick={() => setLanguage("km")}
-          style={{
-            ...styles.langButton,
-            ...(language === "km" ? styles.langButtonActive : {}),
-          }}
-        >
-          KH
-        </button>
+    <main className={styles.page}>
+      <div className={styles.tools}>
+        <LanguageToggle />
         <ThemeToggle />
       </div>
 
-      <div style={styles.formContainer}>
-        <p className="subtitle" style={styles.kicker}>
-          {t.kicker}
-        </p>
-        <h1 style={styles.title}>{t.signup}</h1>
+      <section className={styles.formSide}>
+        <div className={styles.formInner}>
+          <BackLink className={styles.back} />
+          <LoginBrand />
 
-        <form style={styles.form} onSubmit={handleSubmit}>
-          <div style={styles.fieldGroup}>
-            <label htmlFor="email" style={styles.label}>
-              {t.emailLabel}
-            </label>
-            <input
+          <h1 className={styles.title}>{t.signupWelcome}</h1>
+          <p className={styles.intro}>{t.signupIntro}</p>
+
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <AuthField
               id="email"
+              label={t.emailLabel}
+              icon="mail"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={styles.input}
               disabled={loading}
               required
             />
-          </div>
-
-          <div style={styles.fieldGroup}>
-            <label htmlFor="password" style={styles.label}>
-              {t.passwordLabel}
-            </label>
-            <input
+            <AuthField
               id="password"
-              type="password"
+              label={t.passwordLabel}
+              icon="lock"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
               disabled={loading}
               required
+              trailing={eyeButton(showPassword, setShowPassword)}
             />
-          </div>
-
-          <div style={styles.fieldGroup}>
-            <label htmlFor="confirmPassword" style={styles.label}>
-              {t.confirmPassword}
-            </label>
-            <input
+            <AuthField
               id="confirmPassword"
-              type="password"
+              label={t.confirmPassword}
+              icon="lock"
+              type={showConfirm ? "text" : "password"}
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              style={styles.input}
               disabled={loading}
               required
+              trailing={eyeButton(showConfirm, setShowConfirm)}
             />
-          </div>
 
-          {error && <p style={styles.error}>{error}</p>}
+            {error && (
+              <p className={styles.error} role="alert">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              ...styles.button,
-              ...(buttonHovered ? styles.buttonHover : {}),
-            }}
-            onMouseEnter={() => setButtonHovered(true)}
-            onMouseLeave={() => setButtonHovered(false)}
-          >
-            {loading ? t.creatingAccount : t.signupButton}
-          </button>
-        </form>
+            <button type="submit" disabled={loading} className={styles.submit}>
+              <AuthIcon name="userPlus" />
+              {loading ? t.creatingAccount : t.signupButton}
+            </button>
+          </form>
 
-        <a
-          href="/login"
-          style={{
-            ...styles.link,
-            ...(linkHovered ? styles.linkHover : {}),
-          }}
-          onMouseEnter={() => setLinkHovered(true)}
-          onMouseLeave={() => setLinkHovered(false)}
-        >
-          {t.login}
-        </a>
-      </div>
+          <p className={styles.switch}>
+            {t.haveAccount}{" "}
+            <a href="/login" className={styles.switchLink}>
+              {t.loginButton}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <LoginScene />
     </main>
   );
 }
