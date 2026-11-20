@@ -1,0 +1,257 @@
+/* The /contribute landing page for visitors who are not signed in
+   (ContributeWelcome). The collage beside the headline styles itself in
+   ContributeCollage.module.css.
+   Wide screens: text left, collage right. Below 900px they stack. */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+/* Room above the headline for the dashed flight path. */
+.text {
+  --path: clamp(110px, 12vw, 160px);
+  --path-x: -34px; /* how far the loop pokes out to the left */
+  position: relative;
+  padding-top: calc(var(--path) * 0.5);
+}
+
+.path {
+  position: absolute;
+  top: 0;
+  left: var(--path-x);
+  width: var(--path);
+  height: auto;
+  fill: none;
+  stroke: var(--color-detail);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 7;
+  stroke-linecap: round;
+}
+
+/* Sits on the path's end point (140, 8 in its 160 x 90 drawing). */
+.pathPlane {
+  position: absolute;
+  top: calc(var(--path) * 0.05 - 17px);
+  left: calc(var(--path) * 0.875 + var(--path-x) - 17px);
+  width: 34px;
+  height: 34px;
+  color: var(--color-detail);
+  transform: rotate(62deg);
+}
+
+.title {
+  position: relative;
+  margin: 0;
+  font-size: clamp(40px, 5.4vw, 66px);
+  line-height: 1.08;
+  color: var(--color-accent);
+}
+
+/* Bolder than theme.css's 600 for this one big headline. */
+:global(html:not([lang="km"])) .title {
+  font-weight: 700 !important;
+  line-height: 1.08 !important;
+}
+
+/* An orange underline that also works when the words wrap. */
+.highlight {
+  text-decoration: underline;
+  text-decoration-color: var(--color-detail);
+  text-decoration-thickness: 0.09em;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 0.16em;
+}
+
+.intro {
+  max-width: 34em;
+  margin: clamp(18px, 2.4vw, 26px) 0 0;
+  font-size: clamp(16.5px, 1.6vw, 19px);
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+:global(html[lang="km"]) .title {
+  font-size: clamp(32px, 4.2vw, 50px);
+  line-height: 1.55;
+}
+
+:global(html[lang="km"]) .highlight {
+  text-underline-offset: 0.45em;
+}
+
+:global(html[lang="km"]) .intro {
+  line-height: 1.95;
+}
+
+/* ---------- the two buttons ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(26px, 3.4vw, 36px);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 0 26px;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 14px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+:global(html:not([lang="km"])) .primary,
+:global(html:not([lang="km"])) .secondary {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 18px;
+}
+
+.primary {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  box-shadow: 0 10px 22px -10px rgba(11, 37, 69, 0.6);
+}
+
+.primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.secondary {
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-accent);
+}
+
+.secondary:hover {
+  background-color: var(--color-surface-tint);
+  transform: translateY(-1px);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---------- smaller screens ---------- */
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  /* Phones: keep the whole loop on screen. */
+  .text {
+    --path-x: -10px;
+  }
+
+  .primary,
+  .secondary {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary,
+  .secondary {
+    transition: none;
+  }
+}
+
+/* ---------- entrance (plays once when the page opens) ---------- */
+
+/* The page cross-fade (PageTransition) takes about 0.3s to reveal the
+   page, so everything starts a little after that. "backwards" holds the
+   starting frame during each delay; afterwards the normal styles (and
+   hover effects) apply again. */
+
+.title,
+.intro,
+.actions {
+  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+.title {
+  animation-delay: 200ms;
+}
+
+.intro {
+  animation-delay: 330ms;
+}
+
+.actions {
+  animation-delay: 460ms;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+/* The dashed flight path is drawn from left to right... */
+.path {
+  animation: drawPath 900ms ease-in-out 250ms backwards;
+}
+
+@keyframes drawPath {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ...then the plane pops onto its end and keeps bobbing gently. */
+.pathPlane {
+  animation:
+    popIn 420ms cubic-bezier(0.3, 1.6, 0.5, 1) 1050ms backwards,
+    bob 2.8s ease-in-out 1.5s infinite alternate;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: rotate(62deg) scale(0.3);
+  }
+}
+
+@keyframes bob {
+  from {
+    transform: rotate(62deg) translate(0, 0);
+  }
+  to {
+    transform: rotate(62deg) translate(-3px, -4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .intro,
+  .actions,
+  .path,
+  .pathPlane {
+    animation: none;
+  }
+}

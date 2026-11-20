@@ -1,0 +1,413 @@
+/* The /contribute collage (ContributeCollage, CollagePrint, CollagePhoto):
+   three tilted prints, a PNH stamp and postmark lines, laid out in one box
+   that keeps its shape at every width. The prints are photo paper, so they
+   stay cream in dark mode too. */
+
+.collage {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  max-width: 620px;
+  aspect-ratio: 6 / 5;
+}
+
+/* A print: a photo with a white border, thicker at the bottom where the
+   entry's title is written. */
+.print {
+  --pad: clamp(7px, 1.3vw, 13px);
+  --pad-bottom: clamp(28px, 4vw, 46px);
+  position: absolute;
+  box-sizing: border-box;
+  padding: var(--pad) var(--pad) var(--pad-bottom);
+  background-color: #fffaf1;
+  border-radius: 6px;
+  box-shadow:
+    0 22px 40px -14px rgba(18, 21, 28, 0.35),
+    0 2px 6px rgba(18, 21, 28, 0.08);
+}
+
+.back {
+  top: 22%;
+  left: 0;
+  z-index: 1;
+  width: 42%;
+  --tilt: -6deg;
+  transform: rotate(var(--tilt));
+}
+
+.main {
+  top: 8%;
+  left: 20%;
+  z-index: 2;
+  width: 62%;
+  --tilt: 3deg;
+  transform: rotate(var(--tilt));
+}
+
+.small {
+  right: 0;
+  bottom: 3%;
+  z-index: 3;
+  width: 38%;
+  --tilt: 5deg;
+  transform: rotate(var(--tilt));
+}
+
+/* A strip of tape holding the main print. */
+.tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  z-index: 1;
+  width: 30%;
+  height: 26px;
+  background-color: rgba(238, 224, 188, 0.8);
+  box-shadow: 0 1px 3px rgba(18, 21, 28, 0.12);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+/* ---------- real photos (CollagePrint) ---------- */
+
+/* A print that opens its entry: it straightens and lifts on hover. */
+.linked {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 320ms cubic-bezier(0.2, 0.7, 0.3, 1),
+    box-shadow 320ms ease;
+}
+
+.linked:hover {
+  z-index: 6;
+  box-shadow:
+    0 30px 50px -16px rgba(18, 21, 28, 0.45),
+    0 2px 6px rgba(18, 21, 28, 0.1);
+}
+
+.main.linked:hover {
+  transform: rotate(1deg) translateY(-6px) scale(1.02);
+}
+
+.back.linked:hover {
+  transform: rotate(-3deg) translateY(-6px) scale(1.03);
+}
+
+.small.linked:hover {
+  transform: rotate(2deg) translateY(-6px) scale(1.03);
+}
+
+.linked:focus-visible {
+  z-index: 6;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.realPhoto {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background-color: #e9e4da;
+  border-radius: 2px;
+}
+
+.realImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The entry's title on the print's wide bottom margin, on one line. */
+.caption {
+  position: absolute;
+  right: var(--pad);
+  bottom: 0;
+  left: var(--pad);
+  overflow: hidden;
+  font-size: clamp(11px, 1.3vw, 15px);
+  line-height: var(--pad-bottom);
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #3b342a;
+}
+
+/* Handwritten in English, like a note on the back of a photo. */
+:global(html:not([lang="km"])) .caption {
+  font-family: var(--font-subtitle), cursive !important;
+  font-size: clamp(12px, 1.5vw, 17px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linked {
+    transition: box-shadow 200ms ease;
+  }
+
+  /* Keep each print's resting tilt: only the shadow responds. */
+  .main.linked:hover {
+    transform: rotate(3deg);
+  }
+
+  .back.linked:hover {
+    transform: rotate(-6deg);
+  }
+
+  .small.linked:hover {
+    transform: rotate(5deg);
+  }
+}
+
+/* ---------- drawn fallback photos (CollagePhoto) ---------- */
+
+/* The terminal drawing reads --wall, --roof, --glass and --apron. */
+.photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--sky);
+  border-radius: 2px;
+}
+
+.terminal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plane {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 84%;
+  height: auto;
+  transform: translateX(-50%);
+}
+
+.day {
+  --sky: linear-gradient(180deg, #4f86c6 0%, #8dbbe6 50%, #f3dcc2 100%);
+  --wall: #f3e8d6;
+  --roof: #ddcdb3;
+  --glass: #2a4b74;
+  --apron: #cbc3b8;
+}
+
+.vintage {
+  --sky: linear-gradient(180deg, #b9c3c9 0%, #dfe2df 100%);
+  --wall: #ece6da;
+  --roof: #c9c0b0;
+  --glass: #4d5560;
+  --apron: #a9a49c;
+  filter: sepia(0.85) contrast(0.92) brightness(1.03);
+}
+
+.vintage .plane {
+  top: 14%;
+  width: 96%;
+}
+
+.sunset {
+  --sky: linear-gradient(180deg, #f6b26b 0%, #f08a5d 55%, #b85b5d 100%);
+  --wall: #2d2233;
+  --roof: #2d2233;
+  --glass: #f7c38a;
+  --apron: #3b2c3c;
+}
+
+/* A small dark silhouette climbing away into the evening. */
+.sunset .plane {
+  top: 14%;
+  left: 62%;
+  width: 46%;
+  filter: brightness(0);
+  opacity: 0.7;
+}
+
+/* ---------- stamp and postmark ---------- */
+
+/* The outer box is covered in small holes; the solid inner panel hides
+   them except around the edge, which gives the perforated stamp border. */
+.stamp {
+  position: absolute;
+  top: 0;
+  right: 3%;
+  z-index: 4;
+  box-sizing: border-box;
+  width: 21%;
+  aspect-ratio: 5 / 6;
+  padding: 7px;
+  background: radial-gradient(
+      circle,
+      transparent 3px,
+      #fffaf1 3.5px
+    ) -5px -5px /
+    10px 10px;
+  filter: drop-shadow(0 8px 14px rgba(18, 21, 28, 0.25));
+  transform: rotate(9deg);
+}
+
+.stampInner {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  height: 100%;
+  box-sizing: border-box;
+  color: #0b2545;
+  background-color: #fffaf1;
+  border: 2px solid #0b2545;
+  border-radius: 3px;
+}
+
+.stampPlane {
+  width: 44%;
+  height: auto;
+  transform: rotate(45deg);
+}
+
+.stampCode {
+  font-size: clamp(14px, 2vw, 22px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* Baloo 2 in English and Khmer alike: "PNH" is a code, not a word. */
+:global(html) .stampCode {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+/* Wavy cancellation lines running off the stamp's right edge, tucked
+   behind it. */
+.postmark {
+  position: absolute;
+  top: 9%;
+  right: -12%;
+  z-index: 3;
+  width: 24%;
+  height: auto;
+  fill: none;
+  stroke: #0b2545;
+  stroke-width: 2.4;
+  opacity: 0.45;
+}
+
+@media (max-width: 900px) {
+  .collage {
+    max-width: 560px;
+  }
+
+  /* No room past the edge: shorter lines, still inside the screen. */
+  .postmark {
+    right: -2%;
+    width: 16%;
+  }
+}
+
+/* ---------- entrance (plays once when the page opens) ---------- */
+
+/* The prints are laid down one after another: each starts higher, larger
+   and more tilted (3x its --tilt), then settles into place. "backwards"
+   holds the first frame during the delay; afterwards the print's own
+   transform (and hover) applies again. */
+.print {
+  animation: placePrint 650ms cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+}
+
+.back {
+  animation-delay: 450ms;
+}
+
+.main {
+  animation-delay: 600ms;
+}
+
+.small {
+  animation-delay: 750ms;
+}
+
+@keyframes placePrint {
+  from {
+    opacity: 0;
+    transform: rotate(calc(var(--tilt) * 3)) translateY(-36px) scale(1.08);
+  }
+}
+
+/* The stamp lands last with a small thump... */
+.stamp {
+  animation: stampDown 520ms cubic-bezier(0.3, 1.4, 0.5, 1) 1050ms backwards;
+}
+
+@keyframes stampDown {
+  from {
+    opacity: 0;
+    transform: rotate(24deg) scale(1.7);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(7deg) scale(0.94);
+  }
+}
+
+/* ...and the postmark lines are drawn across after it. */
+.postmark {
+  animation: drawPostmark 600ms ease-out 1350ms backwards;
+}
+
+@keyframes drawPostmark {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ---------- scroll (browsers with scroll-driven animations) ---------- */
+
+/* Wide screens: the collage drifts a little slower than the page as it
+   scrolls (parallax). Phones and tablets, where it sits below the buttons:
+   it rises and fades into view as it scrolls onto the screen. Browsers
+   without scroll-driven animations (e.g. Firefox today) skip this. */
+@supports (animation-timeline: view()) {
+  .collage {
+    animation: collageDrift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  @media (max-width: 900px) {
+    .collage {
+      animation-name: collageReveal;
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
+
+@keyframes collageDrift {
+  from {
+    transform: translateY(48px);
+  }
+  to {
+    transform: translateY(-48px);
+  }
+}
+
+@keyframes collageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(70px) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .print,
+  .stamp,
+  .postmark,
+  .collage {
+    animation: none;
+  }
+}

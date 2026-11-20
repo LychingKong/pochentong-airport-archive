@@ -2,12 +2,12 @@
 
 import { usePageTransition } from "../lib/usePageTransition";
 import styles from "./PageTransition.module.css";
-import PlaneIcon from "./PlaneIcon";
 import TakeoffOverlay from "./TakeoffOverlay";
 
 // Plays when moving forward to another page. Opening an entry gets the big
 // takeoff (sky, clouds and the airliner from the welcome screen); other
-// pages get a small plane flying across. Going back has no animation.
+// pages cross-fade: the old page fades out, the new one fades in. Going
+// back has no animation.
 export default function PageTransition() {
   const { phase, kind } = usePageTransition();
 
@@ -21,9 +21,5 @@ export default function PageTransition() {
   if (kind === "takeoff") return <TakeoffOverlay phase={phase} />;
 
   const classes = [styles.overlay, styles[phase]];
-  return (
-    <div className={classes.join(" ")} aria-hidden="true">
-      <PlaneIcon className={styles.plane} />
-    </div>
-  );
+  return <div className={classes.join(" ")} aria-hidden="true" />;
 }

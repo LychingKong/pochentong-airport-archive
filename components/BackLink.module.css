@@ -1,0 +1,41 @@
+/* "← Back to homepage" (BackLink.js): a small white pill, the same on
+   every page. Pages that need different spacing pass a className. */
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: clamp(24px, 4vw, 36px);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  text-decoration: none;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.back:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-surface-tint);
+}
+
+.back:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+:global(html[lang="km"]) .back {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back {
+    transition: none;
+  }
+}

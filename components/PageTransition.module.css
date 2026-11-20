@@ -1,37 +1,23 @@
+/* The cross-fade between pages (PageTransition.js). A sheet in the page
+   color covers the screen while the next page loads:
+   - leaving:  fades in over the old page (exit), 180ms
+   - arriving: fades away to reveal the new page (enter), 320ms
+   Durations match FADE_COVER_MS and FADE_IN_MS in lib/usePageTransition.js. */
+
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  overflow: hidden;
-  background-color: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  background-color: var(--color-bg);
+  pointer-events: none;
 }
 
 .leaving {
-  animation: fadeIn 100ms ease forwards;
+  animation: fadeIn 180ms ease-out both;
 }
 
 .arriving {
-  animation: fadeOut 150ms ease 200ms forwards;
-}
-
-.plane {
-  position: absolute;
-  top: 38%;
-  left: -120px;
-  width: 120px;
-  height: 120px;
-  color: var(--color-accent);
-  transform: rotate(90deg);
-  animation: fly 350ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
-}
-
-@keyframes fly {
-  from {
-    transform: translate(0, 0) rotate(90deg);
-  }
-  to {
-    transform: translate(calc(100vw + 240px), -60px) rotate(90deg);
-  }
+  animation: fadeOut 320ms ease-in-out both;
 }
 
 @keyframes fadeIn {

@@ -1,4 +1,5 @@
-// Small line icons for the sign-in form, drawn in the text color.
+// Small line icons for the sign-in/sign-up forms and the /contribute
+// landing page, drawn in the text color.
 // Decorative only: every field and button has its own text or label.
 const PATHS = {
   mail: "M4 6h16v12H4zM4 7l8 6 8-6",
