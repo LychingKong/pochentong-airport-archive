@@ -4,6 +4,7 @@ import Script from "next/script";
 import collection from "../collection.config.js";
 import LanguageProvider from "../components/LanguageProvider";
 import PageTransition from "../components/PageTransition";
+import ScrollReveal from "../components/ScrollReveal";
 import WelcomeScreen from "../components/WelcomeScreen";
 
 import "./theme.css";
@@ -55,6 +56,10 @@ const schoolbell = Schoolbell({
 // Also marks a visitor who already passed the welcome screen this session,
 // so it stays hidden from the first paint (key must match WELCOME_KEY in
 // lib/useWelcomeFlow.js).
+// Last, it switches on the scroll reveal (theme.css, ScrollReveal.js) before
+// the first paint, so revealed blocks don't flash in and then vanish. If the
+// reveal hasn't started 4 seconds later, it switches it off again so
+// nothing stays hidden.
 const applySavedTheme = `
 try {
   var saved = localStorage.getItem("pochentong-theme");
@@ -67,6 +72,12 @@ try {
     document.documentElement.dataset.welcomeSeen = "1";
   }
 } catch (e) {}
+document.documentElement.dataset.scrollReveal = "on";
+setTimeout(function () {
+  if (document.documentElement.dataset.scrollReveal !== "ready") {
+    delete document.documentElement.dataset.scrollReveal;
+  }
+}, 4000);
 `;
 
 export default function RootLayout({ children }) {
@@ -98,6 +109,7 @@ export default function RootLayout({ children }) {
         </noscript>
         <LanguageProvider>
           {children}
+          <ScrollReveal />
           <PageTransition />
           <WelcomeScreen />
         </LanguageProvider>

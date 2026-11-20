@@ -10,7 +10,7 @@ export default function NoResults() {
   const { t } = useLanguage();
 
   return (
-    <div className={styles.wrap} role="status">
+    <div className={styles.wrap} role="status" data-reveal>
       <NoResultsIllustration className={styles.art} />
       <h3 className={styles.title}>{t.noResultsTitle}</h3>
       <p className={styles.hint}>{t.noResultsHint}</p>

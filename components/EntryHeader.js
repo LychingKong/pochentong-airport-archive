@@ -15,7 +15,7 @@ export default function EntryHeader({ entry }) {
   const description = getLocalizedEntryField(entry, "description", language);
 
   return (
-    <header className={styles.intro}>
+    <header className={styles.intro} data-reveal>
       {/* In English the "subtitle" class (theme.css) makes this handwritten. */}
       <p className={`subtitle ${styles.kicker}`}>{t.kicker}</p>
       <h1 className={styles.title}>{title || t.untitledEntry}</h1>

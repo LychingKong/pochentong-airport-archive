@@ -23,16 +23,20 @@ export default function EntryDetail({ entry }) {
   return (
     <section className={styles.story}>
       {/* In English the "subtitle" class (theme.css) makes this handwritten. */}
-      <p className={`subtitle ${styles.storyLabel}`}>
+      <p className={`subtitle ${styles.storyLabel}`} data-reveal>
         {t.sections.story.title}
       </p>
       {paragraphs.map((paragraph, index) => (
-        <p className={index === 0 ? styles.lead : styles.paragraph} key={index}>
+        <p
+          className={index === 0 ? styles.lead : styles.paragraph}
+          key={index}
+          data-reveal
+        >
           {paragraph}
         </p>
       ))}
       {/* A small plane between two lines marks the end of the story. */}
-      <div className={styles.end} aria-hidden="true">
+      <div className={styles.end} aria-hidden="true" data-reveal>
         <span className={styles.endLine} />
         <span className={styles.endMark}>
           <PlaneIcon className={styles.endIcon} />

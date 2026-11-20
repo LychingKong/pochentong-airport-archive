@@ -50,13 +50,15 @@ export default function MyEntriesList({ entries }) {
 
   return (
     <section>
-      <h1 style={styles.heading}>{t.myEntries}</h1>
+      <h1 style={styles.heading} data-reveal>
+        {t.myEntries}
+      </h1>
       {entries.length === 0 ? (
         <p style={styles.empty}>{t.noMyEntries}</p>
       ) : null}
       <ul style={styles.list}>
         {entries.map((entry) => (
-          <li key={entry.id}>
+          <li key={entry.id} data-reveal>
             <Link href={`/entries/${entry.id}`} style={styles.item}>
               <span>
                 {language === "km" && entry.title_km

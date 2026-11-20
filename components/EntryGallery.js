@@ -22,7 +22,7 @@ export default function EntryGallery({ images, title }) {
   }
 
   return (
-    <figure className={styles.gallery}>
+    <figure className={styles.gallery} data-reveal>
       <button
         type="button"
         className={styles.frame}

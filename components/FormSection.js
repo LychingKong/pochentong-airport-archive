@@ -8,7 +8,11 @@ export default function FormSection({ id, number, required, children }) {
   const { title, hint } = t.sections[id];
 
   return (
-    <section className={styles.section} aria-labelledby={`${id}-heading`}>
+    <section
+      className={styles.section}
+      aria-labelledby={`${id}-heading`}
+      data-reveal
+    >
       <div>
         <span className={styles.sectionNumber}>{number}</span>
         <h2 id={`${id}-heading`} className={styles.sectionTitle}>

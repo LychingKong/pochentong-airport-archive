@@ -33,7 +33,7 @@ export default function HomeHero({ collection, entries }) {
 
   return (
     <section className={styles.hero}>
-      <div className={styles.top}>
+      <div className={styles.top} data-reveal>
         <div className={styles.headline}>
           <p className={`subtitle ${styles.kicker}`}>{t.kicker}</p>
           <HeroTitle name={collection.name} lines={collection.nameLines} />
@@ -41,7 +41,7 @@ export default function HomeHero({ collection, entries }) {
         <HeroFlapCount entries={entries} />
       </div>
 
-      <div className={styles.stage}>
+      <div className={styles.stage} data-reveal>
         <div className={styles.panelWrap}>
           <div className={styles.panel} aria-hidden="true">
             <HeroSky />

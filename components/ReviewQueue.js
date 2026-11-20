@@ -38,13 +38,15 @@ export default function ReviewQueue({ isReviewer, entries }) {
 
   return (
     <section>
-      <h1 style={styles.heading}>{t.reviewTitle}</h1>
+      <h1 style={styles.heading} data-reveal>
+        {t.reviewTitle}
+      </h1>
       {queue.length === 0 ? (
         <p style={styles.message}>{t.reviewEmpty}</p>
       ) : null}
       <ul style={styles.list}>
         {queue.map((entry) => (
-          <li key={entry.id}>
+          <li key={entry.id} data-reveal>
             <ReviewCard entry={entry} onReviewed={removeEntry} />
           </li>
         ))}

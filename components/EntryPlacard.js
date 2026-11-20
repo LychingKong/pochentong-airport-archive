@@ -14,7 +14,7 @@ export default function EntryPlacard({ entry }) {
   const tags = getLocalizedEntryField(entry, "tags", language);
 
   return (
-    <aside className={styles.placard}>
+    <aside className={styles.placard} data-reveal>
       {/* PNH: Pochentong's airport code, as on the homepage. */}
       <p className={styles.code}>PNH</p>
       <dl className={styles.facts}>

@@ -60,7 +60,7 @@ export default function ArchiveGrid({ entries }) {
   return (
     <section>
       {/* Title and live count on the left, search on the right (stacks on phones) */}
-      <div className={styles.toolbar}>
+      <div className={styles.toolbar} data-reveal>
         <div className={styles.heading}>
           <h2 className={styles.title}>{t.collectionSectionTitle}</h2>
           <span className={styles.count}>
@@ -104,7 +104,9 @@ export default function ArchiveGrid({ entries }) {
         <NoResults />
       ) : (
         // Nothing published yet (no search typed): keep the short message.
-        <p className={styles.empty}>{t.noResults}</p>
+        <p className={styles.empty} data-reveal>
+          {t.noResults}
+        </p>
       )}
     </section>
   );

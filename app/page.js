@@ -109,7 +109,7 @@ export default function Home() {
         </div>
       )}
 
-      <footer className={styles.footer}>
+      <footer className={styles.footer} data-reveal>
         <span className={styles.footerMark} aria-hidden="true">
           <PlaneIcon className={styles.footerIcon} />
         </span>

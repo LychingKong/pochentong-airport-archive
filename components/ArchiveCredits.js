@@ -33,7 +33,7 @@ export default function ArchiveCredits({ curator, source }) {
   return (
     <dl className={styles.credits}>
       {items.map(({ key, label, value }) => (
-        <div key={key} className={`${styles.tile} ${styles[key]}`}>
+        <div key={key} className={`${styles.tile} ${styles[key]}`} data-reveal>
           <span className={styles.icon} aria-hidden="true">
             <svg viewBox="0 0 24 24">{ICONS[key]}</svg>
           </span>

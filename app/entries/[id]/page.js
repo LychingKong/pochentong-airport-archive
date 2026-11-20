@@ -134,7 +134,7 @@ export default async function EntryPage({ params }) {
           </div>
         </article>
 
-        <nav className={styles.closing}>
+        <nav className={styles.closing} data-reveal>
           <BackLink className={styles.back} />
         </nav>
       </main>

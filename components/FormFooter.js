@@ -9,7 +9,7 @@ export default function FormFooter({ formError, saving, editing }) {
   const busyLabel = editing ? t.savingChanges : t.submittingEntry;
 
   return (
-    <div className={styles.footer}>
+    <div className={styles.footer} data-reveal>
       {formError ? (
         <p className={styles.formError} role="alert">
           {t.submitErrors[formError] || t.submitErrors.saveFailed}

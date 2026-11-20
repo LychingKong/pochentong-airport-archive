@@ -43,7 +43,7 @@ export default function EntryCard({
   };
 
   return (
-    <Link href={`/entries/${id}`} className={motion.card}>
+    <Link href={`/entries/${id}`} className={motion.card} data-reveal>
       <div style={styles.collage} className={motion.collage}>
         <div style={echo} className={motion.echoBack} aria-hidden="true" />
         <div style={echo} className={motion.echoMid} aria-hidden="true" />
