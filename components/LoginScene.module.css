@@ -1,0 +1,177 @@
+/* The sign-in page's picture half (LoginScene + LoginTerminal).
+   Desktop: fills the right of the page with a curved left edge.
+   Tablets and phones (below 900px): a banner above the form with a curved
+   bottom edge. The sky turns to dusk in dark mode. */
+
+.scene {
+  position: relative;
+  min-height: 100%;
+  /* the curve: how far in the left edge bows */
+  --curve: clamp(120px, 16vw, 260px);
+  --sky: linear-gradient(
+    180deg,
+    #4f86c6 0%,
+    #8dbbe6 42%,
+    #d9e6ef 68%,
+    #f6dcc0 88%,
+    #f3cfa8 100%
+  );
+  --wall: #f3e8d6;
+  --roof: #ddcdb3;
+  --glass: #2a4b74;
+  --apron: #cbc3b8;
+  /* entrance: drifts in from the right (from above on small screens) */
+  --enter-from: translateX(48px);
+  animation: sceneIn 760ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes sceneIn {
+  from {
+    opacity: 0;
+    transform: var(--enter-from);
+  }
+}
+
+/* The orange band peeking out along the curved edge. */
+.band,
+.sky {
+  position: absolute;
+  inset: 0;
+  border-top-left-radius: var(--curve) 50%;
+  border-bottom-left-radius: var(--curve) 50%;
+}
+
+.band {
+  background: linear-gradient(180deg, #f6a04d, var(--color-detail));
+  transform: translateX(-14px);
+}
+
+.sky {
+  overflow: hidden;
+  background: var(--sky);
+}
+
+/* The archive's airliner, climbing gently. */
+.plane {
+  position: absolute;
+  top: 22%;
+  left: 53%;
+  z-index: 1;
+  width: min(84%, 720px);
+  height: auto;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 24px 30px rgba(18, 30, 52, 0.25));
+  animation: climb 6s ease-in-out infinite alternate;
+}
+
+@keyframes climb {
+  from {
+    transform: translateX(-50%) translateY(6px) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) translateY(-8px) rotate(-1.5deg);
+  }
+}
+
+/* Full width at its drawn proportions, so the tower is never cut off. */
+.terminal {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wall {
+  fill: var(--wall);
+}
+
+.roof {
+  fill: var(--roof);
+}
+
+.glass {
+  fill: var(--glass);
+}
+
+.apron {
+  fill: var(--apron);
+}
+
+.taxiLine {
+  stroke: #f2b84b;
+  stroke-width: 3;
+  stroke-dasharray: 26 18;
+}
+
+.antenna {
+  stroke: var(--roof);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* ---------- dark mode: a dusk sky ---------- */
+
+:global(:root[data-theme="dark"]) .scene {
+  --sky: linear-gradient(
+    180deg,
+    #0d1d3a 0%,
+    #23406d 45%,
+    #6b5c78 75%,
+    #c7845a 100%
+  );
+  --wall: #b9ae9c;
+  --roof: #9c907e;
+  --glass: #f2c27a;
+  --apron: #4a4f5c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .scene {
+    --sky: linear-gradient(
+      180deg,
+      #0d1d3a 0%,
+      #23406d 45%,
+      #6b5c78 75%,
+      #c7845a 100%
+    );
+    --wall: #b9ae9c;
+    --roof: #9c907e;
+    --glass: #f2c27a;
+    --apron: #4a4f5c;
+  }
+}
+
+/* ---------- tablets and phones: a banner above the form ---------- */
+
+@media (max-width: 900px) {
+  .scene {
+    min-height: 0;
+    height: clamp(230px, 52vw, 400px);
+    --curve: 48px;
+    --enter-from: translateY(-24px);
+  }
+
+  .band,
+  .sky {
+    border-radius: 0 0 50% 50% / 0 0 var(--curve) var(--curve);
+  }
+
+  .band {
+    transform: translateY(10px);
+  }
+
+  .plane {
+    top: 16%;
+    left: 50%;
+    width: min(84%, 620px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .plane {
+    animation: none;
+  }
+}
