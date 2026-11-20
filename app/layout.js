@@ -4,6 +4,7 @@ import Script from "next/script";
 import collection from "../collection.config.js";
 import LanguageProvider from "../components/LanguageProvider";
 import PageTransition from "../components/PageTransition";
+import WelcomeScreen from "../components/WelcomeScreen";
 
 import "./theme.css";
 
@@ -51,11 +52,19 @@ const schoolbell = Schoolbell({
   display: "swap",
 });
 
+// Also marks a visitor who already passed the welcome screen this session,
+// so it stays hidden from the first paint (key must match WELCOME_KEY in
+// lib/useWelcomeFlow.js).
 const applySavedTheme = `
 try {
   var saved = localStorage.getItem("pochentong-theme");
   if (saved === "light" || saved === "dark") {
     document.documentElement.dataset.theme = saved;
+  }
+} catch (e) {}
+try {
+  if (sessionStorage.getItem("pochentong-welcome-seen") === "1") {
+    document.documentElement.dataset.welcomeSeen = "1";
   }
 } catch (e) {}
 `;
@@ -82,9 +91,15 @@ export default function RootLayout({ children }) {
         <Script id="apply-saved-theme" strategy="beforeInteractive">
           {applySavedTheme}
         </Script>
+        {/* Without JavaScript the welcome screen could never be dismissed,
+            so it is hidden outright. */}
+        <noscript>
+          <style>{"[data-welcome-overlay]{display:none!important}"}</style>
+        </noscript>
         <LanguageProvider>
           {children}
           <PageTransition />
+          <WelcomeScreen />
         </LanguageProvider>
       </body>
     </html>

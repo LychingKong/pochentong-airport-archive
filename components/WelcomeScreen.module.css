@@ -1,0 +1,443 @@
+/* The full-screen welcome (WelcomeScreen, WelcomeProgress, WelcomeSky,
+   WelcomeSoundToggle). A clean, quiet cover: soft off-white, the logo,
+   a hairline progress bar and plenty of space. Colours are fixed, not
+   theme tokens, so it looks the same in light and dark mode. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000; /* above everything, including the plane page transition */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 20px 80px;
+  overflow: hidden;
+  color: #12305a;
+  background-color: #fcfaf7;
+  transition: opacity 700ms ease;
+}
+
+/* Already seen this session: hidden before the page even paints (the
+   flag is set by the early script in app/layout.js). */
+:global(html[data-welcome-seen]) .overlay {
+  display: none;
+}
+
+.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- centre column ---------- */
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  animation: rise 900ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  transition:
+    opacity 400ms ease,
+    transform 600ms ease;
+}
+
+.departing .content,
+.leaving .content {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.logo {
+  width: min(400px, 72vw);
+  height: auto;
+  margin-bottom: clamp(40px, 8vh, 72px);
+}
+
+/* Hairline bar with the percentage to its right. */
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(300px, 70vw);
+}
+
+.progress {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  border-radius: 999px;
+  background-color: #e9e3db;
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background-color: #e8641e;
+  transition: width 200ms linear;
+}
+
+.progressPlane {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  color: #12305a;
+  transform: translate(-50%, -50%);
+  transition: left 200ms linear;
+}
+
+.progressPlaneIcon {
+  width: 100%;
+  height: 100%;
+  transform: rotate(90deg); /* PlaneIcon points up; this faces right */
+}
+
+.percent {
+  min-width: 3.2ch;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: #9a948c;
+}
+
+.status {
+  min-height: 1.6em;
+  margin: 18px 0 0;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #7d776f;
+}
+
+/* Slim navy pill with an arrow; keeps its space while loading, so
+   nothing shifts when it fades in. */
+.start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 12px 22px 12px 26px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #12305a;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease,
+    background-color 150ms ease;
+}
+
+.start svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 200ms ease;
+}
+
+.start:hover {
+  background-color: #0b2545;
+}
+
+.start:hover svg {
+  transform: translateX(3px);
+}
+
+.start:focus-visible {
+  outline: 2px solid #e8641e;
+  outline-offset: 3px;
+}
+
+.startHidden {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* The button uses the heading font (Baloo 2) in English; theme.css gives
+   every element Poppins with !important, so this rule must win. */
+:global(html:not([lang="km"])) .start {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+/* ---------- corner and footer ---------- */
+
+.soundToggle {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #9a948c;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.soundToggle:hover {
+  color: #12305a;
+  background-color: #f1ece5;
+}
+
+.soundToggle:focus-visible {
+  outline: 2px solid #e8641e;
+  outline-offset: 2px;
+}
+
+.soundToggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.footer {
+  position: absolute;
+  z-index: 1;
+  right: 20px;
+  bottom: clamp(18px, 4vh, 32px);
+  left: 20px;
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #aaa39a;
+}
+
+:global(html[lang="km"]) .footer,
+:global(html[lang="km"]) .status {
+  letter-spacing: 0;
+}
+
+/* ---------- the takeoff ---------- */
+
+/* The airliner (public/welcome-plane.webp) waits hidden just past the
+   bottom-left corner, then climbs to the top-right and away, its nose
+   lifting as it goes. Sizes in vmin keep it in proportion on any screen.
+   For smoothness: only `transform` animates (no shadow or filter to
+   repaint each frame), and will-change lets the graphics card move it. */
+.flight {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  width: clamp(720px, 210vmin, 2400px); /* huge: far wider than a phone */
+  height: auto;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(-100%, 100%, 0) rotate(-6deg) scale(0.8);
+  backface-visibility: hidden;
+}
+
+.flying {
+  visibility: visible;
+  will-change: transform;
+  animation: takeoff 2600ms cubic-bezier(0.42, 0.05, 0.58, 0.95) forwards;
+}
+
+/* A gentle climb: it gathers speed, glides through the middle and eases
+   out past the top-right corner while pitching its nose up. */
+@keyframes takeoff {
+  from {
+    transform: translate3d(-100%, 100%, 0) rotate(-6deg) scale(0.8);
+  }
+  50% {
+    transform: translate3d(calc(50vw - 50%), calc(-50vh + 40%), 0)
+      rotate(-11deg) scale(1);
+  }
+  to {
+    transform: translate3d(calc(100vw + 10%), calc(-100vh - 140%), 0)
+      rotate(-16deg) scale(1.12);
+  }
+}
+
+/* ---------- sky and clouds (WelcomeSky.js) ---------- */
+
+/* No z-index here on purpose: the clouds' own z-index values then sit
+   alongside the plane's (3), so the "front" clouds can pass in front. */
+.sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* On takeoff the cream page brightens into a soft blue sky. */
+.skyGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(252, 250, 247, 0) 0%,
+    #e7f0f8 45%,
+    #cfe1f2 100%
+  );
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.departing .skyGlow,
+.leaving .skyGlow {
+  opacity: 1;
+}
+
+/* A cloud is a few soft overlapping puffs (radial gradients), coloured by
+   --cloud. No filters or blur, so moving many of them stays smooth. */
+.cloud {
+  --cloud: 255, 255, 255;
+  position: absolute;
+  aspect-ratio: 2.2;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(var(--cloud), 1), rgba(var(--cloud), 0))
+      0% 78% / 40% 62% no-repeat,
+    radial-gradient(closest-side, rgba(var(--cloud), 1), rgba(var(--cloud), 0))
+      30% 18% / 46% 86% no-repeat,
+    radial-gradient(closest-side, rgba(var(--cloud), 1), rgba(var(--cloud), 0))
+      66% 28% / 42% 80% no-repeat,
+    radial-gradient(closest-side, rgba(var(--cloud), 1), rgba(var(--cloud), 0))
+      100% 74% / 38% 60% no-repeat,
+    radial-gradient(closest-side, rgba(var(--cloud), 1), rgba(var(--cloud), 0))
+      50% 86% / 82% 46% no-repeat;
+}
+
+/* While loading: faint warm clouds swaying slowly; they fade on takeoff. */
+.cloudDrift {
+  --cloud: 238, 228, 216;
+  z-index: 0;
+  opacity: 0.7;
+  animation: drift ease-in-out infinite alternate;
+  transition: opacity 500ms ease;
+}
+
+.departing .cloudDrift,
+.leaving .cloudDrift {
+  opacity: 0;
+}
+
+/* On takeoff: white clouds stream from top-right to bottom-left, against
+   the plane's climb. Hidden until then. */
+.cloudBack,
+.cloudFront {
+  opacity: 0;
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.cloudBack {
+  z-index: 2; /* behind the plane */
+}
+
+.cloudFront {
+  z-index: 4; /* in front of the plane */
+}
+
+.departing .cloudBack,
+.leaving .cloudBack {
+  animation-name: rushBack;
+}
+
+.departing .cloudFront,
+.leaving .cloudFront {
+  animation-name: rushFront;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-4vw, 0, 0);
+  }
+  to {
+    transform: translate3d(4vw, -1.5vh, 0);
+  }
+}
+
+@keyframes rushBack {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  12% {
+    opacity: 0.95;
+  }
+  to {
+    opacity: 0.95;
+    transform: translate3d(-150vw, 110vh, 0);
+  }
+}
+
+@keyframes rushFront {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  12% {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 0.85;
+    transform: translate3d(-190vw, 140vh, 0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+/* No rise, no flight and no sliding: the screen simply fades away. */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition-duration: 250ms;
+  }
+
+  .content {
+    animation: none;
+    transition: none;
+  }
+
+  .progressFill,
+  .progressPlane,
+  .start,
+  .start svg {
+    transition: none;
+  }
+
+  .flight,
+  .flying,
+  .cloudBack,
+  .cloudFront {
+    display: none;
+  }
+
+  .cloudDrift {
+    animation: none;
+  }
+}
