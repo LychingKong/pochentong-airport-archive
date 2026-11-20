@@ -14,11 +14,18 @@ const style = {
   marginBottom: "clamp(28px, 4vw, 40px)",
 };
 
-export default function BackLink() {
+// Pages can pass a className to restyle the link (the entry page shows it
+// as a pill); without one it keeps the plain inline style above.
+export default function BackLink({ className }) {
   const { t } = useLanguage();
 
   return (
-    <Link href="/" style={style} data-direction="back">
+    <Link
+      href="/"
+      className={className}
+      style={className ? undefined : style}
+      data-direction="back"
+    >
       {t.backToHome}
     </Link>
   );

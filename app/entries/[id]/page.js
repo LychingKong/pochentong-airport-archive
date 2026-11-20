@@ -5,9 +5,12 @@ import collection from "../../../collection.config.js";
 import BackLink from "../../../components/BackLink";
 import EntryDetail from "../../../components/EntryDetail";
 import EntryGallery from "../../../components/EntryGallery";
+import EntryHeader from "../../../components/EntryHeader";
 import EntryOwnerActions from "../../../components/EntryOwnerActions";
+import EntryPlacard from "../../../components/EntryPlacard";
 import Header from "../../../components/Header";
 import { createClient } from "../../../lib/supabase/server";
+import styles from "./page.module.css";
 
 function formatDate(isoDate) {
   if (!isoDate) return "";
@@ -93,20 +96,6 @@ export async function generateMetadata({ params }) {
   }
 }
 
-const styles = {
-  wrap: {
-    maxWidth: 1160,
-    margin: "0 auto",
-    padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
-  },
-  layout: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-    gap: "clamp(32px, 5vw, 64px)",
-    alignItems: "start",
-  },
-};
-
 export default async function EntryPage({ params }) {
   const { id } = await params;
 
@@ -124,16 +113,30 @@ export default async function EntryPage({ params }) {
     const entry = transformEntry(dbEntries[0]);
     const isOwner = Boolean(user) && user.id === dbEntries[0].owner;
 
+    // Laid out as an exhibit: title, the photo full width, then the museum
+    // label beside the story (stacked on tablets and phones).
     return (
-      <main style={styles.wrap}>
+      <main className={styles.page}>
         <Header />
-        <BackLink />
-        {isOwner ? <EntryOwnerActions id={entry.id} /> : null}
-
-        <div style={styles.layout}>
-          <EntryGallery images={entry.images} title={entry.title} />
-          <EntryDetail entry={entry} />
+        <div className={styles.topRow}>
+          <BackLink className={styles.back} />
+          {isOwner ? <EntryOwnerActions id={entry.id} /> : null}
         </div>
+
+        <article>
+          <EntryHeader entry={entry} />
+          <EntryGallery images={entry.images} title={entry.title} />
+          <div className={styles.body}>
+            <div className={styles.side}>
+              <EntryPlacard entry={entry} />
+            </div>
+            <EntryDetail entry={entry} />
+          </div>
+        </article>
+
+        <nav className={styles.closing}>
+          <BackLink className={styles.back} />
+        </nav>
       </main>
     );
   } catch {

@@ -1,15 +1,16 @@
 "use client";
 
 import { getLocalizedEntryField } from "../lib/translations";
+import styles from "./EntryExhibit.module.css";
 import { useLanguage } from "./LanguageProvider";
+import PlaneIcon from "./PlaneIcon";
 
+// The story itself. A blank line in the story starts a new paragraph; single
+// line breaks are kept (white-space: pre-wrap). With no story, the
+// description is shown instead. The first paragraph is set larger as a lead.
 export default function EntryDetail({ entry }) {
   const { language, t } = useLanguage();
 
-  const title = getLocalizedEntryField(entry, "title", language);
-  const contributor = getLocalizedEntryField(entry, "contributor", language);
-  const date = getLocalizedEntryField(entry, "date", language);
-  const tags = getLocalizedEntryField(entry, "tags", language);
   const story = getLocalizedEntryField(entry, "story", language);
   const description = getLocalizedEntryField(entry, "description", language);
 
@@ -17,70 +18,27 @@ export default function EntryDetail({ entry }) {
     .split(/\n\n+/)
     .filter(Boolean);
 
-  const styles = {
-    title: {
-      fontFamily: "Georgia, 'Times New Roman', serif",
-      fontSize: "clamp(28px, 4vw, 40px)",
-      fontWeight: 600,
-      lineHeight: 1.15,
-      margin: "0 0 14px",
-      color: "var(--color-text)",
-    },
-    meta: {
-      fontFamily: "'Courier New', monospace",
-      fontSize: 13,
-      letterSpacing: 0.5,
-      color: "var(--color-faint)",
-      margin: "0 0 20px",
-    },
-    tags: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 8,
-      margin: "0 0 28px",
-    },
-    tag: {
-      fontFamily: "'Courier New', monospace",
-      fontSize: 11,
-      letterSpacing: 1,
-      textTransform: "uppercase",
-      color: "var(--color-detail)",
-      backgroundColor: "var(--color-detail-soft)",
-      border: "1px solid var(--color-line)",
-      borderRadius: 999,
-      padding: "6px 12px",
-    },
-    story: {
-      fontSize: 16,
-      lineHeight: 1.8,
-      color: "var(--color-text-soft)",
-      whiteSpace: "pre-wrap",
-      margin: "0 0 18px",
-    },
-  };
+  if (paragraphs.length === 0) return null;
 
   return (
-    <div>
-      <h1 style={styles.title}>{title || t.untitledEntry}</h1>
-      <p style={styles.meta}>
-        {contributor}
-        {contributor && date ? "  ·  " : ""}
-        {date}
+    <section className={styles.story}>
+      {/* In English the "subtitle" class (theme.css) makes this handwritten. */}
+      <p className={`subtitle ${styles.storyLabel}`}>
+        {t.sections.story.title}
       </p>
-      {tags && tags.length > 0 ? (
-        <div style={styles.tags}>
-          {tags.map((tag, index) => (
-            <span style={styles.tag} key={index}>
-              {tag}
-            </span>
-          ))}
-        </div>
-      ) : null}
       {paragraphs.map((paragraph, index) => (
-        <p style={styles.story} key={index}>
+        <p className={index === 0 ? styles.lead : styles.paragraph} key={index}>
           {paragraph}
         </p>
       ))}
-    </div>
+      {/* A small plane between two lines marks the end of the story. */}
+      <div className={styles.end} aria-hidden="true">
+        <span className={styles.endLine} />
+        <span className={styles.endMark}>
+          <PlaneIcon className={styles.endIcon} />
+        </span>
+        <span className={styles.endLine} />
+      </div>
+    </section>
   );
 }

@@ -1,0 +1,388 @@
+/* Shared by EntryHeader, EntryGallery, EntryPlacard and EntryDetail: the
+   entry page laid out as a museum exhibit. The page arranges these pieces
+   (app/entries/[id]/page.module.css); this file styles what is inside them.
+   Khmer text gets taller lines and no capitals or letter-spacing. */
+
+/* ---------- title block (EntryHeader) ---------- */
+
+.intro {
+  max-width: 880px;
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.kicker {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-detail);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(34px, 5.2vw, 60px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+
+.standfirst {
+  max-width: 62ch;
+  margin: clamp(12px, 2vw, 18px) 0 0;
+  font-size: clamp(16.5px, 1.7vw, 19px);
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+:global(html[lang="km"]) .title {
+  font-size: clamp(30px, 4.4vw, 50px);
+  line-height: 1.5;
+}
+
+:global(html[lang="km"]) .standfirst {
+  line-height: 1.9;
+}
+
+/* ---------- photo (EntryGallery) ---------- */
+
+.gallery {
+  margin: 0;
+}
+
+/* A rounded "stage" like the homepage hero. The photo is shown whole
+   (contain); a blurred, enlarged copy of it (--photo) fills the gaps. */
+.frame {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 78vh;
+  padding: 0;
+  overflow: hidden;
+  cursor: zoom-in;
+  background-color: var(--color-stage);
+  border: 0;
+  border-radius: 32px;
+  box-shadow: var(--shadow-soft);
+}
+
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  z-index: -1;
+  background-image: var(--photo);
+  background-position: center;
+  background-size: cover;
+  filter: blur(32px) saturate(1.1);
+  opacity: 0.6;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 600ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.frame:hover .photo {
+  transform: scale(1.015);
+}
+
+.frame:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* The orange round button, matching the homepage's scroll arrow. */
+.zoom {
+  position: absolute;
+  right: clamp(12px, 2vw, 20px);
+  bottom: clamp(12px, 2vw, 20px);
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  color: #ffffff;
+  background-color: var(--color-detail);
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(232, 100, 30, 0.35);
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.7, 0.3, 1),
+    box-shadow 260ms ease;
+}
+
+.frame:hover .zoom {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(232, 100, 30, 0.45);
+}
+
+/* ---------- full-photo viewer (EntryGallery's <dialog>) ---------- */
+
+.viewer {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: clamp(16px, 4vw, 56px);
+  background-color: rgba(6, 12, 24, 0.94);
+  border: 0;
+}
+
+.viewer[open] {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  animation: viewerIn 220ms ease;
+}
+
+.viewer::backdrop {
+  background: transparent;
+}
+
+/* No page scrolling behind the open viewer. */
+:global(html):has(.viewer[open]) {
+  overflow: hidden;
+}
+
+.viewerImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  transition: background-color 150ms ease;
+}
+
+.close:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.close:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+@keyframes viewerIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- museum label (EntryPlacard) ---------- */
+
+.placard {
+  box-sizing: border-box;
+  padding: 22px 22px 24px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-top: 3px solid var(--color-detail);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.code {
+  margin: 0 0 6px;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+/* One column in the narrow desktop label; side by side when it spans
+   the full width on tablets. */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  column-gap: 24px;
+  margin: 0;
+}
+
+.fact {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.label {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.value {
+  margin: 4px 0 0;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+:global(html[lang="km"]) .label {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+:global(html[lang="km"]) .value {
+  line-height: 1.8;
+}
+
+.tagBlock {
+  padding-top: 14px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-detail);
+  background-color: var(--color-detail-soft);
+  border-radius: 999px;
+}
+
+/* ---------- story (EntryDetail) ---------- */
+
+.story {
+  min-width: 0;
+  max-width: 68ch;
+}
+
+.storyLabel {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-detail);
+}
+
+.paragraph,
+.lead {
+  margin: 0 0 1.35em;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.paragraph {
+  font-size: clamp(16.5px, 1.4vw, 18px);
+  line-height: 1.85;
+  color: var(--color-text-soft);
+}
+
+.lead {
+  font-size: clamp(18px, 1.8vw, 21px);
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+/* English only: an orange Baloo 2 initial opens the story. Khmer has no
+   drop caps, so it is never applied there. */
+:global(html:not([lang="km"])) .lead::first-letter {
+  float: left;
+  margin: 0.06em 0.1em 0 0;
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 3.3em;
+  font-weight: 700;
+  line-height: 0.85;
+  color: var(--color-detail);
+}
+
+:global(html[lang="km"]) .paragraph,
+:global(html[lang="km"]) .lead {
+  line-height: 2.05;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(28px, 4vw, 40px);
+}
+
+.endLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-line-strong);
+}
+
+.endMark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-detail);
+  background-color: var(--color-detail-soft);
+  border-radius: 50%;
+}
+
+.endIcon {
+  width: 16px;
+  height: 16px;
+  transform: rotate(45deg);
+}
+
+/* ---------- tablets and phones ---------- */
+
+@media (max-width: 720px) {
+  .frame {
+    aspect-ratio: 4 / 3;
+    max-height: 70vh;
+    border-radius: 22px;
+  }
+
+  .zoom {
+    width: 40px;
+    height: 40px;
+  }
+
+  .placard {
+    padding: 18px 18px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo,
+  .zoom {
+    transition: none;
+  }
+
+  .frame:hover .photo,
+  .frame:hover .zoom {
+    transform: none;
+  }
+
+  .viewer[open] {
+    animation: none;
+  }
+}
