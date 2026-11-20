@@ -1,0 +1,23 @@
+/* The full-screen layer for the entry-page takeoff (TakeoffOverlay.js).
+   The sky, clouds and plane themselves use WelcomeScreen.module.css.
+   It covers the page while the entry loads underneath, then fades away.
+   Same layer as the small page-change plane (z-index 1000). */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background-color: rgba(252, 250, 247, 0);
+  transition:
+    background-color 350ms ease,
+    opacity 500ms ease;
+}
+
+.started {
+  background-color: #fcfaf7;
+}
+
+.fading {
+  opacity: 0;
+}

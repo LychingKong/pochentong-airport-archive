@@ -25,28 +25,12 @@
   animation: fly 350ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
 }
 
-.back .plane {
-  left: auto;
-  right: -120px;
-  transform: rotate(-90deg);
-  animation-name: flyBack;
-}
-
 @keyframes fly {
   from {
     transform: translate(0, 0) rotate(90deg);
   }
   to {
     transform: translate(calc(100vw + 240px), -60px) rotate(90deg);
-  }
-}
-
-@keyframes flyBack {
-  from {
-    transform: translate(0, 0) rotate(-90deg);
-  }
-  to {
-    transform: translate(calc(-100vw - 240px), -60px) rotate(-90deg);
   }
 }
 

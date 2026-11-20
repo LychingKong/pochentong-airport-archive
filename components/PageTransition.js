@@ -3,15 +3,24 @@
 import { usePageTransition } from "../lib/usePageTransition";
 import styles from "./PageTransition.module.css";
 import PlaneIcon from "./PlaneIcon";
+import TakeoffOverlay from "./TakeoffOverlay";
 
-// A plane flies across the screen whenever the page changes: left to right
-// going forward, right to left going back.
+// Plays when moving forward to another page. Opening an entry gets the big
+// takeoff (sky, clouds and the airliner from the welcome screen); other
+// pages get a small plane flying across. Going back has no animation.
 export default function PageTransition() {
-  const { phase, direction } = usePageTransition();
+  const { phase, kind } = usePageTransition();
 
-  if (phase === "idle") return null;
+  if (phase === "idle") {
+    // Loads the airliner in advance, so the first takeoff isn't blank.
+    return (
+      <img src="/welcome-plane.webp" alt="" width="1706" height="577" hidden />
+    );
+  }
 
-  const classes = [styles.overlay, styles[phase], styles[direction]];
+  if (kind === "takeoff") return <TakeoffOverlay phase={phase} />;
+
+  const classes = [styles.overlay, styles[phase]];
   return (
     <div className={classes.join(" ")} aria-hidden="true">
       <PlaneIcon className={styles.plane} />
