@@ -1,74 +1,43 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 
-import { useLanguage } from "./LanguageProvider";
+import HeroFlapCount from "./HeroFlapCount";
+import styles from "./MyEntries.module.css";
 import MyEntriesEmpty from "./MyEntriesEmpty";
+import MyEntriesOverview from "./MyEntriesOverview";
+import MyEntriesSort from "./MyEntriesSort";
+import MyEntryCard from "./MyEntryCard";
 
-const styles = {
-  heading: {
-    fontSize: "clamp(28px, 4vw, 40px)",
-    margin: "0 0 clamp(24px, 4vw, 40px)",
-  },
-  list: {
-    listStyle: "none",
-    margin: 0,
-    padding: 0,
-    display: "grid",
-    gap: 12,
-  },
-  item: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "8px 16px",
-    padding: "16px 20px",
-    border: "1px solid var(--color-line)",
-    borderRadius: 12,
-    color: "inherit",
-    textDecoration: "none",
-  },
-  status: {
-    fontSize: 14,
-    color: "var(--color-muted)",
-    whiteSpace: "nowrap",
-  },
-  note: {
-    width: "100%",
-    fontSize: 14,
-    lineHeight: 1.5,
-    color: "var(--color-text-soft)",
-  },
-};
-
+// The /my-entries page: a heading, the number of entries with a sort menu,
+// then every entry this user has submitted as a card that opens it.
+// `entries` come from app/my-entries/page.js (only this user's, newest
+// first); "Oldest First" just reverses them, no new query. With none, the
+// "Your Story Starts Here" empty state shows instead.
 export default function MyEntriesList({ entries }) {
-  const { language, t } = useLanguage();
+  const [order, setOrder] = useState("newest");
 
-  // No entries yet: the "Your Story Starts Here" invitation instead.
   if (entries.length === 0) return <MyEntriesEmpty />;
 
+  const shown = order === "newest" ? entries : [...entries].reverse();
+
   return (
-    <section>
-      <h1 style={styles.heading} data-reveal>
-        {t.myEntries}
-      </h1>
-      <ul style={styles.list}>
-        {entries.map((entry) => (
+    <section className={styles.listing}>
+      <MyEntriesOverview />
+
+      <div className={styles.toolbar}>
+        {/* The count as split-flap departure-board tiles, the same
+            component as on the homepage. */}
+        <div className={styles.countFlap}>
+          <HeroFlapCount entries={entries} />
+        </div>
+        <MyEntriesSort value={order} onChange={setOrder} />
+      </div>
+
+      <ul className={styles.grid}>
+        {shown.map((entry) => (
           <li key={entry.id} data-reveal>
-            <Link href={`/entries/${entry.id}`} style={styles.item}>
-              <span>
-                {language === "km" && entry.title_km
-                  ? entry.title_km
-                  : entry.title}
-              </span>
-              <span style={styles.status}>{t.statuses[entry.status]}</span>
-              {entry.status === "returned" && entry.review_note ? (
-                <span style={styles.note}>
-                  {t.reviewerNoteLabel} {entry.review_note}
-                </span>
-              ) : null}
-            </Link>
+            <MyEntryCard entry={entry} />
           </li>
         ))}
       </ul>

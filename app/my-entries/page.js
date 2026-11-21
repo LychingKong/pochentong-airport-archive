@@ -28,16 +28,34 @@ export default async function MyEntriesPage() {
   if (!user) redirect("/login");
 
   // Only this user's entries, in any status. Row-level security allows it.
+  // Each card shows the cover photo, title, description and submission date.
   const { data: entries } = await supabase
     .from("entries")
-    .select("id, title, title_km, status, review_note")
+    .select(
+      "id, title, title_km, description, description_km, images, created_at",
+    )
     .eq("owner", user.id)
     .order("created_at", { ascending: false });
+
+  // Dates are formatted here on the server (dd-mm-yyyy, as on entry pages),
+  // so the server and the browser always show the same day.
+  const list = (entries ?? []).map((entry) => ({
+    ...entry,
+    date: formatDate(entry.created_at),
+  }));
 
   return (
     <main style={styles.wrap}>
       <Header />
-      <MyEntriesList entries={entries ?? []} />
+      <MyEntriesList entries={list} />
     </main>
   );
+}
+
+function formatDate(isoDate) {
+  if (!isoDate) return "";
+  const date = new Date(isoDate);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${day}-${month}-${date.getFullYear()}`;
 }

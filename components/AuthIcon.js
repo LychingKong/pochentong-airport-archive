@@ -14,6 +14,12 @@ const PATHS = {
   layers: "M12 3l9 5-9 5-9-5zM3 12.5l9 5 9-5M3 16.5l9 5 9-5",
   plus: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8v8M8 12h8",
   clock: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5V12l3 2",
+  // Used by the /my-entries listing.
+  document: "M7 3h7l5 5v13H7zM14 3v5h5M10 12h6M10 16h6M10 8h2",
+  calendar: "M4 6h16v14H4zM4 10h16M8 3v4M16 3v4",
+  arrowRight: "M5 12h14M13 6l6 6-6 6",
+  sort: "M8 20V4M4 8l4-4 4 4M16 4v16M12 16l4 4 4-4",
+  chevronDown: "M6 9l6 6 6-6",
 };
 
 export default function AuthIcon({ name, className }) {
