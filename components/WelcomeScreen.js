@@ -16,6 +16,7 @@ import styles from "./WelcomeScreen.module.css";
 import WelcomeSky from "./WelcomeSky";
 import WelcomeSoundToggle from "./WelcomeSoundToggle";
 import WelcomeStartButton from "./WelcomeStartButton";
+import WelcomeTitle from "./WelcomeTitle";
 
 // Full-screen welcome shown once per browser session, over whichever page
 // the visitor lands on: the pilot's view down the runway at dusk
@@ -68,8 +69,7 @@ export default function WelcomeScreen() {
         <WelcomeSoundToggle on={soundOn} onToggle={toggleSound} />
       </div>
       <div className={styles.content}>
-        <h1 className={styles.name}>{name}</h1>
-        <p className={styles.tagline}>{t.welcomeTagline}</p>
+        <WelcomeTitle name={name} />
         <WelcomeProgress progress={progress} />
         <p className={styles.status} aria-live="polite">
           {ready ? t.welcomeReady : t.welcomeLoading}

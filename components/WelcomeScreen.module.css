@@ -64,8 +64,20 @@
 }
 
 :global(html[lang="km"]) .name {
-  font-size: clamp(30px, 4.4vw, 50px);
+  font-size: clamp(26px, 4.4vw, 50px);
   line-height: 1.55;
+}
+
+/* Each hand-set Khmer line stays whole. */
+.nameLine {
+  display: block;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  :global(html[lang="km"]) .name {
+    font-size: min(7.4vw, 34px);
+  }
 }
 
 /* Baloo 2 in English; the Khmer name keeps the theme's Khmer font. */
