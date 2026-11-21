@@ -4,22 +4,30 @@ import { useEffect, useRef } from "react";
 
 import collection from "../collection.config.js";
 import { playTakeoffSound } from "../lib/takeoffSound";
+import { collectionText } from "../lib/translations";
 import { usePageLock } from "../lib/usePageLock";
 import { useSoundPreference } from "../lib/useSoundPreference";
 import { useWelcomeFlow } from "../lib/useWelcomeFlow";
 import { useLanguage } from "./LanguageProvider";
+import LanguageToggle from "./LanguageToggle";
 import WelcomeProgress from "./WelcomeProgress";
+import WelcomeRunway from "./WelcomeRunway";
 import styles from "./WelcomeScreen.module.css";
 import WelcomeSky from "./WelcomeSky";
 import WelcomeSoundToggle from "./WelcomeSoundToggle";
+import WelcomeStartButton from "./WelcomeStartButton";
 
 // Full-screen welcome shown once per browser session, over whichever page
-// the visitor lands on. "Gathering memories..." while the site loads (at
-// least 5 seconds), then "Click to Start": a takeoff sound, a plane flying
-// across, and the page fades in. The page behind can't be scrolled or
+// the visitor lands on: the pilot's view down the runway at dusk
+// (WelcomeRunway), with the archive's name and "Gathering memories..."
+// over the sky while the site loads (at least 5 seconds), then "Click to Start": the
+// runway rushes past, a takeoff sound, a plane flying across, and the page
+// fades in. The page behind can't be scrolled or
 // tabbed to meanwhile. The loading logic is in lib/useWelcomeFlow.js.
 export default function WelcomeScreen() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  // The archive's name: from collection.config.js, or its Khmer version.
+  const name = language === "km" ? collectionText.km.name : collection.name;
   const { phase, progress, start } = useWelcomeFlow();
   const [soundOn, toggleSound] = useSoundPreference();
   const overlayRef = useRef(null);
@@ -50,37 +58,31 @@ export default function WelcomeScreen() {
       className={`${styles.overlay} ${styles[phase] ?? ""}`}
       role="dialog"
       aria-modal="true"
-      aria-label={collection.name}
+      aria-label={name}
     >
       <WelcomeSky />
-      <WelcomeSoundToggle on={soundOn} onToggle={toggleSound} />
+      <WelcomeRunway phase={phase} />
+      {/* Top-right corner: the language switch and the sound button. */}
+      <div className={styles.corner}>
+        <LanguageToggle className={styles.lang} />
+        <WelcomeSoundToggle on={soundOn} onToggle={toggleSound} />
+      </div>
       <div className={styles.content}>
-        <img
-          className={styles.logo}
-          src="/welcome-logo.png"
-          alt={collection.name}
-          width="1057"
-          height="472"
-        />
+        <h1 className={styles.name}>{name}</h1>
+        <p className={styles.tagline}>{t.welcomeTagline}</p>
         <WelcomeProgress progress={progress} />
         <p className={styles.status} aria-live="polite">
           {ready ? t.welcomeReady : t.welcomeLoading}
         </p>
-        <button
+        <WelcomeStartButton
           ref={startRef}
-          type="button"
-          className={`${styles.start} ${ready ? "" : styles.startHidden}`}
+          ready={ready}
+          label={t.welcomeStart}
           onClick={handleStart}
-          disabled={!ready}
-        >
-          {t.welcomeStart}
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </button>
+        />
       </div>
       <p className={styles.footer}>
-        {t.welcomePlace} · {collection.name}
+        {t.welcomePlace} · {name}
       </p>
       {/* The airliner is in the page from the start (hidden), so the image
           has loaded long before "Click to Start"; it flies once clicked. */}

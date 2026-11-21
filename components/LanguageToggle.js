@@ -8,13 +8,18 @@ const OPTIONS = [
   { code: "km", label: "ខ្មែរ" },
 ];
 
-// The EN / ខ្មែរ switch in the header. setLanguage also saves the choice
-// (see LanguageProvider), exactly as the old EN / KH buttons did.
-export default function LanguageToggle() {
+// The EN / ខ្មែរ switch in the header (and the welcome screen's corner,
+// which restyles it through `className`). setLanguage also saves the
+// choice (see LanguageProvider), exactly as the old EN / KH buttons did.
+export default function LanguageToggle({ className }) {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className={styles.group} role="group" aria-label="Language">
+    <div
+      className={`${styles.group} ${className ?? ""}`}
+      role="group"
+      aria-label="Language"
+    >
       {OPTIONS.map(({ code, label }) => (
         <button
           key={code}

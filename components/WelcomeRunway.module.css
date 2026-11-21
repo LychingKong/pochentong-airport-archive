@@ -1,0 +1,168 @@
+/* The welcome screen's runway backdrop (WelcomeRunway,
+   WelcomeRunwayLights). Above the welcome sky's soft glow, below the
+   takeoff clouds (z-index 2 and 4) and the plane (3). Fixed colours, so it
+   looks the same in light and dark mode. */
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  /* Grows from the top edge, so the horizon drops (the nose lifts) without
+     opening a gap above the sky. */
+  transform-origin: 50% 0;
+  transition:
+    transform 1.5s cubic-bezier(0.5, 0, 0.75, 0.2),
+    opacity 0.9s ease 0.7s;
+}
+
+.scene svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* "Click to Start": the runway rushes past, the view tilts down as the
+   nose lifts, and it fades into the sky for the takeoff. */
+.rolling {
+  opacity: 0;
+  transform: scale(1.4);
+}
+
+/* ---------- the airliner on the runway ---------- */
+
+.plane,
+.planeShadow {
+  position: absolute;
+  left: 50%;
+  /* Above the footer line at the bottom of the screen. */
+  bottom: 7vh;
+  /* Very big: the wings span almost the whole screen. */
+  width: min(94vw, 1500px);
+}
+
+.plane {
+  z-index: 1;
+  height: auto;
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+  /* A faint engine shimmer while it waits. */
+  animation: idle 0.35s ease-in-out infinite alternate;
+}
+
+/* A soft shadow on the tarmac under the wheels. */
+.planeShadow {
+  height: 5%;
+  background: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0)
+  );
+  transform: translate(-50%, 40%);
+}
+
+/* On Start: it rolls away, shrinking toward the horizon as it lifts. */
+.rolling .plane {
+  animation: depart 1.2s cubic-bezier(0.4, 0, 0.75, 0.4) forwards;
+}
+
+.rolling .planeShadow {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes idle {
+  to {
+    transform: translateX(-50%) translateY(-1px);
+  }
+}
+
+@keyframes depart {
+  from {
+    transform: translateX(-50%);
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-38vh) scale(0.08);
+  }
+}
+
+@media (max-width: 640px) {
+  .plane,
+  .planeShadow {
+    bottom: 11vh;
+    /* Phones: wider than the screen, wingtips cut off at the edges. */
+    width: 160vw;
+  }
+}
+
+/* The window's dark edges, as if seen from the cockpit. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    transparent 55%,
+    rgba(5, 12, 26, 0.55) 100%
+  );
+}
+
+.star {
+  fill: #ffffff;
+  opacity: 0.7;
+  animation: twinkle 3s ease-in-out infinite alternate;
+}
+
+.star:nth-of-type(2n) {
+  animation-delay: -1.5s;
+}
+
+.sun {
+  fill: #ffe7c4;
+}
+
+.skyline {
+  fill: #13233d;
+  stroke: #13233d;
+  stroke-width: 2;
+}
+
+.edge {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 4;
+}
+
+.dash {
+  fill: #f6f1e7;
+}
+
+.light {
+  fill: #ffd27a;
+  filter: drop-shadow(0 0 6px rgba(255, 196, 90, 0.9));
+}
+
+@keyframes twinkle {
+  to {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    transition: opacity 250ms ease;
+  }
+
+  .rolling {
+    transform: none;
+  }
+
+  .star,
+  .plane,
+  .rolling .plane {
+    animation: none;
+  }
+}
