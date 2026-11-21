@@ -1,5 +1,4 @@
 import collection from "../../collection.config.js";
-import BackLink from "../../components/BackLink";
 import Header from "../../components/Header";
 import ReviewQueue from "../../components/ReviewQueue";
 import ReviewRestricted from "../../components/ReviewRestricted";
@@ -9,15 +8,11 @@ export const metadata = {
   title: `Review — ${collection.name}`,
 };
 
+// Same width and padding as the homepage (app/page.module.css): no space
+// above the floating navbar, which brings its own. Used by both the
+// reviewer view and the restricted screen.
 const styles = {
   wrap: {
-    maxWidth: 1160,
-    margin: "0 auto",
-    padding: "clamp(56px, 9vw, 96px) clamp(20px, 5vw, 24px) 64px",
-  },
-  // The restricted screen uses the homepage's padding (no gap above the
-  // floating navbar). The reviewer view above is left as it was.
-  restrictedWrap: {
     boxSizing: "border-box",
     maxWidth: 1160,
     margin: "0 auto",
@@ -37,7 +32,7 @@ export default async function ReviewPage() {
   // stop here, before the pending entries are ever queried.
   if (isReviewer !== true) {
     return (
-      <main style={styles.restrictedWrap}>
+      <main style={styles.wrap}>
         <Header />
         <ReviewRestricted />
       </main>
@@ -60,7 +55,6 @@ export default async function ReviewPage() {
   return (
     <main style={styles.wrap}>
       <Header />
-      <BackLink />
       <ReviewQueue isReviewer={isReviewer === true} entries={entries} />
     </main>
   );

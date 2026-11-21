@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 
+import BackLink from "./BackLink";
 import { useLanguage } from "./LanguageProvider";
 import ReviewCard from "./ReviewCard";
+import ReviewEmpty from "./ReviewEmpty";
 
 const styles = {
   heading: {
@@ -36,14 +38,16 @@ export default function ReviewQueue({ isReviewer, entries }) {
     setQueue((current) => current.filter((entry) => entry.id !== id));
   }
 
+  // Nothing waiting (or the last one was just reviewed): only the
+  // "All Caught Up!" panel, whose headline is then the page's heading.
+  if (queue.length === 0) return <ReviewEmpty />;
+
   return (
     <section>
+      <BackLink />
       <h1 style={styles.heading} data-reveal>
         {t.reviewTitle}
       </h1>
-      {queue.length === 0 ? (
-        <p style={styles.message}>{t.reviewEmpty}</p>
-      ) : null}
       <ul style={styles.list}>
         {queue.map((entry) => (
           <li key={entry.id} data-reveal>
