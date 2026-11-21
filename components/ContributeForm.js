@@ -8,6 +8,7 @@ import FormField from "./FormField";
 import FormSection from "./FormSection";
 import PassBand from "./PassBand";
 import PassStub from "./PassStub";
+import SubmitTakeoff from "./SubmitTakeoff";
 
 // The contribute/edit form as a boarding pass: a navy band on top, the
 // text fields in the main part (English and Khmer side by side; the story
@@ -25,8 +26,16 @@ const SECTIONS = [
 export default function ContributeForm({ entry }) {
   const form = useContributeForm(entry);
 
-  // Only after the server confirmed a new entry was saved.
-  if (form.submitted) return <ContributeSuccess />;
+  // Only after the server confirmed a new entry was saved: the takeoff
+  // plays once over the confirmation, then fades away.
+  if (form.submitted) {
+    return (
+      <>
+        <ContributeSuccess />
+        <SubmitTakeoff />
+      </>
+    );
+  }
 
   return (
     <form onSubmit={form.handleSubmit} noValidate className={styles.form}>

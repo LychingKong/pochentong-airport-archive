@@ -1,5 +1,7 @@
 "use client";
 
+import { primeTakeoffSound } from "../lib/takeoffSound";
+import { isSoundOn } from "../lib/useSoundPreference";
 import AuthIcon from "./AuthIcon";
 import styles from "./ContributeForm.module.css";
 import { useLanguage } from "./LanguageProvider";
@@ -38,6 +40,11 @@ export default function FormFooter({
         className={styles.submit}
         disabled={saving}
         aria-busy={saving}
+        // Unlock the takeoff sound inside this click; it plays once the
+        // new entry is saved (SubmitTakeoff).
+        onClick={() => {
+          if (!editing && isSoundOn()) primeTakeoffSound();
+        }}
       >
         {saving ? (
           <span className={styles.spinner} aria-hidden="true" />
