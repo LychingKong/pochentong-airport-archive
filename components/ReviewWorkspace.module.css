@@ -1,7 +1,7 @@
-/* The reviewer's /review board (ReviewQueue, ReviewStats, ReviewFilters,
+/* The reviewer's /review board (ReviewQueue, ReviewFilters,
    ReviewEntryCard, ReviewDialog) and the review panel inside the dialog
    (ReviewPreview, ReviewGallery, ReviewDecision). Each status has a soft
-   tone (--tone) used by the summary cards and the card badges. */
+   tone (--tone) used by the card badges. */
 
 .board {
   display: flex;
@@ -18,10 +18,6 @@
 .board > a:first-child {
   margin-bottom: 0;
   align-self: flex-start;
-}
-
-.tone_all {
-  --tone: #2a5ea8;
 }
 
 .tone_published {
@@ -90,75 +86,6 @@
   :global(:root:not([data-theme="light"])) .notice {
     color: #8fe0b4;
   }
-}
-
-/* ---------- summary cards (ReviewStats) ---------- */
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(10px, 1.6vw, 16px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* A soft tint of the status color, with a faint drawing in the corner. */
-.stat {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  overflow: hidden;
-  padding: 18px 20px;
-  background-color: color-mix(in srgb, var(--tone) 10%, var(--color-surface));
-  border: 1px solid color-mix(in srgb, var(--tone) 18%, var(--color-surface));
-  border-radius: 20px;
-}
-
-.statIcon {
-  flex-shrink: 0;
-  color: var(--tone);
-}
-
-.statIcon svg {
-  width: 30px;
-  height: 30px;
-}
-
-.statText {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.statLabel {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--color-accent);
-}
-
-.statCount {
-  font-size: 34px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--color-accent);
-}
-
-:global(html:not([lang="km"])) .statLabel,
-:global(html) .statCount {
-  font-family: var(--font-heading), sans-serif !important;
-}
-
-.statArt {
-  position: absolute;
-  right: 10px;
-  bottom: -6px;
-  width: 38%;
-  max-width: 110px;
-  height: auto;
-  fill: var(--tone);
-  opacity: 0.16;
 }
 
 /* ---------- tabs and sort (ReviewFilters) ---------- */
@@ -759,12 +686,6 @@
 }
 
 /* ---------- tablets and phones ---------- */
-
-@media (max-width: 900px) {
-  .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
 @media (max-width: 480px) {
   .card {

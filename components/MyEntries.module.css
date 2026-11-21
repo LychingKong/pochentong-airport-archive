@@ -39,24 +39,6 @@
   pointer-events: none;
 }
 
-/* The orange document tile. */
-.tile {
-  position: relative;
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: clamp(64px, 7vw, 84px);
-  height: clamp(64px, 7vw, 84px);
-  color: var(--color-detail);
-  background-color: var(--color-detail-soft);
-  border-radius: 24px;
-}
-
-.tile svg {
-  width: 46%;
-  height: 46%;
-}
-
 .headText {
   position: relative;
   min-width: 0;

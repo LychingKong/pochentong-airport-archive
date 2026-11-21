@@ -1,13 +1,12 @@
 "use client";
 
-import AuthIcon from "./AuthIcon";
 import { useLanguage } from "./LanguageProvider";
 import styles from "./MyEntries.module.css";
 import MyEntriesHeaderArt from "./MyEntriesHeaderArt";
 
-// The heading of /my-entries: an orange document tile, "My Entries" with
-// an orange swoosh under the last word, a one-line subtitle, and a
-// drawing of memory photos and a boarding pass on the right.
+// The heading of /my-entries: "My Entries" with an orange swoosh under
+// the last word, a one-line subtitle, and a drawing of memory photos and
+// a boarding pass on the right.
 export default function MyEntriesOverview() {
   const { t } = useLanguage();
   // "My Entries" → "My" + "Entries", so the swoosh goes under the last word.
@@ -19,9 +18,6 @@ export default function MyEntriesOverview() {
     <header className={styles.head} data-reveal>
       <MyEntriesHeaderArt />
 
-      <span className={styles.tile} aria-hidden="true">
-        <AuthIcon name="document" />
-      </span>
       <div className={styles.headText}>
         <h1 className={styles.title}>
           {last ? `${words.join(" ")} ` : null}
