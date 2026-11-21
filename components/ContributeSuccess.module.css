@@ -117,7 +117,7 @@
   filter: drop-shadow(0 16px 20px rgba(18, 30, 52, 0.25));
 }
 
-/* The contrail behind the plane and the rope down to the postcard. */
+/* The rope down to the postcard. */
 .overlay {
   position: absolute;
   inset: 0;
@@ -126,18 +126,26 @@
   fill: none;
 }
 
-.contrail {
-  stroke: #ffffff;
-  stroke-width: 3;
-  stroke-dasharray: 10 8;
+/* A tan rope, with a lighter strand on top so it looks twisted. */
+.rope {
+  stroke: #b8864b;
+  stroke-width: 3.5;
   stroke-linecap: round;
-  opacity: 0.55;
 }
 
-.rope {
-  stroke: #fffaf1;
-  stroke-width: 2;
-  stroke-dasharray: 4 3;
+.ropeTwist {
+  stroke: #e8c690;
+  stroke-width: 1.6;
+  stroke-dasharray: 3 4;
+  stroke-linecap: round;
+}
+
+/* The knots at each end: a round dot (a zero-length line, so it stays
+   round however the drawing stretches). */
+.knot {
+  stroke: #a37440;
+  stroke-width: 8;
+  stroke-linecap: round;
 }
 
 /* ---------- the postcard (ContributeSuccessPostcard) ---------- */
