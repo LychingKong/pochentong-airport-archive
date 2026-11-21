@@ -1,5 +1,5 @@
-/* The collection's toolbar (title, count, search), the card grid and the
-   "no results" message. */
+/* The collection's toolbar (ArchiveToolbar: title, count, search, sort),
+   the card grid and the "no results" message. */
 
 .toolbar {
   display: flex;
@@ -10,6 +10,22 @@
   padding-bottom: 24px;
   margin-bottom: clamp(32px, 5vw, 48px);
   border-bottom: 1px solid var(--color-line);
+}
+
+/* The search box and the sort menu, side by side. */
+.controls {
+  display: flex;
+  flex: 1 1 420px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .controls {
+    justify-content: stretch;
+  }
 }
 
 .heading {
