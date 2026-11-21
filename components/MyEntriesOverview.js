@@ -6,8 +6,8 @@ import styles from "./MyEntries.module.css";
 import MyEntriesHeaderArt from "./MyEntriesHeaderArt";
 
 // The heading of /my-entries: an orange document tile, "My Entries" with
-// an orange swoosh under the last word, a one-line subtitle, and a faint
-// drawing of the old terminal on the right.
+// an orange swoosh under the last word, a one-line subtitle, and a
+// drawing of memory photos and a boarding pass on the right.
 export default function MyEntriesOverview() {
   const { t } = useLanguage();
   // "My Entries" → "My" + "Entries", so the swoosh goes under the last word.

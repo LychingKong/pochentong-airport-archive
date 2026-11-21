@@ -1,17 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 import AuthIcon from "./AuthIcon";
 import { useLanguage } from "./LanguageProvider";
 import styles from "./MyEntries.module.css";
+import MyEntryBadges from "./MyEntryBadges";
+import MyEntryNoteDialog from "./MyEntryNoteDialog";
 
 // One entry on /my-entries: the photo on the left; on the right a status
 // badge (Pending Review / Published / Returned), the title, a short
-// description, and a footer with the submission date and an arrow. The
-// whole card is one link to the entry.
-const STATUS_ICONS = { pending: "clock", published: "check", returned: "undo" };
-
+// description (a returned one with a reviewer's note gets a small message
+// button with a red dot that opens the note in a popup), and a footer with
+// the submission date and an arrow. The title link stretches over the
+// whole card, so a click anywhere opens the entry; the message button sits
+// above it (a button cannot go inside a link).
 export default function MyEntryCard({ entry }) {
   const { language, t } = useLanguage();
   const km = language === "km";
@@ -20,27 +24,26 @@ export default function MyEntryCard({ entry }) {
   const description = (km && entry.description_km) || entry.description;
   const cover =
     (entry.images || "").split(",")[0].trim() || "/placeholder-image.png";
+  const hasNote = entry.status === "returned" && Boolean(entry.review_note);
+  const [noteOpen, setNoteOpen] = useState(false);
 
   return (
-    <Link href={`/entries/${entry.id}`} className={styles.card}>
+    <article className={styles.card}>
       <div className={styles.photo}>
         <img src={cover} alt="" loading="lazy" className={styles.photoImg} />
       </div>
 
       <div className={styles.body}>
-        {/* The real status from the database (see app/my-entries/page.js). */}
-        {STATUS_ICONS[entry.status] ? (
-          <span
-            className={`${styles.badge} ${styles[`status_${entry.status}`]}`}
-          >
-            <AuthIcon
-              name={STATUS_ICONS[entry.status]}
-              className={styles.badgeIcon}
-            />
-            {t.myEntriesDashboard.status[entry.status]}
-          </span>
-        ) : null}
-        <h2 className={styles.cardTitle}>{title}</h2>
+        <MyEntryBadges
+          status={entry.status}
+          hasNote={hasNote}
+          onOpenNote={() => setNoteOpen(true)}
+        />
+        <h2 className={styles.cardTitle}>
+          <Link href={`/entries/${entry.id}`} className={styles.cardLink}>
+            {title}
+          </Link>
+        </h2>
         {description ? <p className={styles.desc}>{description}</p> : null}
 
         <div className={styles.footer}>
@@ -53,6 +56,14 @@ export default function MyEntryCard({ entry }) {
           </span>
         </div>
       </div>
-    </Link>
+
+      {noteOpen ? (
+        <MyEntryNoteDialog
+          entry={entry}
+          title={title}
+          onClose={() => setNoteOpen(false)}
+        />
+      ) : null}
+    </article>
   );
 }

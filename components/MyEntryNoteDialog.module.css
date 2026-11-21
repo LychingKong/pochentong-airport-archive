@@ -1,0 +1,292 @@
+/* The reviewer's-note popup on /my-entries (MyEntryNoteDialog and
+   MyEntryNoteHead), styled like the note panel on the entry page
+   (EntryReviewNote.module.css): white card, yellow top edge, header, small
+   uppercase label, then the note as a memo. Warning yellow, as on the
+   card's message button. Colors mix with theme tokens, so dark mode
+   follows. */
+.dialog {
+  --tone: #d69e05;
+  /* Darker yellow, readable as text and icons on light backgrounds. */
+  --ink: #a87a00;
+  width: min(540px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+}
+
+.dialog::backdrop {
+  background-color: rgba(10, 20, 40, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.dialog[open] .panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 3.5vw, 28px);
+  background-color: var(--color-surface);
+  border-top: 3px solid var(--tone);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 80px rgba(5, 15, 35, 0.3);
+}
+
+.panel:focus {
+  outline: none;
+}
+
+/* ---------- header (MyEntryNoteHead) ---------- */
+.head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  background-color: color-mix(in srgb, var(--tone) 16%, var(--color-surface));
+  border-radius: 50%;
+}
+
+.heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.kicker {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(20px, 3vw, 24px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+/* Which entry the note is about. */
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--color-muted);
+}
+
+.entryIcon {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.entryText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  align-self: flex-start;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.close:hover {
+  color: var(--color-accent);
+  background-color: var(--color-surface-tint);
+}
+
+/* The same small uppercase label as the museum label on entry pages. */
+.label {
+  margin: 0 0 -2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* ---------- memo ---------- */
+.memo {
+  position: relative;
+  margin: 0;
+  padding: 22px 20px 14px 24px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-left: 4px solid var(--tone);
+  border-radius: 16px;
+}
+
+/* A big yellow opening quote mark. */
+.memo::before {
+  content: "\201C";
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  font-family: Georgia, serif;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--tone);
+}
+
+/* Keeps the reviewer's line breaks; long words wrap; very long notes
+   scroll inside the memo. */
+.note {
+  max-height: 40vh;
+  margin: 0;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.signature {
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-style: italic;
+  text-align: right;
+  color: var(--color-muted);
+}
+
+/* ---------- footer ---------- */
+.privacy {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.lock {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-line);
+}
+
+.ghost,
+.open {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.ghost {
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-line-strong);
+}
+
+.ghost:hover {
+  background-color: var(--color-surface-tint);
+}
+
+.open {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.open:hover {
+  transform: translateY(-1px);
+  background-color: var(--color-accent-hover);
+}
+
+.openIcon {
+  width: 17px;
+  height: 17px;
+  transition: transform 160ms ease;
+}
+
+.open:hover .openIcon {
+  transform: translateX(3px);
+}
+
+.close:focus-visible,
+.ghost:focus-visible,
+.open:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Phones: the two buttons share the width. */
+@media (max-width: 480px) {
+  .ghost {
+    flex: 0 1 auto;
+  }
+
+  .open {
+    flex: 1 1 auto;
+  }
+}
+
+:global(html[lang="km"]) .label {
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+:global(html[lang="km"]) .note {
+  line-height: 1.95;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] .panel {
+    animation: none;
+  }
+}

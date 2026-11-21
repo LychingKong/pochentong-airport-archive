@@ -9,6 +9,11 @@
   gap: clamp(18px, 2.6vw, 24px);
 }
 
+/* The board under the "All Caught Up!" panel (nothing pending). */
+.belowEmpty {
+  margin-top: clamp(28px, 4vw, 40px);
+}
+
 /* BackLink brings its own bottom margin; the gap above does the spacing. */
 .board > a:first-child {
   margin-bottom: 0;
@@ -266,6 +271,14 @@
   padding-top: 4px;
 }
 
+/* The status badge and, on returned entries with a note, NoteButton. */
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -314,19 +327,6 @@
 :global(html[lang="km"]) .cardTitle,
 :global(html[lang="km"]) .cardDesc {
   line-height: 1.75;
-}
-
-/* The reviewer's note on a returned entry. */
-.cardNote {
-  margin: 2px 0 0;
-  padding: 6px 10px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--color-text-soft);
-  overflow-wrap: anywhere;
-  background-color: var(--color-error-soft);
-  border-left: 3px solid var(--color-error);
-  border-radius: 8px;
 }
 
 .cardFooter {
@@ -383,6 +383,33 @@
 
 .cardAction:hover {
   background-color: var(--color-accent-hover);
+}
+
+/* Review: the reviewer's to-do, in the archive's orange. */
+.actionReview {
+  color: #ffffff;
+  background-color: var(--color-detail);
+  box-shadow: 0 8px 18px rgba(232, 100, 30, 0.28);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.actionReview:hover {
+  background-color: var(--color-detail);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(232, 100, 30, 0.36);
+}
+
+/* View: just opens the published page, so it stays quiet. */
+.actionView {
+  color: var(--color-accent);
+  background-color: transparent;
+  border: 1px solid var(--color-line-strong);
+}
+
+.actionView:hover {
+  background-color: var(--color-surface-tint);
 }
 
 .cardAction:focus-visible {

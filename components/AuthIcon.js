@@ -24,6 +24,12 @@ const PATHS = {
   check: "M5 12.5l4.5 4.5L19 7.5",
   undo: "M9 14L4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11",
   close: "M6 6l12 12M18 6L6 18",
+  // A speech bubble: the reviewer's note on a returned entry.
+  comment: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
+  // A pencil: "Edit entry" under the reviewer's note.
+  pencil: "M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4",
+  // A clipboard with a tick: the Review button on /review cards.
+  clipboardCheck: "M9 4h6v3H9zM7 5.5H5.5V21h13V5.5H17M9 14l2 2 4-4.5",
 };
 
 export default function AuthIcon({ name, className }) {

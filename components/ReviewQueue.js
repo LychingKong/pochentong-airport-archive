@@ -16,7 +16,7 @@ const messageStyle = { fontSize: 16, color: "var(--color-muted)" };
 // menu, then the entries (every status) as cards. Once review_entry
 // confirms a decision (ReviewDecision), that card's status changes in
 // place and the counts follow. With nothing pending, "All Caught Up!"
-// shows.
+// shows above the board.
 export default function ReviewQueue({ isReviewer, entries }) {
   const { t } = useLanguage();
   // Each entry starts with its real status from the database.
@@ -31,7 +31,10 @@ export default function ReviewQueue({ isReviewer, entries }) {
   if (!isReviewer) return <p style={messageStyle}>{t.reviewNotReviewer}</p>;
 
   const counts = countByStatus(items);
-  if (counts.pending === 0) return <ReviewEmpty />;
+  // No entries at all: only "All Caught Up!". Nothing pending: that panel,
+  // then the board, so returned entries and their notes stay visible.
+  if (items.length === 0) return <ReviewEmpty />;
+  const caughtUp = counts.pending === 0;
 
   // Called only after review_entry returned true for this entry.
   function handleReviewed(id, decision, note) {
@@ -50,36 +53,42 @@ export default function ReviewQueue({ isReviewer, entries }) {
   const open = items.find((item) => item.id === openId);
 
   return (
-    <section className={styles.board}>
-      <ReviewBoardHeader
-        counts={counts}
-        notice={notice}
-        filter={filter}
-        onFilter={setFilter}
-        order={order}
-        onOrder={setOrder}
-      />
-
-      {shown.length > 0 ? (
-        <ul className={styles.grid}>
-          {shown.map((item) => (
-            <li key={item.id}>
-              <ReviewEntryCard entry={item} onOpen={setOpenId} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.none}>{t.reviewWorkspace.noneForFilter}</p>
-      )}
-
-      {open ? (
-        <ReviewDialog
-          key={open.id}
-          entry={open}
-          onClose={() => setOpenId(null)}
-          onReviewed={handleReviewed}
+    <>
+      {caughtUp ? <ReviewEmpty /> : null}
+      <section
+        className={`${styles.board} ${caughtUp ? styles.belowEmpty : ""}`}
+      >
+        <ReviewBoardHeader
+          compact={caughtUp}
+          counts={counts}
+          notice={notice}
+          filter={filter}
+          onFilter={setFilter}
+          order={order}
+          onOrder={setOrder}
         />
-      ) : null}
-    </section>
+
+        {shown.length > 0 ? (
+          <ul className={styles.grid}>
+            {shown.map((item) => (
+              <li key={item.id}>
+                <ReviewEntryCard entry={item} onOpen={setOpenId} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.none}>{t.reviewWorkspace.noneForFilter}</p>
+        )}
+
+        {open ? (
+          <ReviewDialog
+            key={open.id}
+            entry={open}
+            onClose={() => setOpenId(null)}
+            onReviewed={handleReviewed}
+          />
+        ) : null}
+      </section>
+    </>
   );
 }

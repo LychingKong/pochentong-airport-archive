@@ -1,6 +1,6 @@
 /* The /my-entries listing (MyEntriesList, MyEntriesOverview,
-   MyEntriesHeaderArt, MyEntriesSort, MyEntryCard): a heading with a faint
-   terminal drawing, a toolbar with the count and a sort menu, then the
+   MyEntriesHeaderArt, MyEntriesSort, MyEntryCard): a heading with a
+   drawing of photos and a boarding pass, a toolbar with the count and a sort menu, then the
    entries as horizontal cards (photo left, text right). Each whole card
    is one link to the entry. */
 
@@ -17,12 +17,12 @@
   display: flex;
   align-items: center;
   gap: clamp(16px, 2.4vw, 28px);
-  min-height: 150px;
+  min-height: 190px;
   padding-bottom: clamp(20px, 3vw, 28px);
   border-bottom: 1px solid var(--color-line);
 }
 
-/* A soft warm glow behind the drawing. */
+/* A soft blue glow behind the drawing. */
 .head::before {
   content: "";
   position: absolute;
@@ -33,85 +33,10 @@
   /* closest-side: fully transparent before the box's edges. */
   background: radial-gradient(
     closest-side,
-    var(--color-detail-soft),
+    color-mix(in srgb, var(--color-accent) 9%, transparent),
     transparent
   );
   pointer-events: none;
-}
-
-/* The terminal drawing, fading out toward the title. */
-.headArt {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: min(52%, 560px);
-  height: auto;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%);
-  mask-image: linear-gradient(90deg, transparent, #000 35%);
-}
-
-.artCloud {
-  fill: var(--color-detail);
-  opacity: 0.07;
-}
-
-.artRoof,
-.artWall,
-.artCab,
-.artPlane,
-.artPane {
-  fill: var(--color-detail);
-}
-
-.artRoof {
-  opacity: 0.2;
-}
-
-.artWall {
-  opacity: 0.08;
-}
-
-.artPane {
-  opacity: 0.16;
-}
-
-.artCab {
-  opacity: 0.2;
-}
-
-.artPlane {
-  opacity: 0.32;
-}
-
-.artCabBars,
-.artLine,
-.artGround,
-.artTrail {
-  fill: none;
-  stroke: var(--color-detail);
-  stroke-linecap: round;
-}
-
-.artCabBars {
-  stroke-width: 1.5;
-  opacity: 0.25;
-}
-
-.artLine {
-  stroke-width: 3;
-  opacity: 0.3;
-}
-
-.artGround {
-  stroke-width: 2;
-  opacity: 0.18;
-}
-
-.artTrail {
-  stroke-width: 2;
-  stroke-dasharray: 5 7;
-  opacity: 0.35;
 }
 
 /* The orange document tile. */
@@ -270,6 +195,7 @@
 /* Photo left (44%), text right. Lifts on hover; the title turns orange
    and the arrow slides. */
 .card {
+  position: relative;
   display: grid;
   grid-template-columns: 44% minmax(0, 1fr);
   gap: 22px;
@@ -292,7 +218,24 @@
   box-shadow: var(--shadow-lift);
 }
 
-.card:focus-visible {
+/* The title link covers the whole card, so the card is clickable. */
+.cardLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+}
+
+.cardLink:focus-visible {
+  outline: none;
+}
+
+.card:has(.cardLink:focus-visible) {
   outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
@@ -367,6 +310,14 @@
   height: 16px;
 }
 
+/* The status badge and, on returned entries with a note, the note icon. */
+.badgeRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+
 .cardTitle {
   margin: 0;
   font-size: 21px;
@@ -433,18 +384,22 @@
 .dateIcon {
   width: 16px;
   height: 16px;
-  color: var(--color-detail);
+  color: var(--color-accent);
 }
 
-/* The arrow in a round orange button that fills in on hover. */
+/* The arrow in a round navy button that fills in on hover. */
 .arrowWrap {
   display: grid;
   flex-shrink: 0;
   place-items: center;
   width: 38px;
   height: 38px;
-  color: var(--color-detail);
-  background-color: var(--color-detail-soft);
+  color: var(--color-accent);
+  background-color: color-mix(
+    in srgb,
+    var(--color-accent) 10%,
+    var(--color-surface)
+  );
   border-radius: 50%;
   transition:
     background-color 200ms ease,
@@ -458,17 +413,17 @@
 }
 
 .card:hover .arrowWrap {
-  color: #ffffff;
-  background-color: var(--color-detail);
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
   transform: translateX(3px);
 }
 
 /* ---------- smaller screens ---------- */
 
-@media (max-width: 720px) {
-  .headArt {
-    width: 70%;
-    opacity: 0.7;
+/* Phones: the drawing is hidden (MyEntriesArt.module.css), so is its glow. */
+@media (max-width: 560px) {
+  .head::before {
+    display: none;
   }
 }
 

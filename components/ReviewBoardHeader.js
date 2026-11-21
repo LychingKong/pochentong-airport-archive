@@ -11,7 +11,10 @@ import styles from "./ReviewWorkspace.module.css";
 // The top of the /review board: back link, heading with the number still
 // waiting, the summary cards, the message after a decision, and the
 // status tabs with the sort menu.
+// `compact` (nothing pending; "All Caught Up!" is above) leaves out the
+// back link and heading, which that panel already covers.
 export default function ReviewBoardHeader({
+  compact,
   counts,
   notice,
   filter,
@@ -24,18 +27,22 @@ export default function ReviewBoardHeader({
 
   return (
     <>
-      <BackLink />
-      <header className={styles.head}>
-        <div>
-          {/* In English the "subtitle" class (theme.css) makes this handwritten. */}
-          <p className={`subtitle ${styles.kicker}`}>{copy.kicker}</p>
-          <h1 className={styles.title}>{t.reviewTitle}</h1>
-        </div>
-        {/* How many are waiting, as split-flap tiles like the homepage. */}
-        <div className={styles.waiting}>
-          <HeroFlapCount count={counts.pending} label={copy.waitingLabel} />
-        </div>
-      </header>
+      {compact ? null : (
+        <>
+          <BackLink />
+          <header className={styles.head}>
+            <div>
+              {/* In English the "subtitle" class (theme.css) makes this handwritten. */}
+              <p className={`subtitle ${styles.kicker}`}>{copy.kicker}</p>
+              <h1 className={styles.title}>{t.reviewTitle}</h1>
+            </div>
+            {/* How many are waiting, as split-flap tiles like the homepage. */}
+            <div className={styles.waiting}>
+              <HeroFlapCount count={counts.pending} label={copy.waitingLabel} />
+            </div>
+          </header>
+        </>
+      )}
 
       <ReviewStats counts={counts} />
       {notice ? (

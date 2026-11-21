@@ -30,11 +30,11 @@ export default async function MyEntriesPage() {
 
   // Only this user's entries, in any status. Row-level security allows it.
   // Each card shows the cover photo, status, title, description and
-  // submission date.
+  // submission date, plus the reviewer's note on a returned entry.
   const { data: entries } = await supabase
     .from("entries")
     .select(
-      "id, title, title_km, description, description_km, images, status, created_at",
+      "id, title, title_km, description, description_km, images, status, review_note, created_at",
     )
     .eq("owner", user.id)
     .order("created_at", { ascending: false });

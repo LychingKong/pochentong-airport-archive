@@ -8,6 +8,7 @@ import EntryGallery from "../../../components/EntryGallery";
 import EntryHeader from "../../../components/EntryHeader";
 import EntryOwnerActions from "../../../components/EntryOwnerActions";
 import EntryPlacard from "../../../components/EntryPlacard";
+import EntryReviewNote from "../../../components/EntryReviewNote";
 import Header from "../../../components/Header";
 import { createClient } from "../../../lib/supabase/server";
 import styles from "./page.module.css";
@@ -112,6 +113,11 @@ export default async function EntryPage({ params }) {
 
     const entry = transformEntry(dbEntries[0]);
     const isOwner = Boolean(user) && user.id === dbEntries[0].owner;
+    // The reviewer's note on a returned entry, shown to its owner only.
+    const ownerNote =
+      isOwner && dbEntries[0].status === "returned"
+        ? dbEntries[0].review_note
+        : null;
 
     // Laid out as an exhibit: title, the photo full width, then the museum
     // label beside the story (stacked on tablets and phones).
@@ -122,6 +128,8 @@ export default async function EntryPage({ params }) {
           <BackLink className={styles.back} />
           {isOwner ? <EntryOwnerActions id={entry.id} /> : null}
         </div>
+
+        {ownerNote ? <EntryReviewNote id={entry.id} note={ownerNote} /> : null}
 
         <article>
           <EntryHeader entry={entry} />
