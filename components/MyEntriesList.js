@@ -3,15 +3,12 @@
 import Link from "next/link";
 
 import { useLanguage } from "./LanguageProvider";
+import MyEntriesEmpty from "./MyEntriesEmpty";
 
 const styles = {
   heading: {
     fontSize: "clamp(28px, 4vw, 40px)",
     margin: "0 0 clamp(24px, 4vw, 40px)",
-  },
-  empty: {
-    fontSize: 16,
-    color: "var(--color-muted)",
   },
   list: {
     listStyle: "none",
@@ -48,14 +45,14 @@ const styles = {
 export default function MyEntriesList({ entries }) {
   const { language, t } = useLanguage();
 
+  // No entries yet: the "Your Story Starts Here" invitation instead.
+  if (entries.length === 0) return <MyEntriesEmpty />;
+
   return (
     <section>
       <h1 style={styles.heading} data-reveal>
         {t.myEntries}
       </h1>
-      {entries.length === 0 ? (
-        <p style={styles.empty}>{t.noMyEntries}</p>
-      ) : null}
       <ul style={styles.list}>
         {entries.map((entry) => (
           <li key={entry.id} data-reveal>

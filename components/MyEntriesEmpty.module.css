@@ -1,0 +1,435 @@
+/* The /my-entries empty state (MyEntriesEmpty, SuitcaseIllustration,
+   SuitcaseStickers). A soft dashed panel, like a blank page waiting to be
+   filled: the suitcase on the left, the invitation on the right. Below
+   820px they stack and center. */
+
+.empty {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(28px, 5vw, 56px);
+  background-color: var(--color-surface-tint);
+  border: 2px dashed var(--color-line-strong);
+  border-radius: 28px;
+}
+
+/* ---------- message ---------- */
+
+.text {
+  max-width: 36em;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-detail);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(34px, 4.4vw, 54px);
+  line-height: 1.1;
+  color: var(--color-accent);
+}
+
+:global(html:not([lang="km"])) .title {
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+}
+
+.message {
+  margin: clamp(14px, 2vw, 20px) 0 0;
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+
+/* A hand-drawn orange swoosh under "Starts Here", as on the other pages;
+   "clone" repeats it under each line if the words wrap. */
+.highlight {
+  padding-bottom: 0.2em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M4 12C60 3 140 2 196 10' fill='none' stroke='%23e8641e' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center bottom / 100% 0.24em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+:global(html[lang="km"]) .highlight {
+  padding-bottom: 0.4em;
+}
+
+:global(html[lang="km"]) .title {
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.55;
+}
+
+:global(html[lang="km"]) .message {
+  line-height: 1.95;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(24px, 3vw, 32px);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 54px;
+  padding: 0 22px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+:global(html:not([lang="km"])) .primary,
+:global(html:not([lang="km"])) .secondary {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 17px;
+}
+
+.primary {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  box-shadow: 0 10px 22px -10px rgba(11, 37, 69, 0.6);
+}
+
+.primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px -10px rgba(11, 37, 69, 0.7);
+}
+
+.secondary {
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.secondary:hover {
+  background-color: var(--color-bg);
+  transform: translateY(-1px);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* A small reassurance under the buttons. */
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 18px 0 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--color-detail);
+}
+
+:global(html[lang="km"]) .note {
+  line-height: 1.9;
+}
+
+/* ---------- illustration ---------- */
+
+/* A warm glow behind the suitcase, so it doesn't float on nothing. */
+.artWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.artWrap::before {
+  content: "";
+  position: absolute;
+  inset: 6% 4%;
+  background: radial-gradient(
+    closest-side,
+    var(--color-detail-soft),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.art {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  overflow: visible;
+}
+
+.cloud {
+  fill: var(--color-stage);
+}
+
+.trail {
+  fill: none;
+  stroke: var(--color-detail);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 7;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.planeShape {
+  fill: var(--color-accent);
+}
+
+.shadow {
+  fill: var(--color-text);
+  opacity: 0.08;
+}
+
+/* The suitcase is drawn in fixed colors, like a real object, so it looks
+   the same in light and dark mode. */
+.handle {
+  fill: none;
+  stroke: #0e1f38;
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.case {
+  fill: #1d3a63;
+}
+
+.caseShine {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.seam {
+  stroke: #12284a;
+  stroke-width: 2.5;
+}
+
+.latch,
+.cap {
+  fill: #d9a75a;
+}
+
+.stitch {
+  stroke: #f0d2a8;
+  stroke-width: 1.2;
+  stroke-dasharray: 3 4;
+  opacity: 0.75;
+}
+
+/* The blank polaroid peeking out of the case. */
+.polaroidFrame {
+  fill: #fffdf8;
+  stroke: #e7dfd2;
+  stroke-width: 1.5;
+}
+
+.polaroidPhoto {
+  fill: #dbe7f1;
+}
+
+.plusCircle {
+  fill: #e8641e;
+}
+
+.plusMark {
+  stroke: #ffffff;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.strap {
+  fill: #c98d5a;
+}
+
+.buckle {
+  fill: none;
+  stroke: #f3d9a8;
+  stroke-width: 3;
+}
+
+.stickerRing {
+  fill: #e8641e;
+}
+
+.stickerFace {
+  fill: #fff4e2;
+}
+
+.stickerPlane {
+  fill: #1d3a63;
+}
+
+.label {
+  fill: #e8641e;
+}
+
+.star {
+  fill: #f3d9a8;
+}
+
+.string {
+  fill: none;
+  stroke: #c98d5a;
+  stroke-width: 2.5;
+}
+
+.tagCard {
+  fill: #fff4e2;
+  stroke: #e3cfae;
+  stroke-width: 1.5;
+}
+
+.tagStripe {
+  fill: #e8641e;
+}
+
+.tagHole {
+  fill: #fff4e2;
+}
+
+.tagLines {
+  stroke: #d9c3a0;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* Text inside the drawing: more specific than theme.css's font rules. */
+:global(html) text.stickerCode {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  fill: #1d3a63;
+  text-anchor: middle;
+}
+
+:global(html) text.labelText {
+  font-family: var(--font-khmer), sans-serif !important;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #ffffff;
+  text-anchor: middle;
+}
+
+/* Entrance: the suitcase drops in with a small bounce, then the polaroid
+   slides up out of it. "backwards" holds the start during each delay. */
+.caseGroup {
+  transform-box: view-box;
+  animation: drop 700ms cubic-bezier(0.3, 1.35, 0.5, 1) 150ms backwards;
+}
+
+.polaroid {
+  animation: peek 650ms cubic-bezier(0.2, 0.8, 0.3, 1) 750ms backwards;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes peek {
+  from {
+    opacity: 0;
+    transform: translateY(42px);
+  }
+}
+
+/* Gentle motion: the tag sways on its string, the plane floats. */
+.tag {
+  transform-box: view-box;
+  transform-origin: 180px 100px;
+  animation: sway 3.4s ease-in-out infinite alternate;
+}
+
+.plane {
+  animation: float 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+/* ---------- smaller screens ---------- */
+
+@media (max-width: 820px) {
+  .empty {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .art {
+    max-width: 320px;
+  }
+
+  .actions,
+  .note {
+    justify-content: center;
+  }
+
+  .note {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .primary,
+  .secondary {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag,
+  .plane,
+  .caseGroup,
+  .polaroid {
+    animation: none;
+  }
+
+  .primary,
+  .secondary {
+    transition: none;
+  }
+}
