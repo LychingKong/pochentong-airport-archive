@@ -20,7 +20,7 @@ import WelcomeStartButton from "./WelcomeStartButton";
 // Full-screen welcome shown once per browser session, over whichever page
 // the visitor lands on: the pilot's view down the runway at dusk
 // (WelcomeRunway), with the archive's name and "Gathering memories..."
-// over the sky while the site loads (at least 5 seconds), then "Click to Start": the
+// over the sky while the site loads (at least 2 seconds), then "Click to Start": the
 // runway rushes past, a takeoff sound, a plane flying across, and the page
 // fades in. The page behind can't be scrolled or
 // tabbed to meanwhile. The loading logic is in lib/useWelcomeFlow.js.
