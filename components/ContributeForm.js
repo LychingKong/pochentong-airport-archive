@@ -31,7 +31,7 @@ export default function ContributeForm({ entry }) {
   if (form.submitted) {
     return (
       <>
-        <ContributeSuccess />
+        <ContributeSuccess onContributeAgain={form.startOver} />
         <SubmitTakeoff />
       </>
     );

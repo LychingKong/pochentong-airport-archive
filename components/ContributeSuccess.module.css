@@ -314,53 +314,107 @@
   line-height: 1.95;
 }
 
-/* A departures-board style strip: STATUS · ● PENDING REVIEW. */
-.statusStrip {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
+/* The status tracker (SuccessTracker): three steps on a line, filled up
+   to the current one. Green done, amber now (as the "Pending Review"
+   badges elsewhere), grey next. */
+.tracker {
+  --done: #2f8f5b;
+  --now: #c98a12;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 420px;
   margin: clamp(18px, 2.4vw, 24px) 0 0;
-  padding: 12px 18px;
-  color: #ffffff;
-  background-color: #0b2545;
-  border-radius: 14px;
-  box-shadow: inset 0 -10px 18px rgba(0, 0, 0, 0.18);
+  padding: 14px 16px 12px;
+  list-style: none;
+  background-color: var(--color-surface-tint);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
 }
 
-.statusLabel {
-  padding-right: 14px;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.statusValue {
-  display: inline-flex;
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 9px;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #ffc46b;
+  gap: 6px;
+  min-width: 0;
+  text-align: center;
 }
 
-:global(html[lang="km"]) .statusLabel,
-:global(html[lang="km"]) .statusValue {
-  font-size: 13.5px;
-  letter-spacing: 0;
+/* The line to the previous step, behind the dots. */
+.step + .step::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  right: 50%;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-line-strong);
+  border-radius: 2px;
 }
 
-.statusLight {
-  width: 9px;
-  height: 9px;
-  background-color: #f5a524;
+.step_now::before {
+  background: linear-gradient(90deg, var(--done), var(--now)) !important;
+}
+
+.stepDot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  color: #ffffff;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-line-strong);
   border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(245, 165, 36, 0.22);
-  animation: blink 1.6s ease-in-out infinite;
+}
+
+.stepDot svg {
+  width: 15px;
+  height: 15px;
+}
+
+.step_done .stepDot {
+  background-color: var(--done);
+  border-color: var(--done);
+}
+
+.step_now .stepDot {
+  background-color: var(--now);
+  border-color: var(--now);
+  animation: pulse 2s ease-out infinite;
+}
+
+.stepName {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-muted);
+}
+
+.step_done .stepName {
+  color: var(--done);
+}
+
+.step_now .stepName {
+  font-weight: 700;
+  color: var(--now);
+}
+
+:global(html[lang="km"]) .stepName {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 138, 18, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(201, 138, 18, 0);
+  }
 }
 
 /* ---------- buttons ---------- */
@@ -372,8 +426,11 @@
   margin-top: clamp(22px, 2.8vw, 28px);
 }
 
+/* Shared by the link and the button, so both look the same. */
 .primary,
 .secondary {
+  font-family: inherit;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -450,12 +507,6 @@
   }
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0.35;
-  }
-}
-
 /* ---------- smaller screens ---------- */
 
 @media (max-width: 820px) {
@@ -491,7 +542,7 @@
   .flight,
   .postcard,
   .sparkles,
-  .statusLight {
+  .step_now .stepDot {
     animation: none;
   }
 

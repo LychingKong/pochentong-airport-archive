@@ -7,12 +7,14 @@ import AuthIcon from "./AuthIcon";
 import styles from "./ContributeSuccess.module.css";
 import ContributeSuccessArt from "./ContributeSuccessArt";
 import { useLanguage } from "./LanguageProvider";
+import SuccessTracker from "./SuccessTracker";
 
 // Shown on /contribute after the server confirms a new entry was saved
 // (ContributeForm, when form.submitted is true): the airliner towing a
 // memory postcard, "Your Memory Has Been Preserved!", a thank-you note, a
-// "Pending Review" status strip, and links to My Entries and the archive.
-export default function ContributeSuccess() {
+// status tracker (Submitted → Pending Review → Published, SuccessTracker), "Contribute Again" (brings back an empty
+// form, onContributeAgain) and a link to My Entries.
+export default function ContributeSuccess({ onContributeAgain }) {
   const { t } = useLanguage();
   const copy = t.contributeSuccess;
 
@@ -35,22 +37,20 @@ export default function ContributeSuccess() {
         </h1>
         <p className={styles.message}>{copy.text}</p>
 
-        <p className={styles.statusStrip}>
-          <span className={styles.statusLabel}>{copy.statusLabel}</span>
-          <span className={styles.statusValue}>
-            <span className={styles.statusLight} aria-hidden="true" />
-            {copy.statusValue}
-          </span>
-        </p>
+        <SuccessTracker />
 
         <div className={styles.actions}>
-          <Link href="/my-entries" className={styles.primary}>
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={onContributeAgain}
+          >
+            <AuthIcon name="plus" />
+            {copy.again}
+          </button>
+          <Link href="/my-entries" className={styles.secondary}>
             <AuthIcon name="document" />
             {copy.myEntries}
-          </Link>
-          <Link href="/" className={styles.secondary}>
-            <AuthIcon name="layers" />
-            {copy.explore}
           </Link>
         </div>
       </div>
