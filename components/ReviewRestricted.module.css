@@ -1,0 +1,586 @@
+/* The /review restricted screen: a boarding pass (ReviewRestricted,
+   ReviewPassHeader, ReviewPassRoute, ReviewPassStub). A navy strip with an
+   orange livery stripe across the top, the main part with the route,
+   ticket details and message, and a tear-off stub behind a dashed
+   perforation that runs through the whole ticket, with half-circle notches
+   cut into the top and bottom edges. Below 720px the stub moves under the
+   main part and the perforation runs across. */
+
+.wrap {
+  display: grid;
+  place-items: center;
+  padding: clamp(0px, 2vw, 24px) 0 clamp(16px, 4vw, 48px);
+}
+
+.pass {
+  --notch: 16px;
+  --pad: clamp(22px, 3.6vw, 40px);
+  --stub: clamp(210px, 28%, 270px);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--stub);
+  grid-template-rows: auto 1fr;
+  width: 100%;
+  max-width: 960px;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 26px;
+  box-shadow:
+    0 1px 2px rgba(18, 21, 28, 0.06),
+    0 28px 56px -20px rgba(18, 21, 28, 0.32);
+  animation: printIn 700ms cubic-bezier(0.2, 0.7, 0.3, 1) 100ms backwards;
+}
+
+/* The ticket slides up into place as the page opens. */
+@keyframes printIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) rotate(-0.6deg);
+  }
+}
+
+/* Half-circle notches where the perforation meets the top and bottom
+   edges, cut out in the page color (the ticket's rounded box clips them). */
+.pass::before,
+.pass::after {
+  content: "";
+  position: absolute;
+  right: calc(var(--stub) - var(--notch) - 1px);
+  z-index: 2;
+  width: calc(var(--notch) * 2);
+  height: calc(var(--notch) * 2);
+  background-color: var(--color-bg);
+  border-radius: 50%;
+}
+
+.pass::before {
+  top: calc(var(--notch) * -1);
+}
+
+.pass::after {
+  bottom: calc(var(--notch) * -1);
+}
+
+/* Small labels above each value, as printed on a pass. */
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+:global(html[lang="km"]) .label {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+/* ---------- top strip (ReviewPassHeader) ---------- */
+
+.band {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  flex-wrap: wrap;
+  padding: 16px var(--pad);
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* The round PNH badge: an orange ring, a plane and the airport code. */
+.badge {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  align-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--color-accent);
+  background-color: var(--color-on-accent);
+  border: 3px solid var(--color-detail);
+  border-radius: 50%;
+}
+
+.badgePlane {
+  width: 16px;
+  height: 16px;
+  transform: rotate(45deg);
+}
+
+.badgeCode,
+.code,
+.gate {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.badgeCode {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Codes like PNH and R1 are set in Baloo 2 in either language. */
+:global(html) .badgeCode,
+:global(html) .code,
+:global(html) .gate {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+.brandName {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.passTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-on-accent);
+  opacity: 0.85;
+}
+
+:global(html[lang="km"]) .passTitle {
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+/* An orange livery stripe under the strip, and the perforation continuing
+   up through it. */
+.band {
+  position: relative;
+  border-bottom: 4px solid var(--color-detail);
+}
+
+.band::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: calc(var(--stub) - 1px);
+  bottom: -4px;
+  border-left: 2px dashed rgba(255, 255, 255, 0.35);
+}
+
+/* ---------- main part (with ReviewPassRoute) ---------- */
+
+/* A faint plane printed in the corner, like a ticket's security pattern. */
+.main {
+  position: relative;
+  padding: var(--pad);
+}
+
+.main::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  bottom: -50px;
+  width: 260px;
+  height: 260px;
+  background-color: var(--color-accent);
+  opacity: 0.04;
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transform: rotate(45deg);
+}
+
+/* Labels on the first row, values on the second: PNH, the flight line,
+   then the destination on the right. */
+.route {
+  display: grid;
+  grid-template-columns: auto minmax(56px, 1fr) auto;
+  align-items: center;
+  gap: 6px clamp(14px, 2vw, 22px);
+}
+
+.toLabel,
+.destination {
+  justify-self: end;
+  text-align: right;
+}
+
+.code {
+  font-size: clamp(30px, 3.4vw, 40px);
+  color: var(--color-accent);
+}
+
+.destination {
+  font-size: clamp(17px, 1.8vw, 21px);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-accent);
+}
+
+/* The dashed flight line with a dot at each end and the plane between. */
+.routeLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  background: repeating-linear-gradient(
+      90deg,
+      var(--color-line-strong) 0 6px,
+      transparent 6px 11px
+    )
+    center / 100% 2px no-repeat;
+}
+
+.routeDot {
+  width: 8px;
+  height: 8px;
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-line-strong);
+  border-radius: 50%;
+}
+
+.routePlane {
+  box-sizing: content-box;
+  width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  color: var(--color-detail);
+  background-color: var(--color-surface);
+  transform: rotate(90deg);
+}
+
+/* Passenger / Boarding / Class, in a dashed box. */
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: clamp(18px, 2.4vw, 24px) 0 clamp(22px, 3vw, 30px);
+  padding: 14px 18px;
+  background-color: var(--color-surface-tint);
+  border: 1px dashed var(--color-line-strong);
+  border-radius: 14px;
+}
+
+.detail {
+  min-width: 0;
+}
+
+.detailValue {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+:global(html[lang="km"]) .detailValue {
+  line-height: 1.7;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(32px, 3.8vw, 48px);
+  line-height: 1.1;
+  color: var(--color-accent);
+}
+
+:global(html:not([lang="km"])) .title {
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+}
+
+/* A hand-drawn orange swoosh under the last word(s); "clone" repeats it
+   under each line if the words wrap. */
+.highlight {
+  padding-bottom: 0.22em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M4 12C60 3 140 2 196 10' fill='none' stroke='%23e8641e' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center bottom / 100% 0.26em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.explain {
+  max-width: 36em;
+  margin: clamp(14px, 2vw, 20px) 0 0;
+  font-size: clamp(15.5px, 1.4vw, 17px);
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+:global(html[lang="km"]) .title {
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.6;
+}
+
+:global(html[lang="km"]) .highlight {
+  padding-bottom: 0.4em;
+}
+
+:global(html[lang="km"]) .explain {
+  line-height: 1.95;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(22px, 3vw, 30px);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+:global(html:not([lang="km"])) .primary,
+:global(html:not([lang="km"])) .secondary {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 17px;
+}
+
+.primary {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  box-shadow: 0 10px 22px -10px rgba(11, 37, 69, 0.6);
+}
+
+.primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.secondary {
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.secondary:hover {
+  background-color: var(--color-surface-tint);
+  transform: translateY(-1px);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---------- tear-off stub (ReviewPassStub) ---------- */
+
+.stub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: var(--pad) calc(var(--pad) * 0.8);
+  background-color: var(--color-surface-tint);
+  border-left: 2px dashed var(--color-line-strong);
+}
+
+.stubFields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stubField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gate {
+  font-size: 44px;
+  color: var(--color-accent);
+}
+
+.access {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+/* The red rubber stamp: a double border, a little crooked, with an inked
+   texture (a noise mask lets some paper show through). It thumps on as
+   the page opens. */
+.stamp {
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 156px;
+  height: 94px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  color: #c62828;
+  border: 3px solid currentColor;
+  border-radius: 14px;
+  box-shadow:
+    inset 0 0 0 3px var(--color-surface-tint),
+    inset 0 0 0 5px currentColor;
+  opacity: 0.9;
+  transform: rotate(-12deg);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    center / cover;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    center / cover;
+  animation: stampOn 520ms cubic-bezier(0.3, 1.4, 0.5, 1) 700ms backwards;
+}
+
+.stampText {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+:global(html:not([lang="km"])) .stampText {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+:global(html[lang="km"]) .stampText {
+  font-size: 20px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+@keyframes stampOn {
+  from {
+    opacity: 0;
+    transform: rotate(-24deg) scale(1.8);
+  }
+  60% {
+    opacity: 0.95;
+    transform: rotate(-10deg) scale(0.94);
+  }
+}
+
+/* Barcode with the printed ticket number under it. */
+.ticketCode {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.barcode {
+  height: 52px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-text) 0 2px,
+    transparent 2px 4px,
+    var(--color-text) 4px 7px,
+    transparent 7px 9px,
+    var(--color-text) 9px 10px,
+    transparent 10px 13px,
+    var(--color-text) 13px 16px,
+    transparent 16px 17px
+  );
+  border-radius: 2px;
+  opacity: 0.75;
+}
+
+.ticketNumber {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-align: center;
+  color: var(--color-faint);
+}
+
+/* ---------- phones: stub under the main part ---------- */
+
+@media (max-width: 720px) {
+  .pass {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The vertical perforation and its notches don't apply here. */
+  .pass::before,
+  .pass::after,
+  .band::after {
+    display: none;
+  }
+
+  .stub {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-top: 2px dashed var(--color-line-strong);
+    border-left: none;
+  }
+
+  /* Notches at the two ends of the horizontal perforation instead. */
+  .stub::before,
+  .stub::after {
+    content: "";
+    position: absolute;
+    top: calc(var(--notch) * -1 - 1px);
+    width: calc(var(--notch) * 2);
+    height: calc(var(--notch) * 2);
+    background-color: var(--color-bg);
+    border-radius: 50%;
+  }
+
+  .stub::before {
+    left: calc(var(--notch) * -1);
+  }
+
+  .stub::after {
+    right: calc(var(--notch) * -1);
+  }
+
+  .stamp {
+    width: 132px;
+    height: 84px;
+  }
+
+  .ticketCode {
+    grid-column: 1 / -1;
+  }
+
+  .details {
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .primary,
+  .secondary {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pass,
+  .stamp {
+    animation: none;
+  }
+
+  .primary,
+  .secondary {
+    transition: none;
+  }
+}

@@ -10,6 +10,9 @@ const PATHS = {
   signIn: "M10 4h8a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-8M3 12h11M10 8l4 4-4 4",
   userPlus:
     "M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2.5 21v-.5a6.5 6.5 0 0 1 11-4.7M18.5 14v7M15 17.5h7",
+  // Used by the /review restricted screen's two buttons.
+  layers: "M12 3l9 5-9 5-9-5zM3 12.5l9 5 9-5M3 16.5l9 5 9-5",
+  plus: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8v8M8 12h8",
 };
 
 export default function AuthIcon({ name, className }) {
