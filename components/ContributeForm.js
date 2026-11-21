@@ -2,6 +2,7 @@
 
 import { useContributeForm } from "../lib/useContributeForm";
 import styles from "./ContributeForm.module.css";
+import ContributeSuccess from "./ContributeSuccess";
 import FormField from "./FormField";
 import FormFooter from "./FormFooter";
 import FormSection from "./FormSection";
@@ -22,15 +23,8 @@ export default function ContributeForm({ entry }) {
   const form = useContributeForm(entry);
   const editing = Boolean(entry);
 
-  if (form.submitted) {
-    return (
-      <div className={styles.pageHead}>
-        <p className={styles.intro} role="status">
-          {t.submittedMessage}
-        </p>
-      </div>
-    );
-  }
+  // Only after the server confirmed a new entry was saved.
+  if (form.submitted) return <ContributeSuccess />;
 
   return (
     <form onSubmit={form.handleSubmit} noValidate className={styles.form}>
