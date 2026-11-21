@@ -688,11 +688,19 @@
 /* ---------- tablets and phones ---------- */
 
 @media (max-width: 480px) {
+  /* One column: photo, text, footer. Rows size to their content and the
+     photo's height comes only from its 16:10 shape. The desktop rules (a
+     stretchy 1fr row with a height: 100% photo) depend on each other, and
+     iPhone Safari resolved that as "photo fills the whole card", drawing
+     the text on top of it. */
   .card {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
   }
 
   .cardImg {
+    align-self: start;
+    height: auto;
     min-height: 0;
     aspect-ratio: 16 / 10;
   }
