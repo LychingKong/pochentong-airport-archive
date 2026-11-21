@@ -1,153 +1,382 @@
-/* Shared by ContributeForm, FormSection, FormField, ImageField and
-   LoginPrompt. A CSS file (not inline styles) because :focus, :hover,
-   :disabled, animation and the mobile layout can't be inline styles. */
+/* The contribute/edit form as a boarding pass (ContributeForm,
+   ContributeHero, PassBand, FormSection, FormField, PassStub, ImageField,
+   PhotoDropPrompt, PhotoFileMeta, FormFooter) and LoginPrompt (.pageHead,
+   .kicker, .title, .intro, .button). Warm cream page, a white pass with a
+   navy band, a dashed tear line with round notches, orange accents and
+   Baloo 2 headings. */
 
 .form {
-  max-width: 1000px;
+  --stub: 330px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(26px, 4vw, 40px);
 }
 
-/* ---------- page heading ---------- */
+/* ---------- heading (ContributeHero) ---------- */
 
-.pageHead {
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.heroText {
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 640px;
-  margin-bottom: clamp(32px, 5vw, 48px);
 }
 
-.kicker {
-  font-family: "Courier New", monospace;
-  font-size: 13px;
-  letter-spacing: 2px;
+.heroArt {
+  display: flex;
+  flex: 0 1 440px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+/* Phones: no room beside the heading. */
+@media (max-width: 760px) {
+  .heroArt {
+    display: none;
+  }
+}
+
+.heroKicker {
+  margin: 0 0 2px;
+  font-size: 22px;
   color: var(--color-detail);
-  margin: 0 0 16px;
 }
 
-.title {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(30px, 4.5vw, 44px);
-  font-weight: 600;
-  line-height: 1.15;
-  margin: 0 0 14px;
-  color: var(--color-text);
-}
-
-.intro {
-  font-size: 17px;
-  line-height: 1.65;
-  color: var(--color-muted);
+.heroTitle {
   margin: 0;
+  font-size: clamp(38px, 5.2vw, 60px);
+  line-height: 1.08;
+  color: var(--color-accent);
 }
 
-/* ---------- sections: hint on the left, fields on the right ---------- */
+:global(html:not([lang="km"])) .heroTitle {
+  font-weight: 700 !important;
+}
+
+/* The orange swoosh under "Memory", as on the other pages' titles. */
+.highlight {
+  display: inline-block;
+  padding-bottom: 0.12em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M4 12C60 3 140 2 196 10' fill='none' stroke='%23e8641e' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center bottom / 100% 0.22em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+:global(html:not([lang="km"])) .heroTitle .highlight {
+  font-family: var(--font-heading) !important;
+}
+
+.heroIntro {
+  max-width: 62ch;
+  margin: 14px 0 0;
+  font-size: clamp(16px, 1.6vw, 18px);
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+
+:global(html[lang="km"]) .heroTitle {
+  line-height: 1.55;
+}
+
+:global(html[lang="km"]) .highlight {
+  padding-bottom: 0.2em;
+}
+
+:global(html[lang="km"]) .heroIntro {
+  line-height: 1.95;
+}
+
+/* ---------- the boarding pass ---------- */
+
+.pass {
+  position: relative;
+  /* clip, not hidden: trims the notches without stopping the stub from
+     staying in view (sticky). */
+  overflow: clip;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 28px;
+  box-shadow: var(--shadow-lift);
+}
+
+/* Two round notches where the tear line meets the top and bottom edges,
+   cut in the page color. */
+.pass::before,
+.pass::after {
+  content: "";
+  position: absolute;
+  left: calc(100% - var(--stub) - 15px);
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+}
+
+.pass::before {
+  top: -15px;
+}
+
+.pass::after {
+  bottom: -15px;
+}
+
+/* ---------- navy band (PassBand) ---------- */
+
+.band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--stub);
+  color: #ffffff;
+  /* Always navy, in both themes. */
+  background-color: #0b2545;
+}
+
+.bandMain,
+.bandStub {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px clamp(20px, 3vw, 32px);
+}
+
+/* The tear line continues through the band. */
+.bandStub {
+  justify-content: center;
+  border-left: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #0b2545;
+  background-color: #ffffff;
+  border: 3px solid var(--color-detail);
+  border-radius: 50%;
+}
+
+.bandTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+:global(html[lang="km"]) .bandTitle {
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.barcode {
+  width: 150px;
+  height: 34px;
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- body: main part and stub ---------- */
+
+.passBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--stub);
+}
+
+.passMain {
+  min-width: 0;
+  padding: clamp(10px, 2vw, 16px) clamp(20px, 3vw, 32px);
+}
+
+/* The stub, past the dashed tear line. */
+.stub {
+  min-width: 0;
+  padding: clamp(20px, 3vw, 28px);
+  background-color: color-mix(
+    in srgb,
+    var(--color-detail) 4%,
+    var(--color-surface)
+  );
+  border-left: 2px dashed var(--color-line-strong);
+}
+
+.stubInner {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Wide, tall screens: the photo and Submit stay in view while you write. */
+@media (min-width: 901px) and (min-height: 760px) {
+  .stubInner {
+    position: sticky;
+    top: 100px;
+  }
+}
+
+/* ---------- a row of the pass (FormSection) ---------- */
 
 .section {
-  display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 20px clamp(32px, 5vw, 64px);
-  padding: clamp(28px, 4vw, 40px) 0;
-  border-top: 1px solid var(--color-line);
+  min-width: 0;
+  padding: clamp(18px, 2.6vw, 24px) 0;
 }
 
-.sectionNumber {
-  display: block;
-  font-family: "Courier New", monospace;
-  font-size: 12px;
-  letter-spacing: 1px;
-  color: var(--color-detail);
-  margin-bottom: 8px;
+.passMain .section + .section {
+  border-top: 1px solid var(--color-line);
 }
 
 .sectionTitle {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 6px;
+  gap: 8px;
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+:global(html:not([lang="km"])) .sectionTitle {
+  font-family: var(--font-body) !important;
+}
+
+:global(html[lang="km"]) .sectionTitle {
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* "02 ·" before the name, in orange. */
+.sectionNumber {
+  color: var(--color-detail);
+}
+
+.sectionNumber::after {
+  content: " ·";
+  color: var(--color-faint);
 }
 
 .required {
-  color: var(--color-error);
-  font-weight: 700;
+  color: var(--color-detail);
 }
 
 .optional {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-muted);
   background-color: var(--color-subtle);
   border-radius: 999px;
-  padding: 2px 10px;
 }
 
 .sectionHint {
-  font-size: 14px;
-  line-height: 1.6;
+  margin: 4px 0 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--color-muted);
-  margin: 0;
 }
 
+:global(html[lang="km"]) .sectionHint {
+  line-height: 1.85;
+}
+
+/* English and Khmer side by side. */
 .sectionFields {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
 }
 
-/* ---------- text fields ---------- */
+/* In the stub there is one photo, full width. */
+.stub .sectionFields {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.stub .section {
+  padding: 0;
+}
+
+/* ---------- text fields (FormField) ---------- */
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   min-width: 0;
 }
 
 .fieldTop {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
+  gap: 10px;
 }
 
 .label {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--color-text-soft);
 }
 
 .counter,
 .counterOver {
-  font-size: 12px;
+  flex-shrink: 0;
+  font-size: 11.5px;
   color: var(--color-faint);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
 .counterOver {
+  font-weight: 600;
   color: var(--color-error);
 }
 
 .input {
   width: 100%;
   box-sizing: border-box;
-  font-family: inherit;
-  font-size: 16px;
-  line-height: 1.6;
   padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
   color: var(--color-text);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: 10px;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+  background-color: var(--color-bg);
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background-color 150ms ease;
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+/* The story boxes: tall and roomy for writing a long memory. */
+textarea.input[rows="9"] {
+  min-height: 240px;
+  font-size: 16px;
+  line-height: 1.8;
 }
 
 .input::placeholder {
   color: var(--color-faint);
-  opacity: 1;
 }
 
 .input:lang(km) {
@@ -160,64 +389,69 @@
 
 .input:focus {
   outline: none;
+  background-color: var(--color-surface);
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
+  box-shadow: 0 0 0 4px var(--color-focus-ring);
 }
 
 .input[aria-invalid="true"] {
   border-color: var(--color-error);
+  background-color: var(--color-error-soft);
 }
 
 .input[aria-invalid="true"]:focus {
-  box-shadow: 0 0 0 3px var(--color-error-ring);
+  box-shadow: 0 0 0 4px var(--color-error-ring);
 }
 
 .input:disabled {
-  background-color: var(--color-subtle);
-  color: var(--color-faint);
-}
-
-textarea.input {
-  resize: vertical;
-  min-height: 96px;
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .limitNote {
-  font-size: 13px;
-  color: var(--color-error);
   margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
 }
 
 .error {
-  font-size: 13px;
-  color: var(--color-error);
   margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-error-strong);
 }
 
-/* ---------- photo drop zone ---------- */
+.note {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  text-align: center;
+  color: var(--color-faint);
+}
+
+/* ---------- photo slot (ImageField, PhotoDropPrompt, PhotoFileMeta) ---------- */
 
 .dropzone {
   position: relative;
-  aspect-ratio: 16 / 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background-color: var(--color-surface);
-  border: 1.5px dashed var(--color-line-strong);
-  border-radius: 12px;
-  transition: border-color 150ms ease, background-color 150ms ease,
-    box-shadow 150ms ease;
+  border: 2px dashed var(--color-line-strong);
+  border-radius: 16px;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
 }
 
-.dropzone:hover,
+.dropzone:hover {
+  border-color: var(--color-detail);
+}
+
 .dropzone:focus-within {
   border-color: var(--color-accent);
-  background-color: var(--color-surface-tint);
-}
-
-.dropzone:focus-within {
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
+  box-shadow: 0 0 0 4px var(--color-focus-ring);
 }
 
 .dropzoneFilled {
@@ -227,6 +461,13 @@ textarea.input {
 
 .dropzoneError {
   border-color: var(--color-error);
+  background-color: var(--color-error-soft);
+}
+
+/* After .dropzoneError, so the orange wins while a file is dragged over. */
+.dropzoneDragging {
+  border-color: var(--color-detail);
+  background-color: var(--color-detail-soft);
 }
 
 .dropPrompt {
@@ -234,54 +475,78 @@ textarea.input {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 24px;
+  padding: 16px;
   text-align: center;
   pointer-events: none;
 }
 
-.dropIcon {
-  width: 44px;
-  height: 44px;
-  box-sizing: border-box;
-  padding: 11px;
-  margin-bottom: 10px;
-  border-radius: 50%;
+.dropIconWrap {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 6px;
   color: var(--color-detail);
   background-color: var(--color-detail-soft);
+  border-radius: 50%;
+  transition: transform 200ms ease;
+}
+
+.dropzone:hover .dropIconWrap,
+.dropzoneDragging .dropIconWrap {
+  transform: translateY(-3px);
+}
+
+.dropIcon {
+  width: 24px;
+  height: 24px;
 }
 
 .dropTitle {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-text-soft);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
-.dropHint {
+/* Looks like a button; the whole slot is the real file input. */
+.browse {
+  margin-top: 8px;
+  padding: 7px 16px;
   font-size: 13px;
+  font-weight: 600;
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border-radius: 999px;
+}
+
+.formats {
+  margin-top: 6px;
+  font-size: 11.5px;
   color: var(--color-faint);
 }
 
 .previewImg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .changePill {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-on-accent);
-  background-color: rgba(18, 21, 28, 0.72);
-  border-radius: 999px;
+  right: 10px;
+  bottom: 10px;
   padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: rgba(11, 37, 69, 0.78);
+  border-radius: 999px;
   pointer-events: none;
 }
 
-/* Invisible but covering the whole zone, so a click anywhere opens the
+/* Invisible but covering the whole slot, so a click anywhere opens the
    picker and a dropped file lands on the real input. */
 .fileInput {
   position: absolute;
@@ -299,114 +564,139 @@ textarea.input {
 .fileMeta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 13px;
+  gap: 10px;
+  min-width: 0;
+}
+
+.fileText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   min-width: 0;
 }
 
 .fileName {
-  min-width: 0;
   overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
   color: var(--color-text-soft);
 }
 
 .fileSize {
-  flex-shrink: 0;
+  font-size: 12px;
   color: var(--color-faint);
 }
 
 .textButton {
-  flex-shrink: 0;
-  margin-left: auto;
-  padding: 4px 0;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--color-accent);
-  background: none;
-  border: none;
+  color: var(--color-error-strong);
   cursor: pointer;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
 }
 
-.textButton:hover:not(:disabled) {
-  text-decoration: underline;
+.textButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-/* ---------- footer ---------- */
+.removeIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- submit area (FormFooter) ---------- */
 
 .footer {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 28px;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
   border-top: 1px solid var(--color-line);
 }
 
-.note {
-  font-size: 13px;
-  color: var(--color-faint);
-  margin: 0;
-}
-
 .formError {
-  order: -1;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 12px 16px;
-  font-size: 14px;
+  margin: 0 0 4px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--color-error-strong);
   background-color: var(--color-error-soft);
   border: 1px solid var(--color-error-line);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
-.button {
+.submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-width: 180px;
-  box-sizing: border-box;
-  padding: 14px 28px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-on-accent);
-  text-decoration: none;
-  background-color: var(--color-accent);
-  border: none;
-  border-radius: 10px;
+  width: 100%;
+  padding: 15px 20px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
   cursor: pointer;
-  transition: background-color 150ms ease, transform 150ms ease;
+  background-color: var(--color-detail);
+  border: none;
+  border-radius: 14px;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    opacity 180ms ease;
 }
 
-.button:hover:not(:disabled) {
-  background-color: var(--color-accent-hover);
+:global(html:not([lang="km"])) .submit {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 18px;
 }
 
-.button:active:not(:disabled) {
-  transform: translateY(1px);
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background-color: color-mix(in srgb, var(--color-detail) 88%, #000);
 }
 
-.button:focus-visible {
-  outline: 2px solid var(--color-accent);
+.submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit:focus-visible {
+  outline: 3px solid var(--color-accent);
   outline-offset: 3px;
 }
 
-.button:disabled {
-  opacity: 0.75;
+.submit:disabled {
+  opacity: 0.8;
   cursor: progress;
 }
 
+.submitIcon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  transition: transform 180ms ease;
+}
+
+.submit:hover:not(:disabled) .submitIcon {
+  transform: translate(2px, -2px);
+}
+
 .spinner {
-  width: 14px;
-  height: 14px;
+  flex: none;
+  width: 16px;
+  height: 16px;
   /* currentColor = the button's text color, so it shows in both themes. */
   border: 2px solid currentColor;
   border-top-color: transparent;
@@ -420,30 +710,128 @@ textarea.input {
   }
 }
 
+/* "Clear form" / "Reset changes": a quiet outlined button. */
+.cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+  background-color: transparent;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: 14px;
+  transition: background-color 160ms ease;
+}
+
+.cancel:hover:not(:disabled) {
+  background-color: var(--color-surface-tint);
+}
+
+.cancel:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.cancel:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.clearIcon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+}
+
+/* ---------- LoginPrompt (edit page when signed out) ---------- */
+
+.pageHead {
+  max-width: 640px;
+  margin-bottom: clamp(32px, 5vw, 48px);
+}
+
+.kicker {
+  margin: 0 0 6px;
+  font-size: 22px;
+  color: var(--color-detail);
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: clamp(32px, 4.5vw, 48px);
+  line-height: 1.15;
+  color: var(--color-accent);
+}
+
+.intro {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-on-accent);
+  text-decoration: none;
+  background-color: var(--color-accent);
+  border-radius: 999px;
+}
+
+.button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* ---------- tablets and phones ---------- */
+
+/* The stub moves under the main part; the tear line runs across. */
+@media (max-width: 900px) {
+  .band,
+  .passBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bandStub {
+    display: none;
+  }
+
+  .stub {
+    border-left: 0;
+    border-top: 2px dashed var(--color-line-strong);
+  }
+
+  .pass::before,
+  .pass::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .sectionFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spinner {
     animation-duration: 2400ms;
   }
-}
 
-/* ---------- phones ---------- */
-
-@media (max-width: 720px) {
-  .section {
-    grid-template-columns: 1fr;
-  }
-
-  /* Phones: error banner, then the button, then the small print. */
-  .footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .note {
-    order: 1;
-  }
-
-  .button {
-    width: 100%;
+  .dropzone,
+  .dropIconWrap,
+  .submit,
+  .submitIcon {
+    transition: none;
   }
 }

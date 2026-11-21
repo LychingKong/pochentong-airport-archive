@@ -56,13 +56,16 @@ export default function FormField({
         <label id={`${name}-label`} htmlFor={name} className={styles.label}>
           {isKhmer ? t.langKhmer : t.langEnglish}
         </label>
-        <span
-          className={used > max ? styles.counterOver : styles.counter}
-          aria-hidden="true"
-        >
-          {used.toLocaleString("en")} / {max.toLocaleString("en")}{" "}
-          {t.counterUnits[unit]}
-        </span>
+        {/* The counter shows once something is typed, to keep the form calm. */}
+        {used > 0 ? (
+          <span
+            className={used > max ? styles.counterOver : styles.counter}
+            aria-hidden="true"
+          >
+            {used.toLocaleString("en")} / {max.toLocaleString("en")}{" "}
+            {t.counterUnits[unit]}
+          </span>
+        ) : null}
       </div>
       {rows ? (
         <textarea {...inputProps} rows={rows} />

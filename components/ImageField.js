@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { formatFieldError } from "../lib/translations";
+import { usePhotoPreview } from "../lib/usePhotoPreview";
 import styles from "./ContributeForm.module.css";
 import { useLanguage } from "./LanguageProvider";
+import PhotoDropPrompt from "./PhotoDropPrompt";
 import PhotoFileMeta from "./PhotoFileMeta";
-import UploadIcon from "./UploadIcon";
 
-// `currentUrl` is the entry's existing photo when editing; it shows until
-// a new file is picked.
+// The photo slot on the boarding pass's stub: the slot is the file input
+// itself (click or drop a file anywhere on it) and turns orange while a
+// file is dragged over it; a chosen photo fills it, with a row below to
+// remove it. `currentUrl` is the entry's existing photo when editing; it
+// shows until a new file is picked.
 export default function ImageField({
   currentUrl,
   file,
@@ -19,19 +23,8 @@ export default function ImageField({
 }) {
   const { t } = useLanguage();
   const inputRef = useRef(null);
-  const [filePreview, setFilePreview] = useState(null);
-  const previewUrl = filePreview || currentUrl;
-
-  // Show the chosen photo, and free its memory when it changes or the form closes.
-  useEffect(() => {
-    if (!file) {
-      setFilePreview(null);
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    setFilePreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+  const [dragging, setDragging] = useState(false);
+  const previewUrl = usePhotoPreview(file) || currentUrl;
 
   function removePhoto() {
     inputRef.current.value = "";
@@ -42,22 +35,24 @@ export default function ImageField({
     styles.dropzone,
     previewUrl ? styles.dropzoneFilled : "",
     error ? styles.dropzoneError : "",
+    dragging ? styles.dropzoneDragging : "",
   ].join(" ");
 
   return (
     <div className={styles.field}>
-      <div className={zoneClass}>
+      <div
+        className={zoneClass}
+        onDragEnter={() => setDragging(true)}
+        onDragLeave={() => setDragging(false)}
+        onDrop={() => setDragging(false)}
+      >
         {previewUrl ? (
           <>
             <img src={previewUrl} alt="" className={styles.previewImg} />
             <span className={styles.changePill}>{t.changePhoto}</span>
           </>
         ) : (
-          <div className={styles.dropPrompt}>
-            <UploadIcon className={styles.dropIcon} />
-            <span className={styles.dropTitle}>{t.dropTitle}</span>
-            <span className={styles.dropHint}>{t.dropHint}</span>
-          </div>
+          <PhotoDropPrompt dragging={dragging} />
         )}
         <input
           ref={inputRef}

@@ -24,6 +24,8 @@ const PATHS = {
   check: "M5 12.5l4.5 4.5L19 7.5",
   undo: "M9 14L4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11",
   close: "M6 6l12 12M18 6L6 18",
+  // A paper plane: the Submit Memory button on /contribute.
+  send: "M21 3L3 10.5l7.5 3L21 3zM21 3l-7.5 18-3-7.5",
   // A speech bubble: the reviewer's note on a returned entry.
   comment: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
   // A pencil: "Edit entry" under the reviewer's note.

@@ -1,0 +1,211 @@
+/* The memory-journal drawing beside the /contribute heading
+   (ContributeHeroArt, ContributeHeroPen): a navy journal with cream pages,
+   a taped photo, handwriting, a pen, a PNH boarding-pass bookmark and a
+   paper plane. Theme colors where they matter, so dark mode follows. */
+.art {
+  width: min(100%, 440px);
+  height: auto;
+  overflow: visible;
+}
+
+.shadow {
+  fill: rgba(11, 37, 69, 0.12);
+}
+
+/* ---------- journal ---------- */
+.cover {
+  fill: #0b2545;
+  /* A faint edge so the navy cover still shows on the dark theme. */
+  stroke: color-mix(in srgb, var(--color-text) 14%, transparent);
+  stroke-width: 1.5;
+}
+
+.page {
+  fill: #fffaf3;
+  stroke: rgba(11, 37, 69, 0.12);
+}
+
+.spine {
+  stroke: rgba(11, 37, 69, 0.18);
+  stroke-width: 2;
+}
+
+.writing {
+  fill: none;
+  stroke: #0b2545;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+/* The last line on the right page draws itself, again and again. */
+.writingNow {
+  stroke: #e8641e;
+  opacity: 1;
+  stroke-dasharray: 130;
+  stroke-dashoffset: 130;
+  animation: write 4s ease-in-out infinite;
+}
+
+/* ---------- taped photo ---------- */
+.photoCard {
+  fill: #ffffff;
+  stroke: rgba(11, 37, 69, 0.15);
+}
+
+.photoSky {
+  fill: #3c5a82;
+}
+
+.photoSun {
+  fill: #f6b27a;
+}
+
+.photoBuilding {
+  fill: #0b2545;
+}
+
+.tape {
+  fill: rgba(232, 100, 30, 0.45);
+}
+
+/* ---------- boarding-pass bookmark ---------- */
+.pass {
+  fill: #ffffff;
+  stroke: rgba(11, 37, 69, 0.2);
+}
+
+.passBand {
+  fill: #e8641e;
+}
+
+.passText {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-anchor: middle;
+  fill: #0b2545;
+}
+
+.passLine {
+  stroke: rgba(11, 37, 69, 0.3);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ---------- pen, paper plane, sparkles ---------- */
+.penBody {
+  fill: #e8641e;
+}
+
+.penCap {
+  fill: #0b2545;
+}
+
+.penTip {
+  fill: #0b2545;
+}
+
+.pen {
+  animation: scribble 4s ease-in-out infinite;
+}
+
+.trail {
+  fill: none;
+  stroke: var(--color-detail);
+  stroke-width: 2;
+  stroke-dasharray: 5 7;
+  stroke-linecap: round;
+  animation: flow 1.6s linear infinite;
+}
+
+.planeTop {
+  fill: var(--color-accent);
+}
+
+.planeFold {
+  fill: color-mix(in srgb, var(--color-accent) 60%, var(--color-bg));
+}
+
+.plane {
+  animation: glide 4.5s ease-in-out infinite;
+}
+
+.sparkle {
+  fill: var(--color-detail);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.twinkle {
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+
+.twinkleLate {
+  animation: twinkle 3.2s ease-in-out 1.2s infinite;
+}
+
+@keyframes write {
+  0% {
+    stroke-dashoffset: 130;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The pen follows the line being written, then lifts back. */
+@keyframes scribble {
+  0% {
+    transform: translate(-70px, 0);
+  }
+  60% {
+    transform: translate(0, 0);
+  }
+  80% {
+    transform: translate(4px, -6px);
+  }
+  100% {
+    transform: translate(-70px, 0);
+  }
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes glide {
+  50% {
+    transform: translate(4px, -5px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writingNow {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .pen,
+  .trail,
+  .plane,
+  .twinkle,
+  .twinkleLate {
+    animation: none;
+  }
+}
