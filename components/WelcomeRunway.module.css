@@ -103,6 +103,26 @@
   --vignette: 0.65;
 }
 
+/* Portrait screens (phones, upright tablets) only show the middle of the
+   scene, so the sun and moon move in from the right edge: the sun high
+   in the upper right in the morning and on the horizon beside the tail
+   at sunset; the moon in the top right, under the corner switches. */
+@media (max-aspect-ratio: 1/1) {
+  .scene {
+    --sun-move: translate(-170px, 0);
+    --moon-move: translate(-300px, 420px);
+  }
+
+  .morning {
+    --sun-move: translate(-170px, -395px);
+  }
+
+  .night {
+    --sun-move: translate(-130px, 165px);
+    --moon-move: translate(-300px, -45px);
+  }
+}
+
 .scene svg * {
   transition:
     fill 1s ease,
