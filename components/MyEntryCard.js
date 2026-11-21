@@ -6,9 +6,12 @@ import AuthIcon from "./AuthIcon";
 import { useLanguage } from "./LanguageProvider";
 import styles from "./MyEntries.module.css";
 
-// One entry on /my-entries: the photo on the left; the title, a short
-// description, and a footer with the submission date and an arrow on the
-// right. The whole card is one link to the entry.
+// One entry on /my-entries: the photo on the left; on the right a status
+// badge (Pending Review / Published / Returned), the title, a short
+// description, and a footer with the submission date and an arrow. The
+// whole card is one link to the entry.
+const STATUS_ICONS = { pending: "clock", published: "check", returned: "undo" };
+
 export default function MyEntryCard({ entry }) {
   const { language, t } = useLanguage();
   const km = language === "km";
@@ -25,6 +28,18 @@ export default function MyEntryCard({ entry }) {
       </div>
 
       <div className={styles.body}>
+        {/* The real status from the database (see app/my-entries/page.js). */}
+        {STATUS_ICONS[entry.status] ? (
+          <span
+            className={`${styles.badge} ${styles[`status_${entry.status}`]}`}
+          >
+            <AuthIcon
+              name={STATUS_ICONS[entry.status]}
+              className={styles.badgeIcon}
+            />
+            {t.myEntriesDashboard.status[entry.status]}
+          </span>
+        ) : null}
         <h2 className={styles.cardTitle}>{title}</h2>
         {description ? <p className={styles.desc}>{description}</p> : null}
 

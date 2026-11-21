@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import collection from "../../collection.config.js";
+import BackLink from "../../components/BackLink";
 import Header from "../../components/Header";
 import MyEntriesList from "../../components/MyEntriesList";
 import { createClient } from "../../lib/supabase/server";
@@ -28,11 +29,12 @@ export default async function MyEntriesPage() {
   if (!user) redirect("/login");
 
   // Only this user's entries, in any status. Row-level security allows it.
-  // Each card shows the cover photo, title, description and submission date.
+  // Each card shows the cover photo, status, title, description and
+  // submission date.
   const { data: entries } = await supabase
     .from("entries")
     .select(
-      "id, title, title_km, description, description_km, images, created_at",
+      "id, title, title_km, description, description_km, images, status, created_at",
     )
     .eq("owner", user.id)
     .order("created_at", { ascending: false });
@@ -47,6 +49,7 @@ export default async function MyEntriesPage() {
   return (
     <main style={styles.wrap}>
       <Header />
+      <BackLink />
       <MyEntriesList entries={list} />
     </main>
   );
