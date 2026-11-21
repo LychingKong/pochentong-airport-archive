@@ -422,6 +422,70 @@
   outline-color: #e8641e;
 }
 
+/* Morning / Sunset / Night (WelcomeTimeSwitch): a frosted pill of three
+   icon buttons, like the language switch beside it. */
+.timeSwitch {
+  display: inline-flex;
+  padding: 3px;
+  background-color: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+}
+
+.timeOption {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 27px;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.timeOption svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.timeOption:hover {
+  color: #ffffff;
+}
+
+.timeOption[aria-pressed="true"] {
+  color: #0b2545;
+  background-color: #ffffff;
+}
+
+.timeOption:focus-visible {
+  outline: 2px solid #e8641e;
+  outline-offset: 2px;
+}
+
+/* Morning: the small text under the title sits on a light sky, so it
+   turns navy to stay readable. */
+.time_morning .tagline,
+.time_morning .status,
+.time_morning .percent,
+.time_morning .progressPlane {
+  color: #0b2545;
+}
+
+.time_morning .progress {
+  background-color: rgba(11, 37, 69, 0.22);
+}
+
 .soundToggle {
   display: grid;
   place-items: center;

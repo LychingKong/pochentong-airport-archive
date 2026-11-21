@@ -21,6 +21,181 @@
   height: 100%;
 }
 
+/* ---------- time of day (WelcomeTimeSwitch) ----------
+   Sunset is the default; .morning and .night swap the colours, the sun
+   for the moon, the stars and how bright the airport lights are. Every
+   change crossfades over a second. */
+.scene {
+  --sky1: #0b2545;
+  --sky2: #2c4c7a;
+  --sky3: #f2a56b;
+  --sky4: #ffd3a1;
+  --ground1: #3d4a3c;
+  --ground2: #141c17;
+  --tarmac1: #5a5f68;
+  --tarmac2: #24272d;
+  --haze: #ffd6a8;
+  --haze-op: 0.55;
+  --glow1: #ffe2b8;
+  --glow2: #ffbf80;
+  --glow3: #ff9a55;
+  --sun-disc: #ffe7c4;
+  --sun: 1;
+  --moon: 0;
+  --sun-move: translate(0, 0);
+  --moon-move: translate(0, 420px);
+  --stars: 1;
+  --cloud: #f6b38a;
+  --cloud-op: 0.45;
+  --birds: 1;
+  --silhouette: #13233d;
+  --lit: 1;
+  --runway-lights: 1;
+  --vignette: 0.55;
+}
+
+.morning {
+  --sky1: #3f7cc4;
+  --sky2: #7fb2e3;
+  --sky3: #ffdcae;
+  --sky4: #fff0d8;
+  --ground1: #5d7f47;
+  --ground2: #2c4426;
+  --tarmac1: #7a7f88;
+  --tarmac2: #3b3e45;
+  --haze: #fff6e0;
+  --haze-op: 0.5;
+  --glow1: #fffbe8;
+  --glow2: #ffe9a8;
+  --glow3: #ffd27a;
+  --sun-disc: #fffdf2;
+  /* high in the sky, a little to the left */
+  --sun-move: translate(-200px, -330px);
+  --stars: 0;
+  --cloud: #ffffff;
+  --cloud-op: 0.85;
+  --silhouette: #2c4466;
+  --lit: 0.12;
+  --runway-lights: 0.25;
+  --vignette: 0.25;
+}
+
+.night {
+  --sky1: #03081a;
+  --sky2: #0b1a36;
+  --sky3: #1a3158;
+  --sky4: #2b4878;
+  --ground1: #1a2420;
+  --ground2: #080c0b;
+  --tarmac1: #2c3038;
+  --tarmac2: #121418;
+  --haze: #6d8fc4;
+  --haze-op: 0.25;
+  --sun: 0;
+  --moon: 1;
+  /* the sun sinks below the horizon; the moon rises into place */
+  --sun-move: translate(60px, 160px);
+  --moon-move: translate(0, 0);
+  --cloud: #34496e;
+  --cloud-op: 0.55;
+  --birds: 0;
+  --silhouette: #050b18;
+  --vignette: 0.65;
+}
+
+.scene svg * {
+  transition:
+    fill 1s ease,
+    stroke 1s ease,
+    stop-color 1s ease,
+    stop-opacity 1s ease,
+    opacity 1s ease;
+}
+
+.sky1 {
+  stop-color: var(--sky1);
+}
+.sky2 {
+  stop-color: var(--sky2);
+}
+.sky3 {
+  stop-color: var(--sky3);
+}
+.sky4 {
+  stop-color: var(--sky4);
+}
+.ground1 {
+  stop-color: var(--ground1);
+}
+.ground2 {
+  stop-color: var(--ground2);
+}
+.tarmac1 {
+  stop-color: var(--tarmac1);
+}
+.tarmac2 {
+  stop-color: var(--tarmac2);
+}
+
+.hazeEdge,
+.hazeEdge2 {
+  stop-color: var(--haze);
+  stop-opacity: 0;
+}
+
+.hazeMid {
+  stop-color: var(--haze);
+  stop-opacity: var(--haze-op);
+}
+
+.glow1 {
+  stop-color: var(--glow1);
+}
+
+.glow2 {
+  stop-color: var(--glow2);
+  stop-opacity: 0.7;
+}
+
+.glow3 {
+  stop-color: var(--glow3);
+  stop-opacity: 0;
+}
+
+.starField {
+  opacity: var(--stars);
+}
+
+/* The sun and moon travel when the time changes: high in the morning,
+   on the horizon at sunset, set below it at night (the grass, drawn after
+   them, hides them as they go down). The moon does the opposite, rising
+   at night. --sun-move and --moon-move are set per time of day above. */
+.sunGroup,
+.moonGroup {
+  transition:
+    transform 1.8s cubic-bezier(0.45, 0, 0.25, 1),
+    opacity 1.8s ease !important;
+}
+
+.sunGroup {
+  opacity: var(--sun);
+  transform: var(--sun-move);
+}
+
+.moonGroup {
+  opacity: var(--moon);
+  transform: var(--moon-move);
+}
+
+.moon {
+  fill: #f4f1e4;
+  filter: drop-shadow(0 0 10px rgba(223, 232, 255, 0.8));
+}
+
+.crater {
+  fill: #d9d4c2;
+}
+
 /* "Click to Start": the runway rushes past, the view tilts down as the
    nose lifts, and it fades into the sky for the takeoff. */
 .rolling {
@@ -42,12 +217,17 @@
 
 .plane {
   z-index: 1;
-  height: auto;
   transform: translateX(-50%);
   transform-origin: 50% 100%;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
   /* A faint engine shimmer while it waits. */
   animation: idle 0.35s ease-in-out infinite alternate;
+}
+
+.planeImg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* A soft shadow on the tarmac under the wheels. */
@@ -106,7 +286,7 @@
   background: radial-gradient(
     ellipse at 50% 45%,
     transparent 55%,
-    rgba(5, 12, 26, 0.55) 100%
+    rgba(5, 12, 26, var(--vignette)) 100%
   );
 }
 
@@ -121,12 +301,12 @@
 }
 
 .sun {
-  fill: #ffe7c4;
+  fill: var(--sun-disc);
 }
 
 .skyline {
-  fill: #13233d;
-  stroke: #13233d;
+  fill: var(--silhouette);
+  stroke: var(--silhouette);
   stroke-width: 2;
 }
 
@@ -141,6 +321,7 @@
 }
 
 .light {
+  opacity: var(--runway-lights);
   fill: #ffd27a;
   filter: drop-shadow(0 0 6px rgba(255, 196, 90, 0.9));
 }
@@ -154,6 +335,11 @@
 @media (prefers-reduced-motion: reduce) {
   .scene {
     transition: opacity 250ms ease;
+  }
+
+  .sunGroup,
+  .moonGroup {
+    transition: opacity 250ms ease !important;
   }
 
   .rolling {

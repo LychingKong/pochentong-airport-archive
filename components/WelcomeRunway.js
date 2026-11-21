@@ -1,12 +1,19 @@
+import WelcomeAirportDetails from "./WelcomeAirportDetails";
 import styles from "./WelcomeRunway.module.css";
+import WelcomeRunwayDefs from "./WelcomeRunwayDefs";
 import WelcomeRunwayLights from "./WelcomeRunwayLights";
+import WelcomeRunwayPlane from "./WelcomeRunwayPlane";
+import WelcomeSkyDetails from "./WelcomeSkyDetails";
 
 // The welcome screen's backdrop: the pilot's view down the runway at
 // dusk. A navy-to-orange sky with a few stars and a setting sun, the
 // arched Pochentong terminal and control tower on the horizon, dark grass,
 // and the runway in perspective with its centreline and edge lights
 // streaming toward you (WelcomeRunwayLights), and the archive's airliner
-// lined up on it, seen from behind. On "Click to Start" the plane rolls
+// lined up on it, seen from behind with its lights on
+// (WelcomeRunwayPlane). `time` (morning, sunset or night) picks the
+// colours, sun or moon, stars and lights. Moving sky and airport details live in
+// WelcomeSkyDetails and WelcomeAirportDetails. On "Click to Start" the plane rolls
 // away and lifts off toward the horizon, the runway rushes past and the
 // view tilts, then it fades into the welcome screen's sky for the usual
 // takeoff. Decorative only.
@@ -22,43 +29,35 @@ const STARS = [
 const ARCHES =
   "M560 520V500q12-12 24 0q12-12 24 0q12-12 24 0q12-12 24 0q12-12 24 0q12-12 24 0q12-12 24 0q12-12 24 0V520z";
 
-export default function WelcomeRunway({ phase }) {
+export default function WelcomeRunway({ phase, time = "sunset" }) {
   const departing = phase === "departing" || phase === "leaving";
 
   return (
     <div
-      className={`${styles.scene} ${departing ? styles.rolling : ""}`}
+      className={`${styles.scene} ${styles[time]} ${departing ? styles.rolling : ""}`}
       aria-hidden="true"
     >
       <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="runway-sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#0b2545" />
-            <stop offset="0.55" stopColor="#2c4c7a" />
-            <stop offset="0.9" stopColor="#f2a56b" />
-            <stop offset="1" stopColor="#ffd3a1" />
-          </linearGradient>
-          <linearGradient id="runway-ground" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#3d4a3c" />
-            <stop offset="1" stopColor="#141c17" />
-          </linearGradient>
-          <linearGradient id="runway-tarmac" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#5a5f68" />
-            <stop offset="1" stopColor="#24272d" />
-          </linearGradient>
-          <radialGradient id="runway-sun">
-            <stop offset="0" stopColor="#ffe2b8" />
-            <stop offset="0.35" stopColor="#ffbf80" stopOpacity="0.7" />
-            <stop offset="1" stopColor="#ff9a55" stopOpacity="0" />
-          </radialGradient>
-        </defs>
+        <WelcomeRunwayDefs />
 
         <rect width="1600" height="520" fill="url(#runway-sky)" />
-        {STARS.map(([x, y, r]) => (
-          <circle key={x} cx={x} cy={y} r={r} className={styles.star} />
-        ))}
-        <circle cx="1130" cy="505" r="190" fill="url(#runway-sun)" />
-        <circle cx="1130" cy="505" r="46" className={styles.sun} />
+        <g className={styles.starField}>
+          {STARS.map(([x, y, r]) => (
+            <circle key={x} cx={x} cy={y} r={r} className={styles.star} />
+          ))}
+        </g>
+        <g className={styles.sunGroup}>
+          <circle cx="1130" cy="505" r="190" fill="url(#runway-sun)" />
+          <circle cx="1130" cy="505" r="46" className={styles.sun} />
+        </g>
+        {/* the moon, shown at night instead of the sun */}
+        <g className={styles.moonGroup}>
+          <circle cx="1230" cy="150" r="110" fill="url(#runway-moon)" />
+          <circle cx="1230" cy="150" r="30" className={styles.moon} />
+          <circle cx="1220" cy="142" r="6" className={styles.crater} />
+          <circle cx="1240" cy="160" r="4" className={styles.crater} />
+        </g>
+        <WelcomeSkyDetails />
 
         {/* the terminal's arched roofs and the control tower */}
         <path d={ARCHES} className={styles.skyline} />
@@ -74,18 +73,10 @@ export default function WelcomeRunway({ phase }) {
           className={styles.edge}
         />
 
+        <WelcomeAirportDetails />
         <WelcomeRunwayLights departing={departing} />
       </svg>
-      {/* The archive's airliner, seen from behind, lined up on the runway;
-          on Start it rolls away and lifts off toward the horizon. */}
-      <span className={styles.planeShadow} />
-      <img
-        className={styles.plane}
-        src="/runway-plane.webp"
-        alt=""
-        width="900"
-        height="395"
-      />
+      <WelcomeRunwayPlane />
       <span className={styles.vignette} />
     </div>
   );

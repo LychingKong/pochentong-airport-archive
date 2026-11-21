@@ -8,13 +8,13 @@ import { collectionText } from "../lib/translations";
 import { usePageLock } from "../lib/usePageLock";
 import { useSoundPreference } from "../lib/useSoundPreference";
 import { useWelcomeFlow } from "../lib/useWelcomeFlow";
+import { useWelcomeTime } from "../lib/useWelcomeTime";
 import { useLanguage } from "./LanguageProvider";
-import LanguageToggle from "./LanguageToggle";
+import WelcomeCorner from "./WelcomeCorner";
 import WelcomeProgress from "./WelcomeProgress";
 import WelcomeRunway from "./WelcomeRunway";
 import styles from "./WelcomeScreen.module.css";
 import WelcomeSky from "./WelcomeSky";
-import WelcomeSoundToggle from "./WelcomeSoundToggle";
 import WelcomeStartButton from "./WelcomeStartButton";
 import WelcomeTitle from "./WelcomeTitle";
 
@@ -31,6 +31,7 @@ export default function WelcomeScreen() {
   const name = language === "km" ? collectionText.km.name : collection.name;
   const { phase, progress, start } = useWelcomeFlow();
   const [soundOn, toggleSound] = useSoundPreference();
+  const [time, setTime] = useWelcomeTime();
   const overlayRef = useRef(null);
   const startRef = useRef(null);
   const visible = phase !== "hidden";
@@ -56,18 +57,19 @@ export default function WelcomeScreen() {
     <div
       ref={overlayRef}
       data-welcome-overlay=""
-      className={`${styles.overlay} ${styles[phase] ?? ""}`}
+      className={`${styles.overlay} ${styles[phase] ?? ""} ${styles[`time_${time}`]}`}
       role="dialog"
       aria-modal="true"
       aria-label={name}
     >
       <WelcomeSky />
-      <WelcomeRunway phase={phase} />
-      {/* Top-right corner: the language switch and the sound button. */}
-      <div className={styles.corner}>
-        <LanguageToggle className={styles.lang} />
-        <WelcomeSoundToggle on={soundOn} onToggle={toggleSound} />
-      </div>
+      <WelcomeRunway phase={phase} time={time} />
+      <WelcomeCorner
+        time={time}
+        onTime={setTime}
+        soundOn={soundOn}
+        onSound={toggleSound}
+      />
       <div className={styles.content}>
         <WelcomeTitle name={name} />
         <WelcomeProgress progress={progress} />
