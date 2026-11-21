@@ -2,59 +2,84 @@
 
 import { useState } from "react";
 
-import BackLink from "./BackLink";
+import { countByStatus, visibleItems } from "../lib/reviewBoard";
 import { useLanguage } from "./LanguageProvider";
-import ReviewCard from "./ReviewCard";
+import ReviewBoardHeader from "./ReviewBoardHeader";
+import ReviewDialog from "./ReviewDialog";
 import ReviewEmpty from "./ReviewEmpty";
+import ReviewEntryCard from "./ReviewEntryCard";
+import styles from "./ReviewWorkspace.module.css";
 
-const styles = {
-  heading: {
-    fontSize: "clamp(28px, 4vw, 40px)",
-    margin: "0 0 clamp(24px, 4vw, 40px)",
-  },
-  message: {
-    fontSize: 16,
-    color: "var(--color-muted)",
-  },
-  list: {
-    listStyle: "none",
-    margin: 0,
-    padding: 0,
-    display: "grid",
-    gap: 16,
-  },
-};
+const messageStyle = { fontSize: 16, color: "var(--color-muted)" };
 
+// The reviewer's board on /review: summary cards, status tabs and a sort
+// menu, then the entries (every status) as cards. Once review_entry
+// confirms a decision (ReviewDecision), that card's status changes in
+// place and the counts follow. With nothing pending, "All Caught Up!"
+// shows.
 export default function ReviewQueue({ isReviewer, entries }) {
   const { t } = useLanguage();
-  // Kept in state so a reviewed entry can leave the list without a reload.
-  const [queue, setQueue] = useState(entries);
+  // Each entry starts with its real status from the database.
+  const [items, setItems] = useState(() =>
+    entries.map((entry) => ({ ...entry, reviewStatus: entry.status })),
+  );
+  const [filter, setFilter] = useState("all");
+  const [order, setOrder] = useState("newest");
+  const [openId, setOpenId] = useState(null);
+  const [notice, setNotice] = useState(null);
 
-  if (!isReviewer) {
-    return <p style={styles.message}>{t.reviewNotReviewer}</p>;
+  if (!isReviewer) return <p style={messageStyle}>{t.reviewNotReviewer}</p>;
+
+  const counts = countByStatus(items);
+  if (counts.pending === 0) return <ReviewEmpty />;
+
+  // Called only after review_entry returned true for this entry.
+  function handleReviewed(id, decision, note) {
+    setItems((current) =>
+      current.map((item) =>
+        item.id === id
+          ? { ...item, reviewStatus: decision, review_note: note }
+          : item,
+      ),
+    );
+    setOpenId(null);
+    setNotice(`${decision}Notice`);
   }
 
-  function removeEntry(id) {
-    setQueue((current) => current.filter((entry) => entry.id !== id));
-  }
-
-  // Nothing waiting (or the last one was just reviewed): only the
-  // "All Caught Up!" panel, whose headline is then the page's heading.
-  if (queue.length === 0) return <ReviewEmpty />;
+  const shown = visibleItems(items, filter, order);
+  const open = items.find((item) => item.id === openId);
 
   return (
-    <section>
-      <BackLink />
-      <h1 style={styles.heading} data-reveal>
-        {t.reviewTitle}
-      </h1>
-      <ul style={styles.list}>
-        {queue.map((entry) => (
-          <li key={entry.id} data-reveal>
-            <ReviewCard entry={entry} onReviewed={removeEntry} />
-          </li>
-        ))}
-      </ul>
+    <section className={styles.board}>
+      <ReviewBoardHeader
+        counts={counts}
+        notice={notice}
+        filter={filter}
+        onFilter={setFilter}
+        order={order}
+        onOrder={setOrder}
+      />
+
+      {shown.length > 0 ? (
+        <ul className={styles.grid}>
+          {shown.map((item) => (
+            <li key={item.id}>
+              <ReviewEntryCard entry={item} onOpen={setOpenId} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.none}>{t.reviewWorkspace.noneForFilter}</p>
+      )}
+
+      {open ? (
+        <ReviewDialog
+          key={open.id}
+          entry={open}
+          onClose={() => setOpenId(null)}
+          onReviewed={handleReviewed}
+        />
+      ) : null}
     </section>
   );
 }

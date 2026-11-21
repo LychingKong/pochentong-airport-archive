@@ -1,0 +1,770 @@
+/* The reviewer's /review board (ReviewQueue, ReviewStats, ReviewFilters,
+   ReviewEntryCard, ReviewDialog) and the review panel inside the dialog
+   (ReviewPreview, ReviewGallery, ReviewDecision). Each status has a soft
+   tone (--tone) used by the summary cards and the card badges. */
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.6vw, 24px);
+}
+
+/* BackLink brings its own bottom margin; the gap above does the spacing. */
+.board > a:first-child {
+  margin-bottom: 0;
+  align-self: flex-start;
+}
+
+.tone_all {
+  --tone: #2a5ea8;
+}
+
+.tone_published {
+  --tone: #2f8f5b;
+}
+
+.tone_pending {
+  --tone: #c98a12;
+}
+
+.tone_returned {
+  --tone: #c0392b;
+}
+
+/* ---------- header ---------- */
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-detail);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.15;
+  color: var(--color-accent);
+}
+
+:global(html[lang="km"]) .title {
+  line-height: 1.55;
+}
+
+/* The split-flap count (HeroFlapCount, styled in HomeHero.module.css)
+   brings space above itself for the homepage hero; not needed here. */
+.waiting > div {
+  padding-top: 0;
+}
+
+/* Success message after a decision. */
+.notice {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1f6b45;
+  background-color: rgba(47, 143, 91, 0.12);
+  border: 1px solid rgba(47, 143, 91, 0.3);
+  border-radius: 14px;
+}
+
+:global(:root[data-theme="dark"]) .notice {
+  color: #8fe0b4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .notice {
+    color: #8fe0b4;
+  }
+}
+
+/* ---------- summary cards (ReviewStats) ---------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 16px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A soft tint of the status color, with a faint drawing in the corner. */
+.stat {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  overflow: hidden;
+  padding: 18px 20px;
+  background-color: color-mix(in srgb, var(--tone) 10%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--tone) 18%, var(--color-surface));
+  border-radius: 20px;
+}
+
+.statIcon {
+  flex-shrink: 0;
+  color: var(--tone);
+}
+
+.statIcon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.statText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.statCount {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+:global(html:not([lang="km"])) .statLabel,
+:global(html) .statCount {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+.statArt {
+  position: absolute;
+  right: 10px;
+  bottom: -6px;
+  width: 38%;
+  max-width: 110px;
+  height: auto;
+  fill: var(--tone);
+  opacity: 0.16;
+}
+
+/* ---------- tabs and sort (ReviewFilters) ---------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 20px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:global(html:not([lang="km"])) .filter {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 16px;
+}
+
+.filter svg {
+  width: 18px;
+  height: 18px;
+}
+
+.filter:hover {
+  border-color: var(--color-accent);
+}
+
+.filter[aria-pressed="true"] {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.filter:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---------- entry cards (ReviewEntryCard) ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: clamp(14px, 2vw, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid > li {
+  display: flex;
+}
+
+/* Photo left, text right, date and action along the bottom. */
+.card {
+  display: grid;
+  grid-template-columns: 44% minmax(0, 1fr);
+  grid-template-rows: 1fr auto;
+  gap: 14px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 12px 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  min-height: 170px;
+  object-fit: cover;
+  background-color: var(--color-subtle);
+  border-radius: 14px;
+}
+
+/* Long words (or a title with no spaces) wrap instead of overflowing:
+   overflow-wrap: anywhere on the text inside. */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tone);
+  background-color: color-mix(in srgb, var(--tone) 14%, var(--color-surface));
+  border-radius: 999px;
+}
+
+.badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cardTitle {
+  overflow-wrap: anywhere;
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.25;
+  color: var(--color-accent);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+:global(html:not([lang="km"])) .cardTitle {
+  font-weight: 700 !important;
+}
+
+.cardDesc {
+  overflow-wrap: anywhere;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+:global(html[lang="km"]) .cardTitle,
+:global(html[lang="km"]) .cardDesc {
+  line-height: 1.75;
+}
+
+/* The reviewer's note on a returned entry. */
+.cardNote {
+  margin: 2px 0 0;
+  padding: 6px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+  overflow-wrap: anywhere;
+  background-color: var(--color-error-soft);
+  border-left: 3px solid var(--color-error);
+  border-radius: 8px;
+}
+
+.cardFooter {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 4px 8px;
+  border-top: 1px solid var(--color-line);
+}
+
+.cardDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--color-text-soft);
+}
+
+.cardDate svg {
+  width: 17px;
+  height: 17px;
+  color: var(--color-accent);
+}
+
+.cardAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--color-on-accent);
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: 999px;
+  transition: background-color 150ms ease;
+}
+
+:global(html:not([lang="km"])) .cardAction {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 15.5px;
+}
+
+.cardAction svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cardAction:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.cardAction:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.none {
+  margin: 0;
+  padding: 36px 20px;
+  font-size: 15px;
+  text-align: center;
+  color: var(--color-muted);
+  background-color: var(--color-surface-tint);
+  border: 2px dashed var(--color-line-strong);
+  border-radius: 20px;
+}
+
+/* ---------- review panel (ReviewDialog) ---------- */
+
+.dialog {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(12px, 3vw, 40px);
+  overflow-y: auto;
+  background: rgba(6, 12, 24, 0.6);
+  border: none;
+}
+
+.dialog::backdrop {
+  background: transparent;
+}
+
+/* No page scrolling behind the open panel. */
+:global(html):has(.dialog[open]) {
+  overflow: hidden;
+}
+
+.dialogPanel {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  animation: panelIn 220ms ease-out;
+}
+
+.dialogClose {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #0b2545;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.92);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.dialogClose:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ---------- preview (ReviewPreview) ---------- */
+
+.preview {
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  transition: opacity 200ms ease;
+}
+
+/* While a decision is being saved. */
+.saving {
+  opacity: 0.6;
+}
+
+.previewBody {
+  padding: clamp(20px, 3vw, 32px) clamp(20px, 3vw, 36px) 8px;
+}
+
+.previewMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 5px 12px 5px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  background-color: var(--color-subtle);
+  border-radius: 999px;
+}
+
+.metaIcon {
+  width: 15px;
+  height: 15px;
+  color: var(--color-detail);
+}
+
+.previewTitle {
+  overflow-wrap: anywhere;
+  margin: 14px 0 0;
+  font-size: clamp(24px, 2.8vw, 34px);
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+
+:global(html[lang="km"]) .previewTitle {
+  line-height: 1.6;
+}
+
+.lead {
+  overflow-wrap: anywhere;
+  margin: 12px 0 0;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  overflow-wrap: anywhere;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-detail);
+  background-color: var(--color-detail-soft);
+  border-radius: 999px;
+}
+
+.story {
+  margin-top: clamp(20px, 3vw, 28px);
+  padding-top: clamp(18px, 2.6vw, 24px);
+  border-top: 1px solid var(--color-line);
+}
+
+.sectionLabel {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+:global(html[lang="km"]) .sectionLabel {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+/* A blank line starts a new paragraph; single line breaks are kept. */
+.paragraph {
+  margin: 0 0 1.2em;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--color-text-soft);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+:global(html[lang="km"]) .lead,
+:global(html[lang="km"]) .paragraph {
+  line-height: 2;
+}
+
+/* ---------- gallery (ReviewGallery) ---------- */
+
+.gallery {
+  padding: 12px 12px 0;
+}
+
+/* The photo shown whole on a soft stage, never cropped. */
+.galleryMain {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: 460px;
+  overflow: hidden;
+  background-color: var(--color-stage);
+  border-radius: 16px;
+}
+
+/* Pinned to the frame and fitted inside it, so portrait photos show whole
+   instead of overflowing the frame. */
+.galleryImg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.galleryThumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+.galleryThumb {
+  flex-shrink: 0;
+  width: 72px;
+  height: 54px;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+
+.galleryThumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galleryThumb[aria-pressed="true"] {
+  border-color: var(--color-detail);
+}
+
+.galleryThumb:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- decision bar (ReviewDecision) ---------- */
+
+/* A dashed tear line on top, like a boarding pass stub. */
+.decision {
+  padding: 18px clamp(20px, 3vw, 36px) 22px;
+  background-color: var(--color-surface-tint);
+  border-top: 2px dashed var(--color-line-strong);
+}
+
+.decisionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.publish,
+.return {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  font-family: inherit;
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:global(html:not([lang="km"])) .publish,
+:global(html:not([lang="km"])) .return {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 16.5px;
+}
+
+.publish {
+  color: #ffffff;
+  background-color: #2f8f5b;
+  border: 2px solid #2f8f5b;
+}
+
+.publish:hover:not(:disabled) {
+  background-color: #257549;
+  border-color: #257549;
+}
+
+.return {
+  color: var(--color-error);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-error-line);
+}
+
+.return:hover:not(:disabled) {
+  border-color: var(--color-error);
+}
+
+.publish:disabled,
+.return:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.publish:focus-visible,
+.return:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.publish svg,
+.return svg {
+  width: 18px;
+  height: 18px;
+}
+
+.savingText {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.error {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--color-error-strong);
+  background-color: var(--color-error-soft);
+  border: 1px solid var(--color-error-line);
+  border-radius: 12px;
+}
+
+/* ---------- tablets and phones ---------- */
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cardImg {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  .publish,
+  .return {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter,
+  .cardAction,
+  .preview,
+  .publish,
+  .return {
+    transition: none;
+  }
+
+  .dialogPanel {
+    animation: none;
+  }
+}

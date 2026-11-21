@@ -41,13 +41,16 @@ export default async function ReviewPage() {
 
   let entries = [];
   if (isReviewer === true) {
-    // Oldest first, so the entry that has waited longest is at the top.
+    // Entries in every status, so the board's Published / Pending / Returned
+    // counts and tabs are real. Reviewers may already read all entries (the
+    // read policy allows published OR owner OR reviewer); this query only
+    // runs after the is_reviewer check above. Oldest first, so the entry
+    // that has waited longest comes first.
     const { data } = await supabase
       .from("entries")
       .select(
-        "id, title, title_km, description, description_km, story, story_km, tags, tags_km, images, created_at",
+        "id, title, title_km, description, description_km, story, story_km, tags, tags_km, images, status, review_note, created_at",
       )
-      .eq("status", "pending")
       .order("created_at", { ascending: true });
     entries = data ?? [];
   }

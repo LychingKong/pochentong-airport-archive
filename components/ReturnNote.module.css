@@ -1,0 +1,102 @@
+/* The return-note field (ReturnNote), shown in the /review workspace's
+   decision bar after pressing Return: a note box, then Return (red, the
+   first button) and Cancel as pills, matching ReviewWorkspace.module.css. */
+
+.note {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text);
+  resize: vertical;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 14px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.note:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-focus-ring);
+}
+
+:global(html[lang="km"]) .note {
+  line-height: 1.9;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  font-family: inherit;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-line-strong);
+  border-radius: 999px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:global(html:not([lang="km"])) .button {
+  font-family: var(--font-heading), sans-serif !important;
+  font-size: 16.5px;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+/* The first button confirms the return. */
+.button:first-child {
+  color: #ffffff;
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.button:first-child:hover:not(:disabled) {
+  background-color: var(--color-error-strong);
+  border-color: var(--color-error-strong);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .button {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note,
+  .button {
+    transition: none;
+  }
+}

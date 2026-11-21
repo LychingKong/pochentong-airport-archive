@@ -1,9 +1,9 @@
 "use client";
 
 import { useLanguage } from "./LanguageProvider";
-import styles from "./ReviewCard.module.css";
+import styles from "./ReturnNote.module.css";
 
-// Opens under the card when a reviewer presses Return, so the note box only
+// Opens in the decision bar when a reviewer presses Return, so the note box only
 // appears when a return needs a reason.
 export default function ReturnNote({
   note,
