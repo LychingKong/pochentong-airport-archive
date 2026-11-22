@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import AuthIcon from "./AuthIcon";
 import DeleteConfirm from "./DeleteConfirm";
 import styles from "./EntryOwnerActions.module.css";
 import { useLanguage } from "./LanguageProvider";
@@ -50,7 +51,11 @@ export default function EntryOwnerActions({ id }) {
         />
       ) : (
         <>
-          <Link href={`/entries/${id}/edit`} className={styles.button}>
+          <Link
+            href={`/entries/${id}/edit`}
+            className={`${styles.button} ${styles.primary}`}
+          >
+            <AuthIcon name="pencil" />
             {t.editEntry}
           </Link>
           <button
@@ -58,6 +63,7 @@ export default function EntryOwnerActions({ id }) {
             className={deleteClass}
             onClick={() => setConfirming(true)}
           >
+            <AuthIcon name="trash" />
             {t.deleteEntry}
           </button>
         </>

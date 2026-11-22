@@ -28,7 +28,10 @@ const PATHS = {
   send: "M21 3L3 10.5l7.5 3L21 3zM21 3l-7.5 18-3-7.5",
   // A speech bubble: the reviewer's note on a returned entry.
   comment: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
-  // A pencil: "Edit entry" under the reviewer's note.
+  // A bin: the Delete button on the entry page (EntryOwnerActions).
+  trash: "M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5",
+  // A pencil: "Edit entry" under the reviewer's note (and the entry
+  // page's Edit button).
   pencil: "M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4",
   // A clipboard with a tick: the Review button on /review cards.
   clipboardCheck: "M9 4h6v3H9zM7 5.5H5.5V21h13V5.5H17M9 14l2 2 4-4.5",

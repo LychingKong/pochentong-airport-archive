@@ -26,6 +26,7 @@
 .button {
   display: inline-flex;
   align-items: center;
+  gap: 7px;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
@@ -37,6 +38,13 @@
   text-decoration: none;
   cursor: pointer;
   transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+/* The pencil / bin icons on Edit and Delete, a touch smaller than the
+   AuthIcon default so they sit level with the 14px text. */
+.button svg {
+  width: 17px;
+  height: 17px;
 }
 
 .button:hover:not(:disabled) {
@@ -53,12 +61,29 @@
   cursor: progress;
 }
 
+/* Edit: filled navy (it flips to light with dark text in dark mode,
+   following the theme's accent colors). */
+.primary {
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Delete: filled red, the same as "Yes, delete" (.dangerSolid below). */
 .danger {
-  color: var(--color-error);
+  color: var(--color-on-accent);
+  background-color: var(--color-error);
+  border-color: var(--color-error);
 }
 
 .danger:hover:not(:disabled) {
-  border-color: var(--color-error);
+  background-color: var(--color-error-strong);
+  border-color: var(--color-error-strong);
 }
 
 .dangerSolid {
