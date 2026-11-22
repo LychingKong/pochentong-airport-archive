@@ -315,20 +315,16 @@
   background-color: var(--color-accent-hover);
 }
 
-/* Review: the reviewer's to-do, in the archive's orange. */
+/* Review: the reviewer's to-do, in the archive's orange. Flat like the
+   View button (no orange shadow, which read as a glow on the dark card);
+   hover just darkens the orange a little. */
 .actionReview {
   color: #ffffff;
   background-color: var(--color-detail);
-  box-shadow: 0 8px 18px rgba(232, 100, 30, 0.28);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease;
 }
 
 .actionReview:hover {
-  background-color: var(--color-detail);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(232, 100, 30, 0.36);
+  background-color: color-mix(in srgb, var(--color-detail) 88%, #000000);
 }
 
 /* View: just opens the published page, so it stays quiet. */
