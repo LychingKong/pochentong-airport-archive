@@ -18,14 +18,13 @@ export default function ArchiveGrid({ entries }) {
   // "newest" or "oldest", from the sort menu.
   const [order, setOrder] = useState("newest");
 
-  // Memoized filter: re-runs when query, language, or entries array changes. Returns all entries if query is empty.
+  // Memoized filter: re-runs when the query or entries array changes.
+  // Returns all entries if the query is empty. Lowercasing makes English
+  // case-insensitive and leaves Khmer unchanged (it has no case).
   const filtered = useMemo(() => {
-    let q = query.trim().replace(/["']/g, "");
-    if (language === "en") {
-      q = q.toLowerCase();
-    }
-    return q ? entries.filter((entry) => matches(entry, q, language)) : entries;
-  }, [entries, query, language]);
+    const q = query.trim().replace(/["']/g, "").toLowerCase();
+    return q ? entries.filter((entry) => matches(entry, q)) : entries;
+  }, [entries, query]);
 
   // The homepage loads entries newest first (ordered by created_at in
   // app/page.js), so "Oldest First" is that list reversed.
