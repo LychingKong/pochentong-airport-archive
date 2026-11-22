@@ -32,6 +32,9 @@ const PATHS = {
   pencil: "M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4",
   // A clipboard with a tick: the Review button on /review cards.
   clipboardCheck: "M9 4h6v3H9zM7 5.5H5.5V21h13V5.5H17M9 14l2 2 4-4.5",
+  // Two diagonal arrows: the zoom badge on the /review photo (the same
+  // shape as the entry page's zoom badge in EntryGallery).
+  expand: "M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7",
 };
 
 export default function AuthIcon({ name, className }) {

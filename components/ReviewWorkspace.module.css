@@ -167,7 +167,7 @@
 .card {
   display: grid;
   grid-template-columns: 44% minmax(0, 1fr);
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto auto;
   gap: 14px 16px;
   width: 100%;
   box-sizing: border-box;
@@ -178,10 +178,13 @@
   box-shadow: var(--shadow-soft);
 }
 
+/* A fixed height, not 100% of the row: with height: 100% a tall portrait
+   photo stretched its row and made that card taller than the others.
+   200px fits the clamped text (2-line title, 3-line description), Khmer
+   line height included. */
 .cardImg {
   width: 100%;
-  height: 100%;
-  min-height: 170px;
+  height: 200px;
   object-fit: cover;
   background-color: var(--color-subtle);
   border-radius: 14px;
@@ -535,14 +538,26 @@
   padding: 12px 12px 0;
 }
 
-/* The photo shown whole on a soft stage, never cropped. */
+/* The photo shown whole on a soft stage, never cropped. It is a button:
+   pressing it opens the full photo (ReviewPhotoZoom). */
 .galleryMain {
   position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 460px;
+  padding: 0;
   overflow: hidden;
+  cursor: zoom-in;
   background-color: var(--color-stage);
+  border: 0;
   border-radius: 16px;
+}
+
+.galleryMain:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 /* Pinned to the frame and fitted inside it, so portrait photos show whole
@@ -554,6 +569,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: transform 600ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.galleryMain:hover .galleryImg {
+  transform: scale(1.015);
 }
 
 .galleryThumbs {
@@ -589,6 +609,97 @@
 .galleryThumb:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* The orange round badge, bottom right of the photo, matching the entry
+   page's zoom badge (EntryGallery). It lifts when the photo is hovered. */
+.zoomBadge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  color: #ffffff;
+  background-color: var(--color-detail);
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(232, 100, 30, 0.35);
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.7, 0.3, 1),
+    box-shadow 260ms ease;
+}
+
+.galleryMain:hover .zoomBadge {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(232, 100, 30, 0.45);
+}
+
+/* ---------- full-size photo (ReviewPhotoZoom) ---------- */
+
+/* Covers the whole screen, above the review panel; the photo is fitted
+   inside it whole, never cropped. Same look as the entry page's viewer. */
+.zoom {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(16px, 4vw, 56px);
+  background-color: rgba(6, 12, 24, 0.94);
+  border: 0;
+}
+
+.zoom[open] {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  animation: zoomIn 220ms ease;
+}
+
+.zoom::backdrop {
+  background: transparent;
+}
+
+.zoomImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.zoomClose {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  transition: background-color 150ms ease;
+}
+
+.zoomClose:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.zoomClose:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+  }
 }
 
 /* ---------- decision bar (ReviewDecision) ---------- */
@@ -689,10 +800,9 @@
 
 @media (max-width: 480px) {
   /* One column: photo, text, footer. Rows size to their content and the
-     photo's height comes only from its 16:10 shape. The desktop rules (a
-     stretchy 1fr row with a height: 100% photo) depend on each other, and
-     iPhone Safari resolved that as "photo fills the whole card", drawing
-     the text on top of it. */
+     photo's height comes only from its 16:10 shape, not the desktop's
+     fixed 200px. (An older desktop rule, a height: 100% photo in a
+     stretchy row, made iPhone Safari draw the text on top of the photo.) */
   .card {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto;
@@ -716,11 +826,19 @@
   .cardAction,
   .preview,
   .publish,
-  .return {
+  .return,
+  .galleryImg,
+  .zoomBadge {
     transition: none;
   }
 
-  .dialogPanel {
+  .galleryMain:hover .galleryImg,
+  .galleryMain:hover .zoomBadge {
+    transform: none;
+  }
+
+  .dialogPanel,
+  .zoom[open] {
     animation: none;
   }
 }
